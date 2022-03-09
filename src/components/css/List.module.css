@@ -1,0 +1,15 @@
+.lists {
+  margin-bottom: 40px;
+  overflow: scroll;
+  padding: 0 40px;
+  height: calc(100% - 186px);
+}
+
+.name {
+  margin-bottom: 8px;
+}
+
+.addressRoad,
+.addressLot {
+  margin-bottom: 3px;
+}
