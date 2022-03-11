@@ -5,12 +5,22 @@ import styled from "styled-components";
 import style from "../components/css/List.module.css";
 
 const StList = styled.li`
-  padding: 20px 0;
+  padding: 20px;
   cursor: pointer;
   color: ${(props) =>
     props.contents.BSN_STATE_NM == "폐업" ? "red" : "inherit"};
   font-weight: ${(props) =>
     props.contents.BSN_STATE_NM == "폐업" ? "300" : "500"};
+  border: 1.5px solid #ebebeb;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 100ms ease-out;
+
+  &:hover {
+    border-color: #717171;
+    transform: scale(1.02);
+    box-shadow: 0 0 8px 16px rgb(0 0 0 / 5%);
+  }
 `;
 
 export default function List(props) {

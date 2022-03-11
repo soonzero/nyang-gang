@@ -6,10 +6,10 @@
 }
 
 .name {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .addressRoad,
 .addressLot {
-  margin-bottom: 3px;
+  margin-bottom: 8px;
 }
