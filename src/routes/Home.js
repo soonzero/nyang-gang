@@ -1,13 +1,13 @@
 import React from "react";
 import axios from "axios";
-import Kakaomap from "./Kakaomap";
+import Kakaomap from "../components/Kakaomap";
 import Search from "../components/Search";
 import List from "../components/List";
 import styled from "styled-components";
 
-const StContainer = styled.div`
+const StGridContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1.5fr;
   width: 100vw;
   height: 100vh;
 `;
@@ -74,30 +74,32 @@ export default function Home() {
   };
 
   return (
-    <StContainer>
-      <StGridLeft>
-        <Search
-          setCity={setCity}
-          road={road}
-          setRoad={setRoad}
-          closed={closed}
-          setClosed={setClosed}
-        />
-        <List
-          data={display}
-          loading={isLoading}
-          setCenter={getCoordinates}
-          city={city}
-          road={road}
-          page={page}
-          setPage={setPage}
-          closed={closed}
-          setDisplay={setDisplay}
-        />
-      </StGridLeft>
-      <div className="gridright">
-        <Kakaomap data={data} center={center} markers={markers} />
-      </div>
-    </StContainer>
+    <>
+      <StGridContainer>
+        <StGridLeft>
+          <Search
+            setCity={setCity}
+            road={road}
+            setRoad={setRoad}
+            closed={closed}
+            setClosed={setClosed}
+          />
+          <List
+            data={display}
+            loading={isLoading}
+            setCenter={getCoordinates}
+            city={city}
+            road={road}
+            page={page}
+            setPage={setPage}
+            closed={closed}
+            setDisplay={setDisplay}
+          />
+        </StGridLeft>
+        <div className="gridright">
+          <Kakaomap data={data} center={center} markers={markers} />
+        </div>
+      </StGridContainer>
+    </>
   );
 }

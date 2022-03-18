@@ -2,7 +2,13 @@ import React from "react";
 import Loading from "./Loading";
 import Pagination from "./Pagination";
 import styled from "styled-components";
-import style from "../components/css/List.module.css";
+
+const StListBox = styled.div`
+  margin-bottom: 40px;
+  overflow: scroll;
+  padding: 0 40px;
+  height: calc(100% - 186px);
+`;
 
 const StList = styled.li`
   padding: 20px;
@@ -21,6 +27,14 @@ const StList = styled.li`
     transform: scale(1.02);
     box-shadow: 0 0 8px 16px rgb(0 0 0 / 5%);
   }
+
+  & > div:first-child {
+    margin-bottom: 12px;
+  }
+
+  & > div:nth-child(2) {
+    margin-bottom: 8px;
+  }
 `;
 
 export default function List(props) {
@@ -33,15 +47,15 @@ export default function List(props) {
             props.setCenter(d.REFINE_WGS84_LAT, d.REFINE_WGS84_LOGT)
           }
         >
-          <div className={style.name}>
+          <div>
             {d.BSN_STATE_NM == "폐업" ? "(폐업)" : null} {d.BIZPLC_NM}
           </div>
-          <div className={style.addressRoad}>
+          <div>
             {props.road
               ? `[${d.REFINE_ZIP_CD}] ${d.REFINE_ROADNM_ADDR}`
               : `${d.REFINE_LOTNO_ADDR}`}
           </div>
-          <div className={style.tel}>
+          <div>
             {d.LOCPLC_FACLT_TELNO ? `TEL : ${d.LOCPLC_FACLT_TELNO}` : null}
           </div>
         </StList>
@@ -67,7 +81,7 @@ export default function List(props) {
   };
 
   return (
-    <div className={style.lists}>
+    <StListBox>
       {!props.loading ? (
         <>
           <ul>{displayFilteredItem(props.city)}</ul>
@@ -80,6 +94,6 @@ export default function List(props) {
       ) : (
         <Loading />
       )}
-    </div>
+    </StListBox>
   );
 }
