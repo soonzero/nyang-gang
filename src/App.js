@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import Home from "./routes/Home";
-import "./reset.css";
 import { authService } from "components/fbase/fbase";
+import Main from "routes/Main";
+import { GlobalStyle } from "components/styled";
 import AppRouter from "routes/Router";
 
 function App() {
@@ -21,7 +21,13 @@ function App() {
 
   return (
     <div className="App">
-      {init ? <AppRouter isLoggedIn={isLoggedIn} /> : "Initializing..."}
+      <GlobalStyle />
+      {init ? (
+        // <AppRouter isLoggedIn={isLoggedIn} />
+        <Main />
+      ) : (
+        "Initializing..."
+      )}
     </div>
   );
 }

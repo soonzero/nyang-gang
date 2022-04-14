@@ -4,6 +4,7 @@ import Kakaomap from "../components/Kakaomap";
 import Search from "../components/Search";
 import List from "../components/List";
 import styled from "styled-components";
+import Navbar from "components/Navbar";
 
 const StGridContainer = styled.div`
   display: grid;
@@ -13,7 +14,6 @@ const StGridContainer = styled.div`
 `;
 
 const StGridLeft = styled.div`
-  padding: 20px 40px;
   position: relative;
   overflow: hidden;
   min-width: 550px;
@@ -77,6 +77,7 @@ export default function Home() {
     <>
       <StGridContainer>
         <StGridLeft>
+          <Navbar />
           <Search
             setCity={setCity}
             road={road}
@@ -97,7 +98,7 @@ export default function Home() {
           />
         </StGridLeft>
         <div className="gridright">
-          <Kakaomap data={data} center={center} markers={markers} />
+          {/* <Kakaomap data={data} center={center} markers={markers} /> */}
         </div>
       </StGridContainer>
     </>

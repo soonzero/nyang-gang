@@ -4,103 +4,99 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import React, { useState } from "react";
-import styledComponents from "styled-components";
+import styled from "styled-components";
 
-const StContainer = styledComponents.div`
-width: 100vw;
-height: 100vh;
-display: flex;
-align-items: center;
-justify-content: center;
-
-& > form {
+const StContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  width: 100%;
-  height: 100%;
-  max-width: 568px;
-  max-height: 405px;
-  box-sizing: border-box;
 
-  & > section {
-    margin-bottom: 80px;
+  & > form {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
-    & > h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 12px;
+    padding: 40px;
+    width: 100%;
+    height: 100%;
+    max-width: 568px;
+    max-height: 405px;
+    box-sizing: border-box;
+
+    & > section {
+      margin-bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      & > h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      & > span {
+        cursor: pointer;
+      }
     }
 
-    & > span {
-      cursor: pointer;
-    }
-  }
-
-  & > input {
-    border: 2px solid #ebebeb;
-    font-size: 1rem;
-    margin: 0 0 6px 0;
-    outline: none;
-    background-color: transparent;
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
-
-  & > input[type=submit] {
-    background-color: #0066ff;
-    border: none;
-    color: white;
-    width: 100%;
-    margin-top: 50px;
-    margin-bottom: 25px;
-    font-weight: 600;
-    cursor: pointer;
-    box-sizing: border-box;
-  }
-
-  & > div {
-
-    & > button {
-      background-color: white;
-      color: black;
-      padding: 10px 12px;
-      margin-bottom: 6px;
-      border-radius: 8px;
+    & > input {
+      border: 2px solid #ebebeb;
       font-size: 1rem;
-      border: none;
+      margin: 0 0 6px 0;
+      outline: none;
+      background-color: transparent;
       width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    & > input[type="submit"] {
+      background-color: #0066ff;
+      border: none;
+      color: white;
+      width: 100%;
+      margin-top: 50px;
+      margin-bottom: 25px;
+      font-weight: 600;
       cursor: pointer;
       box-sizing: border-box;
     }
 
-    & > button:first-child {
-      background-color: #4285F4;
-      color: white;
-    }
+    & > div {
+      & > button {
+        background-color: white;
+        color: black;
+        padding: 10px 12px;
+        margin-bottom: 6px;
+        border-radius: 8px;
+        font-size: 1rem;
+        border: none;
+        width: 100%;
+        cursor: pointer;
+        box-sizing: border-box;
+      }
 
-    & > button:nth-child(2) {
-      background-color: black;
-      color: white;
-    }
-  
-    & > button:last-child {
-      background-color: #FEE500;
-      color: rgba(0, 0, 0, 0.85)
-    }
+      & > button:first-child {
+        background-color: #4285f4;
+        color: white;
+      }
 
+      & > button:nth-child(2) {
+        background-color: black;
+        color: white;
+      }
+
+      & > button:last-child {
+        background-color: #fee500;
+        color: rgba(0, 0, 0, 0.85);
+      }
+    }
   }
-
-  
-}
 `;
 
 export default function Auth() {

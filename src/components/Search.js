@@ -1,21 +1,6 @@
 import React from "react";
-import styled from "styled-components";
-import style from "./css/Search.module.css";
-
-const StContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 25px;
-  padding: 20px 40px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
-  background-color: white;
-
-  &::after {
-    content: "";
-  }
-`;
+import { SearchContainer } from "./styled";
+import { authService } from "./fbase/fbase";
 
 export default function Search(props) {
   const [cities, setCities] = React.useState([
@@ -58,8 +43,12 @@ export default function Search(props) {
     props.setCity(code);
   };
 
+  const handleLogOut = () => {
+    authService.signOut();
+  };
+
   return (
-    <StContainer>
+    <SearchContainer>
       {/* <div className={style.searchPanel}>
         <input
           className={style.input}
@@ -70,8 +59,8 @@ export default function Search(props) {
           🔍
         </button>
       </div> */}
-      <div className={style.select} onChange={selectCity}>
-        <select className={style.selection}>
+      <div className="select" onChange={selectCity}>
+        <select className="selection">
           <option>지역을 선택하세요</option>
           {cities.map((city) => {
             return (
@@ -83,19 +72,22 @@ export default function Search(props) {
         </select>
         <button
           type="button"
-          className={style.button}
+          className="button"
           onClick={() => props.setRoad(!props.road)}
         >
           {props.road ? "도로명 > 지번" : "지번 > 도로명"}
         </button>
         <button
           type="button"
-          className={style.button}
+          className="button"
           onClick={() => props.setClosed((prev) => !prev)}
         >
           {props.closed ? "폐업 포함하기" : "폐업 제외하기"}
         </button>
+        {/* <button type="button" className="button" onClick={handleLogOut}>
+          로그아웃하기
+        </button> */}
       </div>
-    </StContainer>
+    </SearchContainer>
   );
 }
