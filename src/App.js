@@ -22,12 +22,7 @@ function App() {
   return (
     <div className="App">
       <GlobalStyle />
-      {init ? (
-        // <AppRouter isLoggedIn={isLoggedIn} />
-        <Main />
-      ) : (
-        "Initializing..."
-      )}
+      <AppRouter />
     </div>
   );
 }

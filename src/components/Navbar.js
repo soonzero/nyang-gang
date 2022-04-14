@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "images/nyang-gang.svg";
 
 const NavStyle = styled.div`
   background-color: white;
+
+  a {
+    text-decoration: none;
+  }
 
   .nav-container {
     height: 80px;
@@ -45,7 +50,8 @@ const NavStyle = styled.div`
   }
 
   .nav-menu {
-    padding: 10px 20px;
+    padding: 10px 0px;
+    margin-right: 25px;
     cursor: pointer;
     color: grey;
     transition: color 300ms ease-in-out;
@@ -56,11 +62,27 @@ const NavStyle = styled.div`
   }
 
   .nav-menu:last-child {
-    padding-right: 0;
+    margin-right: 0;
+  }
+
+  .profile {
+    width: 30px;
+    height: 30px;
+    border: 1px solid grey;
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
   }
 `;
 
-export default function Navbar() {
+export default function Navbar(props) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <NavStyle>
       <div className="nav-container">
@@ -71,26 +93,27 @@ export default function Navbar() {
             </span>
             <span className="logo-text">냥갱</span>
           </li>
-          <div className="nav-side">
-            <li className="nav-menu">병원 찾기</li>
-            <li className="nav-menu">유기동물 보호소</li>
-            <li className="nav-menu">유기동물 조회</li>
-            <li className="nav-menu">내 반려동물 등록하기</li>
-            <li className="nav-menu">
-              <div className="profile">
-                <div
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    backgroundColor: "white",
-                    border: "1px solid grey",
-                    borderRadius: "50%",
-                    cursor: "pointer",
-                  }}
-                />
-              </div>
-            </li>
-          </div>
+          {!props.auth && (
+            <div className="nav-side">
+              <li className="nav-menu">병원 찾기</li>
+              <li className="nav-menu">유기동물 보호소</li>
+              <li className="nav-menu">유기동물 조회</li>
+              {isLoggedIn ? (
+                <>
+                  <li className="nav-menu">내 반려동물 등록하기</li>
+                  <li className="nav-menu">
+                    <div className="profile">
+                      <img src="https://pbs.twimg.com/media/EU2bPq7UcAEJRp5.jpg" />
+                    </div>
+                  </li>
+                </>
+              ) : (
+                <Link to="/auth">
+                  <li className="nav-menu">로그인 / 회원가입</li>
+                </Link>
+              )}
+            </div>
+          )}
         </ul>
       </div>
     </NavStyle>
