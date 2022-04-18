@@ -1,5 +1,5 @@
 import React from "react";
-import { SearchContainer } from "./styled";
+import { SearchStyle } from "./styled";
 import { authService } from "./fbase/fbase";
 
 export default function Search(props) {
@@ -48,7 +48,7 @@ export default function Search(props) {
   };
 
   return (
-    <SearchContainer>
+    <SearchStyle>
       {/* <div className={style.searchPanel}>
         <input
           className={style.input}
@@ -88,6 +88,6 @@ export default function Search(props) {
           로그아웃하기
         </button> */}
       </div>
-    </SearchContainer>
+    </SearchStyle>
   );
 }

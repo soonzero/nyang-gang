@@ -1,135 +1,18 @@
 import { authService } from "components/fbase/fbase";
-import Navbar from "components/Navbar";
+import { ReactComponent as Logo } from "images/nyang-gang.svg";
+import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-
-const StContainer = styled.div`
-  width: 100vw;
-  height: calc(100vh - 80px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    width: 100%;
-    height: 100%;
-    max-width: 568px;
-    max-height: 405px;
-    box-sizing: border-box;
-  }
-
-  .form-title {
-    margin-bottom: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-  }
-
-  .form-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .form-inputs {
-    margin-right: 20px;
-
-    input {
-      width: 100%;
-      border: 2px solid #ebebeb;
-      font-size: 1rem;
-      margin: 0 0 6px 0;
-      outline: none;
-      background-color: transparent;
-      padding: 10px 12px;
-      border-radius: 8px;
-      box-sizing: border-box;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    input.email {
-      border: ${(props) =>
-        props.validEmail == false
-          ? "2px solid grey"
-          : props.validEmail == true
-          ? "2px solid #f57977"
-          : "2px solid #ebebeb"};
-    }
-
-    input.password {
-      border: ${(props) =>
-        props.validPassword == false
-          ? "2px solid grey"
-          : props.validPassword == true
-          ? "2px solid #f57977"
-          : "2px solid #ebebeb"};
-    }
-  }
-
-  .auth-button {
-    background-color: #f57977;
-    padding: 15px 30px;
-    font-size: 1rem;
-    height: 100%;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    word-break: keep-all;
-    box-sizing: border-box;
-  }
-
-  & > div {
-    & > button {
-      background-color: white;
-      color: black;
-      padding: 10px 12px;
-      margin-bottom: 6px;
-      border-radius: 8px;
-      font-size: 1rem;
-      border: none;
-      width: 100%;
-      cursor: pointer;
-      box-sizing: border-box;
-    }
-
-    & > button:first-child {
-      background-color: #4285f4;
-      color: white;
-    }
-
-    & > button:nth-child(2) {
-      background-color: black;
-      color: white;
-    }
-
-    & > button:last-child {
-      background-color: #fee500;
-      color: rgba(0, 0, 0, 0.85);
-    }
-  }
-`;
+import { AuthStyle } from "components/styled";
+import SocialAuth from "components/SocialAuth";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const emailReg =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+  const passwordReg =
+    /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!-_@#$%^&+=]).*$/;
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState();
   const [password, setPassword] = useState("");
@@ -152,7 +35,16 @@ export default function Login() {
     try {
       let data;
       data = await signInWithEmailAndPassword(authService, email, password);
-      console.log(data);
+      sessionStorage.setItem(
+        "accessToken",
+        data.user.stsTokenManager.accessToken
+      );
+      sessionStorage.setItem(
+        "refreshToken",
+        data.user.stsTokenManager.refreshToken
+      );
+      sessionStorage.setItem("uid", data.user.uid);
+      navigate("/");
     } catch (error) {
       alert(error.message);
     }
@@ -170,7 +62,11 @@ export default function Login() {
     }
 
     if (password.length >= 6) {
-      setValidPassword(true);
+      if (passwordReg.test(password)) {
+        setValidPassword(true);
+      } else {
+        setValidPassword(false);
+      }
     } else if (password.length == 0) {
       setValidPassword();
     } else {
@@ -186,12 +82,16 @@ export default function Login() {
 
   return (
     <>
-      <Navbar auth />
-      <StContainer validEmail={validEmail} validPassword={validPassword}>
+      <AuthStyle validEmail={validEmail} validPassword={validPassword}>
         <form className="auth-form" onSubmit={onSubmit}>
-          <section className="form-title">
-            <h1>로그인하기</h1>
-          </section>
+          <Link to="/">
+            <section className="form-logo">
+              <span className="logo-img">
+                <Logo fill="white" />
+              </span>
+              <h1 className="logo-text">냥갱</h1>
+            </section>
+          </Link>
           <div className="form-container">
             <div className="form-inputs">
               <input
@@ -216,9 +116,21 @@ export default function Login() {
             <button className="auth-button" type="submit">
               로그인
             </button>
+            <div className="auth-extra">
+              <span className="extra-menu">
+                <Link to="/">비밀번호 재설정</Link>
+              </span>
+              <span className="extra-menu">
+                <Link to="/signup">회원가입</Link>
+              </span>
+            </div>
+          </div>
+          <div className="auth-sns login">
+            <div className="auth-sns-text">SNS 계정으로 간편 로그인</div>
+            <SocialAuth />
           </div>
         </form>
-      </StContainer>
+      </AuthStyle>
     </>
   );
 }

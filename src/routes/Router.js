@@ -1,8 +1,8 @@
 import React from "react";
 import Login from "./Login";
-import Home from "./Home";
 import Main from "./Main";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SignUp from "./SignUp";
 
 export default function AppRouter(props) {
   return (
@@ -10,6 +10,7 @@ export default function AppRouter(props) {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </Router>
   );
