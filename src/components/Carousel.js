@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { CarouselStyle } from "./styled";
+import { ReactComponent as Prev } from "images/prev.svg";
+import { ReactComponent as Next } from "images/next.svg";
 
 const array = [
   {
@@ -9,7 +11,7 @@ const array = [
       "https://uploads-ssl.webflow.com/60cd7ae35efaf14623f555c5/612e8aa3021b4224d2cc6511_how%20do%20i%20care%20for%20a%20sick%20dog.jpg",
     title: "반려동물이 아픈가요?",
     text: "병원 찾기",
-    link: "/",
+    link: "/hospital",
   },
   {
     id: 1,
@@ -65,7 +67,7 @@ export default function Carousel() {
       >
         <div className="img-desc">
           <div className="desc-title">{i.title}</div>
-          <Link to={`/`} className="desc-button">
+          <Link to={i.link} className="desc-button">
             <span className="button">{i.text}</span>
           </Link>
         </div>
@@ -85,50 +87,12 @@ export default function Carousel() {
         <>
           <button className="slide-button prev" onClick={prevSlide}>
             <span className="prev-button">
-              <svg
-                viewBox="0 0 32 32"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="presentation"
-                focusable="false"
-                style={{
-                  display: "block",
-                  fill: "none",
-                  height: "12px",
-                  width: "12px",
-                  stroke: "currentcolor",
-                  strokeWidth: 4,
-                  overflow: "visible",
-                }}
-              >
-                <g fill="none">
-                  <path d="m20 28-11.29289322-11.2928932c-.39052429-.3905243-.39052429-1.0236893 0-1.4142136l11.29289322-11.2928932"></path>
-                </g>
-              </svg>
+              <Prev />
             </span>
           </button>
           <button className="slide-button next" onClick={nextSlide}>
             <span className="next-button">
-              <svg
-                viewBox="0 0 32 32"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="presentation"
-                focusable="false"
-                style={{
-                  display: "block",
-                  fill: "none",
-                  height: "12px",
-                  width: "12px",
-                  stroke: "currentcolor",
-                  strokeWidth: 4,
-                  overflow: "visible",
-                }}
-              >
-                <g fill="none">
-                  <path d="m12 4 11.2928932 11.2928932c.3905243.3905243.3905243 1.0236893 0 1.4142136l-11.2928932 11.2928932"></path>
-                </g>
-              </svg>
+              <Next />
             </span>
           </button>
         </>

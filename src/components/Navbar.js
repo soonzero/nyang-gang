@@ -3,11 +3,13 @@ import { NavStyle } from "./styled";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "images/nyang-gang.svg";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { authService } from "./fbase/fbase";
 
 export default function Navbar(props) {
   const [subMenu, setSubMenu] = useState(false);
   if (sessionStorage.getItem("uid")) {
-    getDownloadURL(ref(getStorage(), `${sessionStorage.getItem("uid")}`))
+    const storage = getStorage();
+    getDownloadURL(ref(storage, `images/${sessionStorage.getItem("uid")}.png`))
       .then((url) => {
         const img = document.querySelector(".profile-image");
         img.setAttribute("src", url);
@@ -21,6 +23,7 @@ export default function Navbar(props) {
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("uid");
     sessionStorage.removeItem("refreshToken");
+    authService.signOut();
     props.setIsLoggedIn(false);
   };
 
@@ -38,7 +41,9 @@ export default function Navbar(props) {
           </Link>
           {!props.auth && (
             <div className="nav-side">
-              <li className="nav-menu">병원 찾기</li>
+              <li className="nav-menu">
+                <Link to="/hospital">병원 찾기</Link>
+              </li>
               <li className="nav-menu">유기동물 보호소</li>
               <li className="nav-menu">유기동물 조회</li>
               {props.isLoggedIn ? (

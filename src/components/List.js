@@ -1,101 +1,136 @@
-import React from "react";
-import Loading from "./Loading";
-import styled from "styled-components";
-
-const StListBox = styled.div`
-  margin-bottom: 40px;
-  overflow: scroll;
-  padding: 20px 20px 0;
-  height: calc(100% - 186px);
-
-  ul {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 20px;
-  }
-`;
-
-const StList = styled.li`
-  padding: 20px;
-  cursor: pointer;
-  color: ${(props) => (props.contents.BSN_STATE_NM == "폐업" ? "red" : "#555")};
-  font-weight: ${(props) =>
-    props.contents.BSN_STATE_NM == "폐업" ? "300" : "500"};
-  border: 3px solid #f5f5f5;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  transition: all 100ms ease-out;
-
-  &:hover {
-    border-color: rgba(245, 121, 119, 0.7);
-    transform: scale(1.02);
-    box-shadow: 0 0 8px 16px rgb(0 0 0 / 5%);
-  }
-
-  & > div:first-child {
-    margin-bottom: 12px;
-  }
-
-  & > div:nth-child(2) {
-    margin-bottom: 8px;
-  }
-`;
+import React, { useEffect, useState } from "react";
+import { ReactComponent as FilledStar } from "images/star-filled.svg";
+import { ReactComponent as EmptyStar } from "images/star-empty.svg";
+import Pagination from "./Pagination";
+import {
+  doc,
+  collection,
+  addDoc,
+  setDoc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
+import { db } from "./fbase/fbase";
+import { ListStyle } from "./styled";
+import { useNavigate } from "react-router-dom";
 
 export default function List(props) {
-  const filter = (list) => {
-    const element = list.map((d) => {
-      return (
-        <StList
-          contents={d}
-          onClick={() =>
-            props.setCenter(d.REFINE_WGS84_LAT, d.REFINE_WGS84_LOGT)
-          }
-        >
-          <div>
-            {d.BSN_STATE_NM == "폐업" ? "(폐업)" : null} {d.BIZPLC_NM}
-          </div>
-          <div>
-            {props.road ? `${d.REFINE_ROADNM_ADDR}` : `${d.REFINE_LOTNO_ADDR}`}
-          </div>
-          <div>
-            {d.LOCPLC_FACLT_TELNO ? `TEL : ${d.LOCPLC_FACLT_TELNO}` : null}
-          </div>
-        </StList>
+  const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [allData, setAllData] = useState();
+  const [filteredData, setFilteredData] = useState([]);
+  const [page, setPage] = useState(1);
+
+  const filter = async (code, num, pageIndex = 1) => {
+    let filteredArray;
+    if (code == "") {
+      setAllData(props.data);
+      filteredArray = props.data.slice(num * (pageIndex - 1), num * pageIndex);
+    } else {
+      filteredArray = await props.data.filter((d) => d.SIGUN_CD == code);
+      setAllData(filteredArray);
+      filteredArray = filteredArray.slice(
+        num * (pageIndex - 1),
+        num * pageIndex
       );
-    });
-    return element;
+    }
+    // console.log(filteredArray);
+    setFilteredData(filteredArray);
+    setIsLoading(false);
   };
 
-  const displayFilteredItem = (code) => {
-    if (props.closed) {
-      let list = props.data.filter((d) => d.BSN_STATE_NM !== "폐업");
-      if (code) {
-        list = list.filter((d) => d.SIGUN_CD == code);
+  useEffect(() => {
+    if (!props.isLoading) {
+      if (props.city != undefined) {
+        filter(props.city, props.number, page);
+      } else {
+        filter("", props.number, page);
       }
-      return filter(list);
+    }
+  }, [props.isLoading, props.city, props.number, page]);
+
+  const manageWishlist = async (item) => {
+    if (sessionStorage.getItem("uid") == null) {
+      alert("로그인을 먼저 해주세요!");
+      navigate("/login");
     } else {
-      let list = props.data;
-      if (code) {
-        list = list.filter((d) => d.SIGUN_CD == code);
+      try {
+        const usersRef = await getDocs(collection(db, "users"));
+        if (usersRef.docs.length == 0) {
+          await setDoc(doc(db, "users", sessionStorage.getItem("uid")), {
+            wishlist: [],
+          });
+        }
+        const userRef = doc(db, "users", sessionStorage.getItem("uid"));
+        const userSnap = await getDoc(userRef);
+        const userWishlist = await userSnap.data().wishlist;
+        const searchWishlist = await userWishlist.filter(
+          (i) => i.name == item.BIZPLC_NM && i.date == item.LICENSG_DE
+        );
+        if (searchWishlist.length > 0) {
+          await updateDoc(userRef, {
+            wishlist: arrayRemove({
+              name: item.BIZPLC_NM,
+              date: item.LICENSG_DE,
+              zip: item.REFINE_ZIP_CD,
+              address: item.REFINE_ROADNM_ADDR,
+              tel: item.LOCPLC_FACLT_TELNO,
+            }),
+          });
+        } else {
+          await updateDoc(userRef, {
+            wishlist: arrayUnion({
+              name: item.BIZPLC_NM,
+              date: item.LICENSG_DE,
+              zip: item.REFINE_ZIP_CD,
+              address: item.REFINE_ROADNM_ADDR,
+              tel: item.LOCPLC_FACLT_TELNO,
+            }),
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
-      return filter(list);
     }
   };
 
   return (
-    <StListBox>
-      {!props.loading ? (
+    <ListStyle>
+      {!isLoading ? (
         <>
-          <ul>{displayFilteredItem(props.city)}</ul>
-          {/* <Pagination
-            data={displayFilteredItem(props.city)}
-            onPage={props.page}
-            setPage={props.setPage}
-          /> */}
+          <div className="list-box">
+            {filteredData.map((item) => {
+              return (
+                <div
+                  key={`${item.BIZPLC_NM} ${item.LICENSG_DE}`}
+                  className="list"
+                >
+                  <h3 className="hosptl-name">{item.BIZPLC_NM}</h3>
+                  <p className="hosptl-address">{`[${item.REFINE_ZIP_CD}] ${item.REFINE_ROADNM_ADDR}`}</p>
+                  <p className="hosptl-tel">{item.LOCPLC_FACLT_TELNO}</p>
+                  <button
+                    className="hosptl-save"
+                    onClick={() => manageWishlist(item)}
+                  >
+                    {/* <FilledStar fill="#FFCB00" /> */}
+                    <EmptyStar className="save" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+          <Pagination
+            data={allData}
+            number={props.number}
+            page={page}
+            setPage={setPage}
+          />
         </>
-      ) : (
-        <Loading />
-      )}
-    </StListBox>
+      ) : null}
+    </ListStyle>
   );
 }

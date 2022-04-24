@@ -46,21 +46,20 @@ export default function SignUp() {
             email,
             password
           );
-          console.log(data.user.uid);
-          console.log(file[0]);
           const storage = getStorage();
-          const storageRef = ref(storage, "profile-img");
+          const storageRef = ref(storage, `images/${data.user.uid}.png`);
+          console.log(file[0]);
           uploadBytes(storageRef, file[0]).then((snapshot) => {
             console.log(snapshot);
           });
           setEmail("");
-          setPassword("");
           navigate("/login");
         } catch (error) {
           console.log(error);
         }
       } else {
-        alert("비밀번호를 다시 확인해주세요");
+        alert("비밀번호를 확인해주세요");
+        setPassword("");
       }
     }
   };
