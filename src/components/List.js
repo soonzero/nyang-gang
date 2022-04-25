@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { ReactComponent as Check } from "images/check.svg";
 import { ReactComponent as FilledStar } from "images/star-filled.svg";
 import { ReactComponent as EmptyStar } from "images/star-empty.svg";
 import Pagination from "./Pagination";
 import {
   doc,
   collection,
-  addDoc,
   setDoc,
   getDoc,
   getDocs,
@@ -53,7 +53,8 @@ export default function List(props) {
     }
   }, [props.isLoading, props.city, props.number, page]);
 
-  const manageWishlist = async (item) => {
+  const manageWishlist = async (event, item) => {
+    const target = event.currentTarget;
     if (sessionStorage.getItem("uid") == null) {
       alert("로그인을 먼저 해주세요!");
       navigate("/login");
@@ -62,35 +63,62 @@ export default function List(props) {
         const usersRef = await getDocs(collection(db, "users"));
         if (usersRef.docs.length == 0) {
           await setDoc(doc(db, "users", sessionStorage.getItem("uid")), {
-            wishlist: [],
+            hospital: [],
+            shelter: [],
           });
         }
         const userRef = doc(db, "users", sessionStorage.getItem("uid"));
         const userSnap = await getDoc(userRef);
-        const userWishlist = await userSnap.data().wishlist;
-        const searchWishlist = await userWishlist.filter(
-          (i) => i.name == item.BIZPLC_NM && i.date == item.LICENSG_DE
-        );
-        if (searchWishlist.length > 0) {
-          await updateDoc(userRef, {
-            wishlist: arrayRemove({
-              name: item.BIZPLC_NM,
-              date: item.LICENSG_DE,
-              zip: item.REFINE_ZIP_CD,
-              address: item.REFINE_ROADNM_ADDR,
-              tel: item.LOCPLC_FACLT_TELNO,
-            }),
-          });
-        } else {
-          await updateDoc(userRef, {
-            wishlist: arrayUnion({
-              name: item.BIZPLC_NM,
-              date: item.LICENSG_DE,
-              zip: item.REFINE_ZIP_CD,
-              address: item.REFINE_ROADNM_ADDR,
-              tel: item.LOCPLC_FACLT_TELNO,
-            }),
-          });
+        if (target.getAttribute("name") == "hospital") {
+          const userHospital = await userSnap.data().hospital;
+          const searchHospital = await userHospital.filter(
+            (i) => i.name == item.BIZPLC_NM && i.date == item.LICENSG_DE
+          );
+          if (searchHospital.length > 0) {
+            await updateDoc(userRef, {
+              hospital: arrayRemove({
+                name: item.BIZPLC_NM,
+                date: item.LICENSG_DE,
+                zip: item.REFINE_ZIP_CD,
+                address: item.REFINE_ROADNM_ADDR,
+                tel: item.LOCPLC_FACLT_TELNO,
+              }),
+            });
+          } else {
+            await updateDoc(userRef, {
+              hospital: arrayUnion({
+                name: item.BIZPLC_NM,
+                date: item.LICENSG_DE,
+                zip: item.REFINE_ZIP_CD,
+                address: item.REFINE_ROADNM_ADDR,
+                tel: item.LOCPLC_FACLT_TELNO,
+              }),
+            });
+          }
+        } else if (target.getAttribute("name") == "shelter") {
+          const userShelter = await userSnap.data().shelter;
+          const searchShelter = await userShelter.filter(
+            (i) => i.name == item.ENTRPS_NM
+          );
+          if (searchShelter.length > 0) {
+            await updateDoc(userRef, {
+              shelter: arrayRemove({
+                name: item.ENTRPS_NM,
+                zip: item.REFINE_ZIP_CD,
+                address: item.REFINE_ROADNM_ADDR,
+                tel: item.ENTRPS_TELNO,
+              }),
+            });
+          } else {
+            await updateDoc(userRef, {
+              shelter: arrayUnion({
+                name: item.ENTRPS_NM,
+                zip: item.REFINE_ZIP_CD,
+                address: item.REFINE_ROADNM_ADDR,
+                tel: item.ENTRPS_TELNO,
+              }),
+            });
+          }
         }
       } catch (e) {
         console.log(e);
@@ -103,25 +131,68 @@ export default function List(props) {
       {!isLoading ? (
         <>
           <div className="list-box">
-            {filteredData.map((item) => {
-              return (
-                <div
-                  key={`${item.BIZPLC_NM} ${item.LICENSG_DE}`}
-                  className="list"
-                >
-                  <h3 className="hosptl-name">{item.BIZPLC_NM}</h3>
-                  <p className="hosptl-address">{`[${item.REFINE_ZIP_CD}] ${item.REFINE_ROADNM_ADDR}`}</p>
-                  <p className="hosptl-tel">{item.LOCPLC_FACLT_TELNO}</p>
-                  <button
-                    className="hosptl-save"
-                    onClick={() => manageWishlist(item)}
+            {props.hospital &&
+              filteredData.map((item) => {
+                return (
+                  <div
+                    key={`${item.BIZPLC_NM} ${item.LICENSG_DE}`}
+                    className="list"
+                    onClick={() =>
+                      props.setCenter({
+                        lat: item.REFINE_WGS84_LAT,
+                        lon: item.REFINE_WGS84_LOGT,
+                      })
+                    }
                   >
-                    {/* <FilledStar fill="#FFCB00" /> */}
-                    <EmptyStar className="save" />
-                  </button>
-                </div>
-              );
-            })}
+                    <h3 className="name">{item.BIZPLC_NM}</h3>
+                    <p className="address">{`[${item.REFINE_ZIP_CD}] ${item.REFINE_ROADNM_ADDR}`}</p>
+                    <p className="tel">{item.LOCPLC_FACLT_TELNO}</p>
+                    <button
+                      name="hospital"
+                      className="star"
+                      onClick={(event) => manageWishlist(event, item)}
+                    >
+                      {/* <FilledStar fill="#FFCB00" /> */}
+                      <EmptyStar className="icon star" />
+                    </button>
+                  </div>
+                );
+              })}
+            {props.shelter &&
+              filteredData.map((item) => {
+                return (
+                  <div
+                    key={`${item.ENTRPS_NM} ${item.SIGUN_CD}`}
+                    className="list"
+                    onClick={() =>
+                      props.setCenter({
+                        lat: item.REFINE_WGS84_LAT,
+                        lon: item.REFINE_WGS84_LOGT,
+                      })
+                    }
+                  >
+                    <h3 className="name">
+                      {item.CONTRACT_PERD == "직영" && (
+                        <span className="check">
+                          <Check className="icon check" />
+                        </span>
+                      )}
+                      {item.ENTRPS_NM}
+                    </h3>
+
+                    <p className="address">{`[${item.REFINE_ZIP_CD}] ${item.REFINE_ROADNM_ADDR}`}</p>
+                    <p className="tel">{item.ENTRPS_TELNO}</p>
+                    <button
+                      name="shelter"
+                      className="star"
+                      onClick={(event) => manageWishlist(event, item)}
+                    >
+                      {/* <FilledStar fill="#FFCB00" /> */}
+                      <EmptyStar className="icon star" />
+                    </button>
+                  </div>
+                );
+              })}
           </div>
           <Pagination
             data={allData}

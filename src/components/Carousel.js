@@ -19,7 +19,7 @@ const array = [
       "https://images.pexels.com/photos/5733168/pexels-photo-5733168.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     title: "여러분을 기다리고 있어요",
     text: "유기동물 조회",
-    link: "/",
+    link: "/abandoned",
   },
   {
     id: 2,

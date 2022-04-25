@@ -23,6 +23,8 @@ export default function SignUp() {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [validPassword, setValidPassword] = useState();
   const [error, setError] = useState("");
+  const [emailConfirm, setEmailConfirm] = useState(false);
+  const [pwConfirm, setPWConfirm] = useState(true);
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -68,18 +70,23 @@ export default function SignUp() {
     if (email.length > 0) {
       if (emailReg.test(email)) {
         setValidEmail(true);
+        setEmailConfirm(true);
       } else {
         setValidEmail(false);
+        setEmailConfirm(false);
       }
     } else {
       setValidEmail();
+      setEmailConfirm(false);
     }
 
     if (password.length > 0) {
       if (passwordReg.test(password)) {
         setValidPassword(true);
+        setPWConfirm(true);
       } else {
         setValidPassword(false);
+        setPWConfirm(false);
       }
 
       if (passwordCheck.length > 0) {
@@ -91,6 +98,7 @@ export default function SignUp() {
       }
     } else {
       setValidPassword();
+      setPWConfirm(false);
     }
   };
 
@@ -127,7 +135,11 @@ export default function SignUp() {
                   placeholder="이메일"
                   required
                 />
-                <button className="auth-button confirm" type="button">
+                <button
+                  className="auth-button confirm"
+                  type="button"
+                  disabled={!emailConfirm}
+                >
                   이메일 확인하기
                 </button>
               </div>
@@ -135,10 +147,12 @@ export default function SignUp() {
                 <label className="input-label" htmlFor="password">
                   비밀번호
                 </label>
-                <div className="password-text">
-                  {!validPassword
-                    ? "영문, 숫자, 특수문자를 포함하여 8자 이상 입력해주세요"
-                    : null}
+                <div
+                  className={`password-text ${pwConfirm ? "valid" : "invalid"}`}
+                >
+                  {!validPassword && !pwConfirm
+                    ? "⚠️ 영문, 숫자, 특수문자를 포함하여 8자 이상 입력해주세요"
+                    : "✔️ 영문, 숫자, 특수문자를 포함하여 8자 이상 입력 완료"}
                 </div>
                 <input
                   id="password"

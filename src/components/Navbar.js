@@ -44,8 +44,12 @@ export default function Navbar(props) {
               <li className="nav-menu">
                 <Link to="/hospital">병원 찾기</Link>
               </li>
-              <li className="nav-menu">유기동물 보호소</li>
-              <li className="nav-menu">유기동물 조회</li>
+              <li className="nav-menu">
+                <Link to="/shelter">유기동물 보호소</Link>
+              </li>
+              <li className="nav-menu">
+                <Link to="/abandoned">유기동물 조회</Link>
+              </li>
               {props.isLoggedIn ? (
                 <>
                   <li className="nav-menu">내 반려동물 등록하기</li>

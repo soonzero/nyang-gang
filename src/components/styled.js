@@ -169,6 +169,10 @@ export const SearchStyle = styled.div`
     text-align-last: center;
     text-align: center;
     color: #f57977;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 
   .selection.num {
@@ -337,6 +341,14 @@ export const AuthStyle = styled.div`
     font-size: 0.8rem;
     margin-bottom: 12px;
     color: grey;
+
+    &.invalid {
+      color: #f57977;
+    }
+
+    &.valid {
+      text-decoration: line-through;
+    }
   }
 
   .confirm-text {
@@ -388,7 +400,14 @@ export const AuthStyle = styled.div`
     transition: background-color 150ms ease;
     margin-top: 5px;
 
-    &:hover {
+    &:disabled {
+      background-color: #f5f5f5;
+      color: rgba(0, 0, 0, 0.15);
+      border-color: rgba(0, 0, 0, 0.15);
+      cursor: default;
+    }
+
+    &:not(:disabled):hover {
       background-color: rgba(245, 121, 119, 0.15);
     }
   }
@@ -434,6 +453,8 @@ export const AuthStyle = styled.div`
   .auth-sns-selection {
     margin-top: 20px;
     display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .sns {
@@ -685,7 +706,7 @@ export const ContentStyle = styled.div`
     color: #f57977;
     font-size: 2rem;
     font-weight: 500;
-    padding-top: 40px;
+    padding-top: 285px;
   }
 
   @media screen and (max-width: 1210px) {
@@ -743,9 +764,23 @@ export const ListStyle = styled.div`
     }
   }
 
-  .hosptl-name {
+  .name {
     font-weight: 500;
     margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .check {
+    margin-right: 5px;
+    fill: #ffcb00;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .icon.check {
+    width: 1rem;
+    height: 1rem;
   }
 
   p {
@@ -758,20 +793,20 @@ export const ListStyle = styled.div`
     }
   }
 
-  .hosptl-save {
+  .star {
     position: absolute;
     background-color: transparent;
     border: none;
     padding: 0;
     margin: 0;
-    right: 10px;
-    top: 10px;
+    right: 5px;
+    top: 5px;
     width: 20px;
     height: 20px;
     cursor: pointer;
   }
 
-  .save {
+  .icon.star {
     fill: #e5e5e5;
     transition: fill 200ms ease;
 
@@ -813,6 +848,64 @@ export const ListStyle = styled.div`
     .prev {
       right: unset;
       left: -19px;
+    }
+  }
+`;
+
+export const AnimalsStyle = styled.div`
+  display: block;
+  padding-top: 24px;
+  width: 100%;
+
+  .list-container {
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 20px;
+    row-gap: 20px;
+  }
+
+  .list {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .img-container {
+    display: grid;
+    width: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 8px;
+
+    &::before {
+      content: "";
+      width: 100%;
+      padding-top: 100%;
+    }
+  }
+
+  p {
+    font-size: 0.85rem;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .list-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .list-container {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media screen and (max-width: 375px) {
+    .list-container {
+      grid-template-columns: 1fr;
     }
   }
 `;

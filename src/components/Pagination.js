@@ -13,29 +13,29 @@ export default function Pagination(props) {
   }
 
   const changePage = (event) => {
-    if (event.target.getAttribute("name") == "prev") {
+    if (event.currentTarget.getAttribute("name") == "prev") {
       props.setPage((prev) => prev - 1);
-    } else if (event.target.getAttribute("name") == "next") {
+    } else if (event.currentTarget.getAttribute("name") == "next") {
       props.setPage((prev) => prev + 1);
     }
   };
 
   return (
-    <ol className="pagination">
+    <div className="pagination">
       {props.data && pages != 1 && (
         <>
           {props.page > 1 && (
-            <li name="prev" className="prev" onClick={changePage}>
+            <button name="prev" className="prev" onClick={changePage}>
               <Prev />
-            </li>
+            </button>
           )}
           {props.page < pages && (
-            <li name="next" className="next" onClick={changePage}>
+            <button name="next" className="next" onClick={changePage}>
               <Next />
-            </li>
+            </button>
           )}
         </>
       )}
-    </ol>
+    </div>
   );
 }
