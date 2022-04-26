@@ -23,6 +23,7 @@ export default function Abandoned() {
   }, []);
 
   const getData = async () => {
+    setIsLoading(true);
     try {
       const today = new Date();
       const year = today.getFullYear();
@@ -36,20 +37,17 @@ export default function Abandoned() {
       const day = today.getDate();
       const date = `${year}${month()}${day}`;
       let animals = [];
-      for (let i = 0; i < 3; i++) {
-        console.log();
+      for (let i = 0; i < 2; i++) {
         const url = `https://openapi.gg.go.kr/AbdmAnimalProtect?KEY=${API_KEY}&Type=json&pIndex=${
           i + 1
-        }&pSize=1000`;
+        }&pSize=1000&STATE_NM=보호중`;
         const animalsArray = await axios({
           method: "GET",
           url: url,
         });
         animals = [...animals, ...animalsArray.data.AbdmAnimalProtect[1].row];
       }
-      setData(
-        animals.filter((a) => a.PBLANC_END_DE >= date && a.STATE_NM == "보호중")
-      );
+      setData(animals.filter((a) => a.PBLANC_END_DE >= date));
       setIsLoading(false);
     } catch (e) {
       console.log(e);

@@ -888,7 +888,7 @@ export const AnimalsStyle = styled.div`
   }
 
   p {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   @media screen and (max-width: 1024px) {

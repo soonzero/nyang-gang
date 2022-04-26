@@ -21,14 +21,6 @@ const array = [
     text: "유기동물 조회",
     link: "/abandoned",
   },
-  {
-    id: 2,
-    cover:
-      "https://cdn.pixabay.com/photo/2018/10/01/09/21/pets-3715733_1280.jpg",
-    title: "반려동물 등록은 필수입니다",
-    text: "등록하기",
-    link: "/",
-  },
 ];
 
 export default function Carousel() {
@@ -38,14 +30,14 @@ export default function Carousel() {
 
   const prevSlide = () => {
     if (currentSlide == 0) {
-      setCurrentSlide(array.length - 1);
+      setCurrentSlide(array.length);
     } else {
       setCurrentSlide((prev) => prev - 1);
     }
   };
 
   const nextSlide = () => {
-    if (currentSlide == array.length - 1) {
+    if (currentSlide == array.length) {
       setCurrentSlide(0);
     } else {
       setCurrentSlide((prev) => prev + 1);
@@ -82,6 +74,23 @@ export default function Carousel() {
     >
       <div className="carousel-wrapper" ref={slideRef}>
         {carouselItems}
+        <div
+          className="carousel-list"
+          style={{
+            backgroundImage: `url("https://cdn.pixabay.com/photo/2018/10/01/09/21/pets-3715733_1280.jpg")`,
+          }}
+        >
+          <div className="img-desc">
+            <div className="desc-title">반려동물 등록은 필수입니다</div>
+            <a
+              href="https://www.animal.go.kr/front/community/show.do?boardId=contents&seq=66&menuNo=2000000016"
+              target="_blank"
+              className="desc-button"
+            >
+              <span className="button">등록하기</span>
+            </a>
+          </div>
+        </div>
       </div>
       {slideActive ? (
         <>

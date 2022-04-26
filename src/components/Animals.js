@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AnimalsStyle } from "./styled";
 
 export default function Animals(props) {
+  const [page, setPage] = useState(1);
+
+  const getList = (page) => {
+    return props.data.slice(20 * (page - 1), 20 * page);
+  };
+
+  const [display, setDisplay] = useState(getList(1));
+
+  const handleScroll = useCallback(() => {
+    const { innerHeight } = window;
+    const { scrollHeight } = document.body;
+    const { scrollTop } = document.documentElement;
+
+    if (Math.round(scrollTop + innerHeight) >= scrollHeight) {
+      setDisplay(display.concat(getList(page + 1)));
+      setPage((prev) => prev + 1);
+    }
+  }, [page, display]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, true);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll, true);
+    };
+  }, [handleScroll]);
+
   return (
     <AnimalsStyle>
       <div className="list-container">
-        {props.data.map((a) => {
+        {display.map((a) => {
           return (
-            <div className="list">
+            <div key={a.ABDM_IDNTFY_NO} className="list">
               <div
                 className="img-container"
                 style={{
@@ -16,8 +43,9 @@ export default function Animals(props) {
               ></div>
               <div className="desc-container">
                 <p className="desc reception-date">
-                  {a.RECEPT_DE.substring(0, 4)}-{a.RECEPT_DE.substring(4, 6)}-
-                  {a.RECEPT_DE.substring(6, 8)}
+                  등록 날짜: {a.RECEPT_DE.substring(0, 4)}년{" "}
+                  {a.RECEPT_DE.substring(4, 6)}월 {a.RECEPT_DE.substring(6, 8)}
+                  일
                 </p>
                 <p className="desc discovery-place">
                   발견 위치: 경기도 {a.SIGUN_NM} {a.DISCVRY_PLC_INFO}

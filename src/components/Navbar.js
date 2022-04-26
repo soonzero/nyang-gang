@@ -52,7 +52,14 @@ export default function Navbar(props) {
               </li>
               {props.isLoggedIn ? (
                 <>
-                  <li className="nav-menu">내 반려동물 등록하기</li>
+                  <li className="nav-menu">
+                    <a
+                      href="https://www.animal.go.kr/front/community/show.do?boardId=contents&seq=66&menuNo=2000000016"
+                      target="_blank"
+                    >
+                      내 반려동물 등록하기
+                    </a>
+                  </li>
                   <li className="nav-menu">
                     <div
                       className="profile"
