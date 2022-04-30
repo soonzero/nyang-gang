@@ -6,6 +6,10 @@ import SignUp from "./SignUp";
 import Hospital from "routes/Hospital";
 import Shelter from "./Shelter";
 import Abandoned from "./Abandoned";
+import AnimalDetail from "pages/AnimalDetail";
+import MyAccount from "./MyAccount";
+import DeleteAccount from "./DeleteAccount";
+import ChangePW from "./ChangePW";
 
 export default function AppRouter(props) {
   return (
@@ -17,6 +21,10 @@ export default function AppRouter(props) {
         <Route path="/hospital" element={<Hospital />} />
         <Route path="/shelter" element={<Shelter />} />
         <Route path="/abandoned" element={<Abandoned />} />
+        <Route path="/abandoned/:id" element={<AnimalDetail />} />
+        <Route path="/myaccount" element={<MyAccount />} />
+        <Route path="/delete" element={<DeleteAccount />} />
+        <Route path="/change" element={<ChangePW />} />
       </Routes>
     </Router>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { NavStyle } from "./styled";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "images/nyang-gang.svg";
@@ -7,7 +7,9 @@ import { authService } from "./fbase/fbase";
 
 export default function Navbar(props) {
   const [subMenu, setSubMenu] = useState(false);
-  if (sessionStorage.getItem("uid")) {
+  const [shadow, setShadow] = useState(false);
+
+  if (sessionStorage.getItem("uid") && !props.auth) {
     const storage = getStorage();
     getDownloadURL(ref(storage, `images/${sessionStorage.getItem("uid")}.png`))
       .then((url) => {
@@ -27,8 +29,24 @@ export default function Navbar(props) {
     props.setIsLoggedIn(false);
   };
 
+  const handleScroll = useCallback(() => {
+    if (window.scrollY <= 0) {
+      setShadow(false);
+    } else {
+      setShadow(true);
+    }
+  });
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
+
   return (
-    <NavStyle>
+    <NavStyle shadow={shadow}>
       <div className="nav-wrapper">
         <ul className="nav-container">
           <Link to="/">
@@ -67,7 +85,9 @@ export default function Navbar(props) {
                     >
                       <img className="profile-image" />
                       <ul className={`nav-sub ${subMenu ? "open" : ""}`}>
-                        <li className="nav-submenu">내 계정</li>
+                        <Link to="/myaccount">
+                          <li className="nav-submenu">내 계정</li>
+                        </Link>
                         <li className="nav-submenu">내 반려동물</li>
                         <li className="nav-submenu" onClick={logout}>
                           로그아웃
@@ -86,6 +106,22 @@ export default function Navbar(props) {
           )}
         </ul>
       </div>
+      {props.setting && (
+        <div className="nav-wrapper sub-nav-wrapper">
+          <ul className="sub-nav-container">
+            <Link to="/myaccount">
+              <li className={`sub-nav-menu ${props.myaccount ? "open" : ""}`}>
+                회원정보수정
+              </li>
+            </Link>
+            <Link to="/change">
+              <li className={`sub-nav-menu ${props.password ? "open" : ""}`}>
+                비밀번호변경
+              </li>
+            </Link>
+          </ul>
+        </div>
+      )}
     </NavStyle>
   );
 }

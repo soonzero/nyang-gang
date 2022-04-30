@@ -468,7 +468,25 @@ export const AuthStyle = styled.div`
 
 export const NavStyle = styled.div`
   background-color: white;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
   border-bottom: 1px solid #f5f5f5;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    box-shadow: rgb(0 0 0 / 12%) 0px 6px 16px;
+    z-index: 2;
+    transition: opacity 200ms ease;
+    /* border-bottom: 1px solid #f5f5f5; */
+    opacity: ${(props) => (props.shadow == true ? 1 : 0)};
+  }
 
   a {
     text-decoration: none;
@@ -481,6 +499,7 @@ export const NavStyle = styled.div`
     padding: 0 40px;
     margin: 0 auto;
     position: relative;
+    z-index: 3;
   }
 
   .nav-container {
@@ -590,6 +609,32 @@ export const NavStyle = styled.div`
     }
   }
 
+  .nav-wrapper.sub-nav-wrapper {
+    height: 100%;
+  }
+
+  .sub-nav-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .sub-nav-menu {
+    font-weight: 500;
+    padding: 20px 10px;
+    color: #a5a5a5;
+    cursor: pointer;
+    transition: color 200ms ease;
+
+    &:hover {
+      color: grey;
+    }
+  }
+
+  .sub-nav-menu.open {
+    color: black;
+  }
+
   @media screen and (max-width: 768px) {
     .nav-menu:not(:last-child) {
       display: none;
@@ -604,6 +649,7 @@ export const CarouselStyle = styled.div`
   margin: 0 auto;
   position: relative;
   overflow: hidden;
+  z-index: 0;
 
   a {
     text-decoration: none;
@@ -857,6 +903,11 @@ export const AnimalsStyle = styled.div`
   padding-top: 24px;
   width: 100%;
 
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
   .list-container {
     max-width: 100%;
     display: grid;
@@ -870,6 +921,15 @@ export const AnimalsStyle = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: border-color 200ms ease;
+
+    &:hover {
+      border-color: #e5e5e5;
+    }
   }
 
   .img-container {
@@ -887,8 +947,13 @@ export const AnimalsStyle = styled.div`
     }
   }
 
+  .desc-container {
+    margin-top: 6px;
+  }
+
   p {
     font-size: 0.8rem;
+    margin-top: 2px;
   }
 
   @media screen and (max-width: 1024px) {
@@ -906,6 +971,342 @@ export const AnimalsStyle = styled.div`
   @media screen and (max-width: 375px) {
     .list-container {
       grid-template-columns: 1fr;
+    }
+  }
+`;
+
+export const MyAccountStyle = styled.div`
+  margin-top: 25px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 60px;
+
+  .edit-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+
+    span {
+      font-size: 0.8rem;
+      color: #b5b5b5;
+      text-decoration: underline;
+      cursor: pointer;
+      line-height: 1;
+    }
+  }
+
+  .edit-main {
+    margin-top: 45px;
+  }
+
+  .edit-form {
+    display: flex;
+    padding: 20px 0;
+    align-items: center;
+  }
+
+  .edit-form.password {
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .edit-input {
+      margin-bottom: 15px;
+    }
+  }
+
+  .edit-form.profile-img {
+    align-items: flex-start;
+    .edit-input {
+      border: none;
+    }
+  }
+
+  .edit-target {
+    width: 10rem;
+  }
+
+  .edit-input,
+  .edit-input-confirm {
+    padding: 10px 12px;
+    width: 15rem;
+    outline: none;
+    margin-right: 25px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+
+  .edit-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    appearance: none;
+    border: 1px solid #f57977;
+    border-radius: 8px;
+    background-color: white;
+    color: #f57977;
+    font-weight: 600;
+    margin: 0;
+    transition: background-color 200ms ease, color 200ms ease;
+
+    &:hover {
+      background-color: #f57977;
+      color: white;
+    }
+
+    &:disabled {
+      background-color: #f5f5f5;
+      color: rgba(0, 0, 0, 0.15);
+      border-color: rgba(0, 0, 0, 0.15);
+      cursor: default;
+
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .edit-input-profile-img {
+    appearance: none;
+  }
+
+  .image-preview {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    width: 15rem;
+    height: 15rem;
+    border-radius: 50%;
+    border: 1px solid #e5e5e5;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    position: relative;
+    cursor: pointer;
+    margin-right: 25px;
+    padding: 10px;
+
+    &::before {
+      content: "";
+      width: 100%;
+      padding-top: 100%;
+    }
+  }
+
+  .click-here {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    word-break: keep-all;
+    text-align: center;
+    line-height: 1.2;
+    color: grey;
+
+    span {
+      font-size: 0.8rem;
+    }
+  }
+`;
+
+export const DeleteAccountStyle = styled.div`
+  margin-top: 25px;
+
+  strong {
+    font-weight: 500;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+
+  .desc,
+  .header {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    margin-bottom: 20px;
+    line-height: 1.5;
+    word-break: keep-all;
+
+    &:last-child {
+      margin: 0;
+    }
+  }
+
+  ol.content {
+    list-style-type: disc;
+    margin-left: 30px;
+  }
+
+  .main {
+    border: 1px solid #b5b5b5;
+    border-radius: 8px;
+    padding: 30px;
+    margin-bottom: 20px;
+  }
+
+  .confirm-wrapper {
+    .confirm-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .check-box {
+      display: inline-block;
+      position: relative;
+      padding: 9px;
+    }
+
+    input[type="checkbox"] {
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    span {
+      span {
+        margin-left: 5px;
+        font-weight: 500;
+        color: #f57977;
+      }
+    }
+  }
+
+  .check-container {
+    display: inline-block;
+    padding: 2px;
+    border: 1px solid;
+    border-color: ${(props) => (props.checked ? "transparent" : "#e5e5e5")};
+    border-radius: 4px;
+    line-height: 1;
+    width: 22px;
+    height: 22px;
+    box-sizing: border-box;
+    background-color: ${(props) => (props.checked ? "#f57977" : "white")};
+  }
+
+  .delete-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    button {
+      appearance: none;
+      font-size: 1.2rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      padding: 15px;
+      max-width: 10rem;
+      width: 100%;
+      margin: 0;
+      color: white;
+      cursor: pointer;
+    }
+
+    button.delete {
+      background-color: #b5b5b5;
+      margin-right: 10px;
+    }
+
+    button.cancel {
+      background-color: #f57977;
+      margin-right: 0;
+    }
+  }
+`;
+
+export const PasswordStyle = styled.div`
+  max-width: 480px;
+  margin: 0 auto;
+  margin-top: 25px;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 40px;
+  box-sizing: border-box;
+
+  .header {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .inputs-container {
+    margin: 30px 0 0;
+    display: flex;
+    flex-direction: column;
+
+    input {
+      padding: 10px;
+      margin: 0;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      outline: none;
+      font-size: 1rem;
+      margin-bottom: 20px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .pw-title {
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .pw-desc {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  .input-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+
+  .error-msg {
+    font-size: 0.8rem;
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+  }
+
+  .change-button {
+    width: 100%;
+    appearance: none;
+    border: none;
+    background-color: #f57977;
+    opacity: 0.95;
+    padding: 12px;
+    color: white;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
     }
   }
 `;

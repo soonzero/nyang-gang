@@ -7,6 +7,7 @@ import List from "../components/List";
 import Search from "components/Search";
 
 export default function Hospital() {
+  let didCancel = false;
   const API_KEY = process.env.REACT_APP_PUB_DATA_API_KEY;
 
   const [isLoggedIn, setIsLoggedIn] = useState();
@@ -45,6 +46,10 @@ export default function Hospital() {
     }
 
     getHospitals();
+
+    return () => {
+      didCancel = true;
+    };
   }, []);
 
   const getHospitals = async () => {
@@ -60,8 +65,12 @@ export default function Hospital() {
         });
         hospitals = [...hospitals, ...hospitalArray.data.Animalhosptl[1].row];
       }
-      setData(hospitals.filter((hospital) => hospital.BSN_STATE_NM == "정상"));
-      setIsLoading(false);
+      if (!didCancel) {
+        setData(
+          hospitals.filter((hospital) => hospital.BSN_STATE_NM == "정상")
+        );
+        setIsLoading(false);
+      }
     } catch (e) {
       console.log(e);
     }

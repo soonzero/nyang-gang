@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { AnimalsStyle } from "./styled";
 
 export default function Animals(props) {
@@ -34,31 +35,33 @@ export default function Animals(props) {
       <div className="list-container">
         {display.map((a) => {
           return (
-            <div key={a.ABDM_IDNTFY_NO} className="list">
-              <div
-                className="img-container"
-                style={{
-                  backgroundImage: `url(${a.IMAGE_COURS})`,
-                }}
-              ></div>
-              <div className="desc-container">
-                <p className="desc reception-date">
-                  등록 날짜: {a.RECEPT_DE.substring(0, 4)}년{" "}
-                  {a.RECEPT_DE.substring(4, 6)}월 {a.RECEPT_DE.substring(6, 8)}
-                  일
-                </p>
-                <p className="desc discovery-place">
-                  발견 위치: 경기도 {a.SIGUN_NM} {a.DISCVRY_PLC_INFO}
-                </p>
-                <p className="desc species">품종: {a.SPECIES_NM}</p>
-                <p className="desc color">털색: {a.COLOR_NM}</p>
-                <p className="desc age">{a.AGE_INFO}</p>
-                <p className="desc weight">체중: {a.BDWGH_INFO}</p>
-                <p className="desc sex">
-                  성별: {a.SEX_NM == "F" ? "암컷" : "수컷"}
-                </p>
+            <Link to={`/abandoned/${a.ABDM_IDNTFY_NO}`}>
+              <div key={a.ABDM_IDNTFY_NO} className="list">
+                <div
+                  className="img-container"
+                  style={{
+                    backgroundImage: `url(${a.IMAGE_COURS})`,
+                  }}
+                ></div>
+                <div className="desc-container">
+                  <p className="desc reception-date">
+                    등록 날짜: {a.RECEPT_DE.substring(0, 4)}년{" "}
+                    {a.RECEPT_DE.substring(4, 6)}월{" "}
+                    {a.RECEPT_DE.substring(6, 8)}일
+                  </p>
+                  <p className="desc discovery-place">
+                    발견 위치: 경기도 {a.SIGUN_NM} {a.DISCVRY_PLC_INFO}
+                  </p>
+                  {/* <p className="desc species">품종: {a.SPECIES_NM}</p>
+                  <p className="desc color">털색: {a.COLOR_NM}</p>
+                  <p className="desc age">{a.AGE_INFO}</p>
+                  <p className="desc weight">체중: {a.BDWGH_INFO}</p>
+                  <p className="desc sex">
+                    성별: {a.SEX_NM == "F" ? "암컷" : "수컷"}
+                  </p> */}
+                </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

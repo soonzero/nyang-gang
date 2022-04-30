@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 export default function ProfileImage(props) {
   const onChangeHandler = async (event) => {
@@ -22,8 +22,6 @@ export default function ProfileImage(props) {
   useEffect(() => {
     props.setFile(props.file);
     preview();
-
-    // return () => preview();
   }, [props.file]);
 
   return (

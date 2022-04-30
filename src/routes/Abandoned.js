@@ -5,6 +5,8 @@ import { ContentStyle } from "components/styled";
 import React, { useState, useEffect } from "react";
 
 export default function Abandoned() {
+  let didCancel = false;
+
   const API_KEY = process.env.REACT_APP_PUB_DATA_API_KEY;
   const [isLoggedIn, setIsLoggedIn] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -20,6 +22,10 @@ export default function Abandoned() {
       setIsLoggedIn(false);
     }
     getData();
+
+    return () => {
+      didCancel = true;
+    };
   }, []);
 
   const getData = async () => {
@@ -47,8 +53,10 @@ export default function Abandoned() {
         });
         animals = [...animals, ...animalsArray.data.AbdmAnimalProtect[1].row];
       }
-      setData(animals.filter((a) => a.PBLANC_END_DE >= date));
-      setIsLoading(false);
+      if (!didCancel) {
+        setData(animals.filter((a) => a.PBLANC_END_DE >= date));
+        setIsLoading(false);
+      }
     } catch (e) {
       console.log(e);
     }

@@ -7,6 +7,7 @@ import { ContentStyle } from "components/styled";
 import List from "components/List";
 
 export default function Shelter() {
+  let didCancel = false;
   const API_KEY = process.env.REACT_APP_PUB_DATA_API_KEY;
 
   const [isLoggedIn, setIsLoggedIn] = useState();
@@ -44,9 +45,10 @@ export default function Shelter() {
           (item.CONTRACT_PERD == "직영" && item.SUM_YY == "2019") ||
           item.CONTRACT_PERD == "20191231"
       );
-      console.log(response);
-      setData(response);
-      setIsLoading(false);
+      if (!didCancel) {
+        setData(response);
+        setIsLoading(false);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -74,13 +76,14 @@ export default function Shelter() {
     } else {
       setIsLoggedIn(false);
     }
-
-    navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
-  }, []);
-
-  useEffect(() => {
     getData();
+    navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
+
+    return () => {
+      didCancel = true;
+    };
   }, []);
+
   return (
     <>
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
