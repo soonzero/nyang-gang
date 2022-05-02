@@ -957,6 +957,35 @@ export const AnimalsStyle = styled.div`
     margin-top: 2px;
   }
 
+  .top-button {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    padding: 20px;
+    border-radius: 50%;
+    background-color: black;
+    bottom: 50px;
+    right: 50px;
+    cursor: pointer;
+    transition: all 500ms ease;
+
+    svg {
+      transform: rotate(-90deg);
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+
+    &:hover {
+      transform: translateY(-10px);
+    }
+  }
+
+  .top-button.display {
+    visibility: visible;
+    opacity: 1;
+  }
+
   @media screen and (max-width: 1024px) {
     .list-container {
       grid-template-columns: repeat(3, 1fr);
@@ -1435,15 +1464,22 @@ export const LicenseStyle = styled.div`
     margin-bottom: 20px;
   }
 
-  .license-cards {
+  .content-cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     column-gap: 15px;
     padding: 1rem 0;
     margin-bottom: 20px;
   }
 
-  .license-card {
+  .content-cards.license {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .content-cards.way {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .content-card {
     display: grid;
     grid-template-rows: 1fr 1fr;
     width: 100%;
@@ -1501,7 +1537,7 @@ export const LicenseStyle = styled.div`
   }
 
   @media screen and (max-width: 1210px) {
-    .license-cards {
+    .content-cards.license {
       grid-template-columns: repeat(2, 1fr);
       row-gap: 40px;
       column-gap: 40px;
@@ -1513,7 +1549,7 @@ export const LicenseStyle = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    .license-cards {
+    .content-cards {
       grid-template-columns: 1fr;
     }
   }

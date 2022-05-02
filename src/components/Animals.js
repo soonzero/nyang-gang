@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimalsStyle } from "./styled";
+import { ReactComponent as Top } from "images/next.svg";
 
 export default function Animals(props) {
   const [page, setPage] = useState(1);
@@ -10,6 +11,7 @@ export default function Animals(props) {
   };
 
   const [display, setDisplay] = useState(getList(1));
+  const [button, setButton] = useState(false);
 
   const handleScroll = useCallback(() => {
     const { innerHeight } = window;
@@ -19,6 +21,12 @@ export default function Animals(props) {
     if (Math.round(scrollTop + innerHeight) >= scrollHeight) {
       setDisplay(display.concat(getList(page + 1)));
       setPage((prev) => prev + 1);
+    }
+
+    if (window.scrollY >= window.innerHeight) {
+      setButton(true);
+    } else {
+      setButton(false);
     }
   }, [page, display]);
 
@@ -30,8 +38,15 @@ export default function Animals(props) {
     };
   }, [handleScroll]);
 
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <AnimalsStyle>
+    <AnimalsStyle button={button}>
       <div className="list-container">
         {display.map((a) => {
           return (
@@ -64,6 +79,12 @@ export default function Animals(props) {
             </Link>
           );
         })}
+      </div>
+      <div
+        className={`top-button ${button ? "display" : ""}`}
+        onClick={goToTop}
+      >
+        <Top />
       </div>
     </AnimalsStyle>
   );
