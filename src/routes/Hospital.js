@@ -10,7 +10,6 @@ export default function Hospital() {
   let didCancel = false;
   const API_KEY = process.env.REACT_APP_PUB_DATA_API_KEY;
 
-  const [isLoggedIn, setIsLoggedIn] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [mapReady, setMapReady] = useState(false);
   const [data, setData] = useState();
@@ -36,15 +35,6 @@ export default function Hospital() {
   }, [city, number]);
 
   useEffect(() => {
-    if (
-      sessionStorage.getItem("accessToken") &&
-      sessionStorage.getItem("uid")
-    ) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-
     getHospitals();
 
     return () => {
@@ -105,7 +95,7 @@ export default function Hospital() {
 
   return (
     <>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Navbar />
       <Search selectNumber={selectNumber} selectCity={selectCity} />
       {!isLoading && mapReady ? (
         <ContentStyle>

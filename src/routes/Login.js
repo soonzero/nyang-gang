@@ -87,7 +87,7 @@ export default function Login() {
           <Link to="/">
             <section className="form-logo">
               <span className="logo-img">
-                <Logo fill="white" />
+                <Logo color="#f57977" />
               </span>
               <h1 className="logo-text">냥갱</h1>
             </section>

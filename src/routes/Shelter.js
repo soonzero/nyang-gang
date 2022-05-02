@@ -10,7 +10,6 @@ export default function Shelter() {
   let didCancel = false;
   const API_KEY = process.env.REACT_APP_PUB_DATA_API_KEY;
 
-  const [isLoggedIn, setIsLoggedIn] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState();
   const [city, setCity] = useState();
@@ -68,14 +67,6 @@ export default function Shelter() {
   };
 
   useEffect(() => {
-    if (
-      sessionStorage.getItem("accessToken") &&
-      sessionStorage.getItem("uid")
-    ) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
     getData();
     navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
 
@@ -86,7 +77,7 @@ export default function Shelter() {
 
   return (
     <>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Navbar />
       <Search selectNumber={selectNumber} selectCity={selectCity} />
       {!isLoading ? (
         <ContentStyle>

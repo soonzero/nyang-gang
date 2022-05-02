@@ -10,6 +10,7 @@ import AnimalDetail from "pages/AnimalDetail";
 import MyAccount from "./MyAccount";
 import DeleteAccount from "./DeleteAccount";
 import ChangePW from "./ChangePW";
+import License from "./License";
 
 export default function AppRouter(props) {
   return (
@@ -25,6 +26,7 @@ export default function AppRouter(props) {
         <Route path="/myaccount" element={<MyAccount />} />
         <Route path="/delete" element={<DeleteAccount />} />
         <Route path="/change" element={<ChangePW />} />
+        <Route path="/license" element={<License />} />
       </Routes>
     </Router>
   );

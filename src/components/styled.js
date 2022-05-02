@@ -519,6 +519,7 @@ export const NavStyle = styled.div`
   .logo-img {
     height: 30px;
     padding: 15px 0px;
+    color: #f57977;
   }
 
   .logo-text {
@@ -739,6 +740,7 @@ export const ContentStyle = styled.div`
   max-width: 1130px;
   padding: 0 40px;
   margin: 0 auto;
+  margin-top: 25px;
 
   .content-container {
     display: grid;
@@ -900,7 +902,6 @@ export const ListStyle = styled.div`
 
 export const AnimalsStyle = styled.div`
   display: block;
-  padding-top: 24px;
   width: 100%;
 
   a {
@@ -976,7 +977,6 @@ export const AnimalsStyle = styled.div`
 `;
 
 export const MyAccountStyle = styled.div`
-  margin-top: 25px;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
   padding: 60px;
@@ -1116,8 +1116,6 @@ export const MyAccountStyle = styled.div`
 `;
 
 export const DeleteAccountStyle = styled.div`
-  margin-top: 25px;
-
   strong {
     font-weight: 500;
   }
@@ -1236,7 +1234,6 @@ export const DeleteAccountStyle = styled.div`
 export const PasswordStyle = styled.div`
   max-width: 480px;
   margin: 0 auto;
-  margin-top: 25px;
   width: 100%;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
@@ -1307,6 +1304,217 @@ export const PasswordStyle = styled.div`
 
     &:hover {
       opacity: 1;
+    }
+  }
+`;
+
+export const LicenseFullScreenStyle = styled.div`
+  .container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+
+    &:hover {
+      .down {
+        opacity: 1;
+      }
+    }
+  }
+
+  .clip {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    cursor: pointer;
+    transition: all 500ms ease;
+    opacity: 0.5;
+  }
+
+  .clip-left {
+    clip-path: polygon(0% 0%, 58% 0%, 42% 100%, 0% 100%);
+    background-image: url("https://pixabay.com/get/g254e03c7aaf4c1f02f969dfc8ed03d37672053d6bf732bcf63858b85a63c1e2d6c1a635defc0e8a0916287abfdf22b95995168b0b3d2cf9f5248e4f849728347d5f8742bc8d960034051c9ab6e0a6209_1920.jpg");
+    z-index: 1;
+
+    &:hover {
+      clip-path: polygon(0% 0%, 88% 0, 72% 100%, 0% 100%);
+      opacity: 1;
+      z-index: 2;
+    }
+  }
+
+  .clip-right {
+    clip-path: polygon(58% 0%, 100% 0%, 100% 100%, 42% 100%);
+    background-image: url("https://pixabay.com/get/g9b8ea29de0b2c7822a9568765befba047c3069e81957066c300ebbfa0e753e504068df573e530bccb69a94514a03aaf33248e364863c0ff601ddf54c5e0aab03dcef87f95e5cc3960fa5d854ff303fea_1920.jpg");
+    z-index: 1;
+
+    &:hover {
+      clip-path: polygon(28% 0%, 100% 0%, 100% 100%, 12% 100%);
+      opacity: 1;
+      z-index: 2;
+    }
+  }
+
+  .logo {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 50%;
+    z-index: 3;
+    width: 75px;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 500ms ease;
+
+    svg {
+      width: 50px;
+      height: 50px;
+      transition: all 500ms ease;
+      color: white;
+    }
+
+    &:hover {
+      background-color: white;
+      opacity: 0.7;
+
+      svg {
+        color: #f57977;
+      }
+    }
+  }
+
+  .down {
+    position: absolute;
+    z-index: 3;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: black;
+    border-radius: 50%;
+    opacity: 0.2;
+    transition: all 500ms ease;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+
+    &:hover {
+      transform: translate(-50%, -0.25rem) rotate(90deg);
+    }
+  }
+`;
+
+export const LicenseStyle = styled.div`
+  width: 100%;
+  height: 100vh;
+
+  .content {
+    padding: 25px 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .content-header {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .license-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 15px;
+    padding: 1rem 0;
+    margin-bottom: 20px;
+  }
+
+  .license-card {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .card-image {
+    display: grid;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    grid-template-columns: minmax(0px, 1fr);
+    grid-template-rows: minmax(0px, 1fr);
+
+    &::before {
+      content: "";
+      width: 100%;
+      padding-top: 67%;
+      box-sizing: border-box;
+      grid-area: 1 / 1 / 1 / 1;
+    }
+  }
+
+  .card-text {
+    padding: 1.5rem 1rem;
+    background-color: #f5f5f5;
+
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.2;
+      word-break: keep-all;
+      margin-bottom: 10px;
+    }
+  }
+
+  .extra-desc {
+    display: flex;
+    justify-content: center;
+    word-break: keep-all;
+
+    span {
+      padding: 15px 30px;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+      color: black;
+    }
+  }
+
+  @media screen and (max-width: 1210px) {
+    .license-cards {
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 40px;
+      column-gap: 40px;
+    }
+
+    .card-image::before {
+      padding-top: 50%;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .license-cards {
+      grid-template-columns: 1fr;
     }
   }
 `;

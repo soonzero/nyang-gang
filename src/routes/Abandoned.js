@@ -8,19 +8,10 @@ export default function Abandoned() {
   let didCancel = false;
 
   const API_KEY = process.env.REACT_APP_PUB_DATA_API_KEY;
-  const [isLoggedIn, setIsLoggedIn] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState();
 
   useEffect(() => {
-    if (
-      sessionStorage.getItem("accessToken") &&
-      sessionStorage.getItem("uid")
-    ) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
     getData();
 
     return () => {
@@ -40,8 +31,14 @@ export default function Abandoned() {
           return today.getMonth() + 1;
         }
       };
-      const day = today.getDate();
-      const date = `${year}${month()}${day}`;
+      const day = () => {
+        if (today.getDay() < 10) {
+          return `0${today.getDay()}`;
+        } else {
+          return today.getDay();
+        }
+      };
+      const date = `${year}${month()}${day()}`;
       let animals = [];
       for (let i = 0; i < 2; i++) {
         const url = `https://openapi.gg.go.kr/AbdmAnimalProtect?KEY=${API_KEY}&Type=json&pIndex=${
@@ -64,7 +61,7 @@ export default function Abandoned() {
 
   return (
     <>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Navbar />
       {!isLoading ? (
         <ContentStyle>
           <Animals data={data} />

@@ -8,6 +8,7 @@ import { authService } from "./fbase/fbase";
 export default function Navbar(props) {
   const [subMenu, setSubMenu] = useState(false);
   const [shadow, setShadow] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState();
 
   if (sessionStorage.getItem("uid") && !props.auth) {
     const storage = getStorage();
@@ -30,10 +31,18 @@ export default function Navbar(props) {
   };
 
   const handleScroll = useCallback(() => {
-    if (window.scrollY <= 0) {
-      setShadow(false);
+    if (props.license) {
+      if (window.scrollY > window.innerHeight) {
+        setShadow(true);
+      } else {
+        setShadow(false);
+      }
     } else {
-      setShadow(true);
+      if (window.scrollY <= 0) {
+        setShadow(false);
+      } else {
+        setShadow(true);
+      }
     }
   });
 
@@ -45,6 +54,17 @@ export default function Navbar(props) {
     };
   }, [handleScroll]);
 
+  useEffect(() => {
+    if (
+      sessionStorage.getItem("accessToken") &&
+      sessionStorage.getItem("uid")
+    ) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  });
+
   return (
     <NavStyle shadow={shadow}>
       <div className="nav-wrapper">
@@ -52,7 +72,7 @@ export default function Navbar(props) {
           <Link to="/">
             <li className="nav-logo">
               <span className="logo-img">
-                <Logo fill="white" />
+                <Logo color="#f57977" />
               </span>
               <span className="logo-text">냥갱</span>
             </li>
@@ -68,15 +88,10 @@ export default function Navbar(props) {
               <li className="nav-menu">
                 <Link to="/abandoned">유기동물 조회</Link>
               </li>
-              {props.isLoggedIn ? (
+              {isLoggedIn ? (
                 <>
                   <li className="nav-menu">
-                    <a
-                      href="https://www.animal.go.kr/front/community/show.do?boardId=contents&seq=66&menuNo=2000000016"
-                      target="_blank"
-                    >
-                      내 반려동물 등록하기
-                    </a>
+                    <Link to="/license">반려동물 등록</Link>
                   </li>
                   <li className="nav-menu">
                     <div
