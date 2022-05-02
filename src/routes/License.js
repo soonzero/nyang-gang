@@ -38,8 +38,8 @@ export default function License() {
         <LicenseStyle>
           <div className="content">
             <h1 className="content-header">동물등록제</h1>
-            <div className="license-cards">
-              <div className="license-card">
+            <div className="content-cards license">
+              <div className="content-card">
                 <div
                   className="card-image"
                   style={{
@@ -53,7 +53,7 @@ export default function License() {
                   <p>반려견만 의무 등록</p>
                 </div>
               </div>
-              <div className="license-card">
+              <div className="content-card">
                 <div
                   className="card-image"
                   style={{
@@ -67,7 +67,7 @@ export default function License() {
                   <p>반려묘는 보호자 희망 시 등록 가능</p>
                 </div>
               </div>
-              <div className="license-card">
+              <div className="content-card">
                 <div
                   className="card-image"
                   style={{
@@ -81,7 +81,7 @@ export default function License() {
                   <p>등록 가능 여부를 미리 확인!</p>
                 </div>
               </div>
-              <div className="license-card">
+              <div className="content-card">
                 <div
                   className="card-image"
                   style={{
@@ -105,6 +105,31 @@ export default function License() {
           </div>
           <div className="content">
             <h1 className="content-header">등록 방법</h1>
+            <div className="content-cards way">
+              <div className="content-card">
+                <div className="card-text">
+                  <h3>외장형 무선식별장치 부착</h3>
+                  <p>RFID칩이 내장된 목걸이 부착</p>
+                  <p>
+                    반려묘의 경우 행동 특성상 훼손 및 분실 가능성이 크기 때문에
+                    불가능
+                  </p>
+                </div>
+                {/* <div className="card-image" /> */}
+              </div>
+              <div className="content-card">
+                <div className="card-text">
+                  <h3>내장형 무선식별장치 개체 삽입</h3>
+                  <p>동물 양쪽 어깨뼈 사이의 피부 아래에 의료기기를 주입</p>
+                  <p>
+                    체내 이물 반응이 없는 재질로 코팅된 쌀알 크기의
+                    동물용의료기기
+                  </p>
+                  <p>동물용의료기기 기준규격과 국제규격에 적합한 제품만 사용</p>
+                </div>
+                {/* <div className="card-image" /> */}
+              </div>
+            </div>
           </div>
         </LicenseStyle>
       </ContentStyle>
