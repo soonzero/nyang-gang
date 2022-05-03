@@ -969,10 +969,11 @@ export const AnimalsStyle = styled.div`
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid transparent;
-    transition: border-color 200ms ease;
+    transition: border-color 200ms ease, transform 200ms ease;
 
     &:hover {
       border-color: #e5e5e5;
+      transform: scale(1.1);
     }
   }
 
@@ -983,6 +984,7 @@ export const AnimalsStyle = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 8px;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.25);
 
     &::before {
       content: "";
@@ -1385,12 +1387,6 @@ export const LicenseFullScreenStyle = styled.div`
     width: 100vw;
     height: 100vh;
     position: relative;
-
-    &:hover {
-      .down {
-        opacity: 1;
-      }
-    }
   }
 
   .clip {
@@ -1454,12 +1450,7 @@ export const LicenseFullScreenStyle = styled.div`
     }
 
     &:hover {
-      background-color: white;
-      opacity: 0.7;
-
-      svg {
-        color: #f57977;
-      }
+      background-color: rgba(255, 255, 255, 0.5);
     }
   }
 
@@ -1478,7 +1469,8 @@ export const LicenseFullScreenStyle = styled.div`
     background-color: black;
     border-radius: 50%;
     opacity: 0.2;
-    transition: all 500ms ease;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.25);
+    transition: all 300ms ease;
 
     svg {
       width: 20px;
@@ -1487,6 +1479,7 @@ export const LicenseFullScreenStyle = styled.div`
     }
 
     &:hover {
+      opacity: 1;
       transform: translate(-50%, -0.25rem) rotate(90deg);
     }
   }
@@ -1540,22 +1533,22 @@ export const LicenseStyle = styled.div`
       .svg-container {
         .dog,
         .cat {
-          opacity: 0;
+          opacity: 1;
         }
 
         .name-tag,
         .pills {
-          top: 50%;
-          left: 50%;
           fill: #f57977;
+          transform-origin: center center;
+          transform: scale(0.3);
         }
 
         .name-tag {
-          transform: scale(4) translate(-50%, -50%);
+          transform: rotate(-30deg) scale(0.3) translate(7rem, 5rem);
         }
 
         .pills {
-          transform: scale(5) translate(-50%, -50%);
+          transform: translate(0.5rem, 0.5rem) scale(0.3);
         }
       }
     }
@@ -1622,7 +1615,6 @@ export const LicenseStyle = styled.div`
       height: auto;
       fill: rgba(0, 0, 0, 0.24);
       transition: all 500ms ease;
-      transform-origin: 0 0;
     }
 
     .name-tag,
@@ -1633,21 +1625,17 @@ export const LicenseStyle = styled.div`
     }
 
     .name-tag {
-      width: 2rem;
-      top: 50%;
-      right: 39%;
+      width: 5rem;
       z-index: 2;
-      transform: rotate(-30deg);
     }
 
     .pills {
-      width: 1.4rem;
-      top: 52%;
-      right: 45%;
+      width: 5rem;
     }
 
     .dog,
     .cat {
+      opacity: 0;
       fill: lightgray;
     }
   }
