@@ -5,6 +5,7 @@ import Search from "components/Search";
 import React, { useState, useEffect } from "react";
 import { ContentStyle } from "components/styled";
 import List from "components/List";
+import Loading from "components/Loading";
 
 export default function Shelter() {
   let didCancel = false;
@@ -79,32 +80,30 @@ export default function Shelter() {
     <>
       <Navbar />
       <Search selectNumber={selectNumber} selectCity={selectCity} />
-      {!isLoading ? (
-        <ContentStyle>
-          <div className="content-container">
-            <Kakaomap
-              shelter
-              data={data}
-              center={center}
-              currentPosition={currentPosition}
-            />
-            <List
-              shelter
-              data={data}
-              isLoading={isLoading}
-              city={city}
-              number={number}
-              setCenter={setCenter}
-            />
-          </div>
-        </ContentStyle>
-      ) : (
-        <ContentStyle>
-          <div className="loading-text">
-            🐱 목록을 불러오고 있어요! 조금만 기다려주세요! 🐶
-          </div>
-        </ContentStyle>
-      )}
+      <ContentStyle>
+        {!isLoading ? (
+          <>
+            <div className="content-container">
+              <Kakaomap
+                shelter
+                data={data}
+                center={center}
+                currentPosition={currentPosition}
+              />
+              <List
+                shelter
+                data={data}
+                isLoading={isLoading}
+                city={city}
+                number={number}
+                setCenter={setCenter}
+              />
+            </div>
+          </>
+        ) : (
+          <Loading />
+        )}
+      </ContentStyle>
     </>
   );
 }

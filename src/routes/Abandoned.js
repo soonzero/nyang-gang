@@ -1,7 +1,8 @@
 import axios from "axios";
 import Animals from "components/Animals";
 import Navbar from "components/Navbar";
-import { ContentStyle } from "components/styled";
+import Loading from "components/Loading";
+import { ContentStyle, LoadingStyle } from "components/styled";
 import React, { useState, useEffect } from "react";
 
 export default function Abandoned() {
@@ -62,17 +63,9 @@ export default function Abandoned() {
   return (
     <>
       <Navbar />
-      {!isLoading ? (
-        <ContentStyle>
-          <Animals data={data} />
-        </ContentStyle>
-      ) : (
-        <ContentStyle>
-          <div className="loading-text">
-            🐱 목록을 불러오고 있어요! 조금만 기다려주세요! 🐶
-          </div>
-        </ContentStyle>
-      )}
+      <ContentStyle>
+        {!isLoading ? <Animals data={data} /> : <Loading />}
+      </ContentStyle>
     </>
   );
 }

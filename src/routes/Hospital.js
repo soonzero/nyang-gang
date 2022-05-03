@@ -5,6 +5,7 @@ import Kakaomap from "../components/Kakaomap";
 import axios from "axios";
 import List from "../components/List";
 import Search from "components/Search";
+import Loading from "components/Loading";
 
 export default function Hospital() {
   let didCancel = false;
@@ -97,32 +98,30 @@ export default function Hospital() {
     <>
       <Navbar />
       <Search selectNumber={selectNumber} selectCity={selectCity} />
-      {!isLoading && mapReady ? (
-        <ContentStyle>
-          <div className="content-container">
-            <Kakaomap
-              hospital
-              data={data}
-              center={center}
-              currentPosition={currentPosition}
-            />
-            <List
-              hospital
-              data={data}
-              isLoading={isLoading}
-              city={city}
-              number={number}
-              setCenter={setCenter}
-            />
-          </div>
-        </ContentStyle>
-      ) : (
-        <ContentStyle>
-          <div className="loading-text">
-            🐱 목록을 불러오고 있어요! 조금만 기다려주세요! 🐶
-          </div>
-        </ContentStyle>
-      )}
+      <ContentStyle>
+        {!isLoading && mapReady ? (
+          <>
+            <div className="content-container">
+              <Kakaomap
+                hospital
+                data={data}
+                center={center}
+                currentPosition={currentPosition}
+              />
+              <List
+                hospital
+                data={data}
+                isLoading={isLoading}
+                city={city}
+                number={number}
+                setCenter={setCenter}
+              />
+            </div>
+          </>
+        ) : (
+          <Loading />
+        )}
+      </ContentStyle>
     </>
   );
 }
