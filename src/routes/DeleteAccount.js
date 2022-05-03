@@ -1,6 +1,7 @@
 import Navbar from "components/Navbar";
 import { ContentStyle, DeleteAccountStyle } from "components/styled";
 import { deleteUser, getAuth } from "firebase/auth";
+import { deleteObject, ref, getStorage } from "firebase/storage";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +17,7 @@ export default function DeleteAccount() {
     }
   };
 
-  const deleteAccount = () => {
+  const deleteAccount = async () => {
     if (checked) {
       if (
         window.confirm(
@@ -25,14 +26,19 @@ export default function DeleteAccount() {
       ) {
         const auth = getAuth();
         const user = auth.currentUser;
-
-        deleteUser(user)
-          .then(() => {
-            alert("회원 탈퇴가 완료되었습니다.");
-          })
-          .catch((error) => {
-            alert(error);
-          });
+        try {
+          const deleteUserAccount = await deleteUser(user);
+          const storage = getStorage();
+          const imageRef = ref(
+            storage,
+            `images/${sessionStorage.getItem("uid")}.png`
+          );
+          const deleteImg = await deleteObject(imageRef);
+          sessionStorage.clear();
+          navigate("/");
+        } catch (e) {
+          console.log(e);
+        }
       } else {
         navigate("/");
       }
