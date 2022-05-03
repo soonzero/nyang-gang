@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
@@ -133,6 +133,33 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+`;
+
+export const rotateAnimation = keyframes`
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+`;
+
+export const dashAnimation = keyframes`
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
 `;
 
 export const SearchStyle = styled.div`
@@ -749,12 +776,28 @@ export const ContentStyle = styled.div`
     column-gap: 10px;
   }
 
-  .loading-text {
+  .loading {
     text-align: center;
     color: #f57977;
     font-size: 2rem;
     font-weight: 500;
     padding-top: 285px;
+    position: relative;
+  }
+
+  .loading-spinner {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3rem;
+    height: 3rem;
+    stroke: #e5e5e5;
+    animation: ${rotateAnimation} 2s linear infinite;
+
+    & .path {
+      animation: ${dashAnimation} 1.5s ease-in-out infinite;
+    }
   }
 
   @media screen and (max-width: 1210px) {
@@ -1487,6 +1530,37 @@ export const LicenseStyle = styled.div`
     overflow: hidden;
   }
 
+  .card-text.way {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 3rem 1rem;
+
+    &:hover {
+      .svg-container {
+        .dog,
+        .cat {
+          opacity: 0;
+        }
+
+        .name-tag,
+        .pills {
+          top: 50%;
+          left: 50%;
+          fill: #f57977;
+        }
+
+        .name-tag {
+          transform: scale(4) translate(-50%, -50%);
+        }
+
+        .pills {
+          transform: scale(5) translate(-50%, -50%);
+        }
+      }
+    }
+  }
+
   .card-image {
     display: grid;
     background-position: 50% 50%;
@@ -1507,6 +1581,17 @@ export const LicenseStyle = styled.div`
   .card-text {
     padding: 1.5rem 1rem;
     background-color: #f5f5f5;
+    height: 100%;
+
+    &.way {
+      padding: 3rem 1rem;
+      border-radius: 12px;
+      height: auto;
+
+      h3 {
+        margin-bottom: 0;
+      }
+    }
 
     h3 {
       font-size: 1.4rem;
@@ -1520,6 +1605,50 @@ export const LicenseStyle = styled.div`
       line-height: 1.2;
       word-break: keep-all;
       margin-bottom: 10px;
+      text-align: center;
+    }
+  }
+
+  .svg-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    position: relative;
+    width: 100%;
+
+    svg {
+      width: 10rem;
+      height: auto;
+      fill: rgba(0, 0, 0, 0.24);
+      transition: all 500ms ease;
+      transform-origin: 0 0;
+    }
+
+    .name-tag,
+    .pills {
+      position: absolute;
+      fill: grey;
+      transition: all 500ms ease;
+    }
+
+    .name-tag {
+      width: 2rem;
+      top: 50%;
+      right: 39%;
+      z-index: 2;
+      transform: rotate(-30deg);
+    }
+
+    .pills {
+      width: 1.4rem;
+      top: 52%;
+      right: 45%;
+    }
+
+    .dog,
+    .cat {
+      fill: lightgray;
     }
   }
 
