@@ -1,6 +1,10 @@
 import Navbar from "components/Navbar";
 import { ReactComponent as Logo } from "images/nyang-gang.svg";
 import { ReactComponent as Down } from "images/next.svg";
+import { ReactComponent as Dog } from "images/dog.svg";
+import { ReactComponent as Cat } from "images/cat.svg";
+import { ReactComponent as Pills } from "images/pills.svg";
+import { ReactComponent as NameTag } from "images/name-tag.svg";
 import {
   ContentStyle,
   LicenseFullScreenStyle,
@@ -106,30 +110,35 @@ export default function License() {
           <div className="content">
             <h1 className="content-header">등록 방법</h1>
             <div className="content-cards way">
-              <div className="content-card">
-                <div className="card-text">
-                  <h3>외장형 무선식별장치 부착</h3>
-                  <p>RFID칩이 내장된 목걸이 부착</p>
-                  <p>
-                    반려묘의 경우 행동 특성상 훼손 및 분실 가능성이 크기 때문에
-                    불가능
-                  </p>
-                </div>
-                {/* <div className="card-image" /> */}
+              <div className="card-text way">
+                <h3>외장형 무선식별장치 부착</h3>
+                <span className="svg-container outside">
+                  <NameTag className="name-tag" />
+                  <Dog className="dog" />
+                </span>
+                <p>RFID칩이 내장된 목걸이 부착</p>
+                <p>반려견만 신청 가능</p>
+                <p>
+                  반려묘의 경우, 행동 특성상 훼손 및 분실 가능성이 크기 때문에
+                  불가능
+                </p>
               </div>
-              <div className="content-card">
-                <div className="card-text">
-                  <h3>내장형 무선식별장치 개체 삽입</h3>
-                  <p>동물 양쪽 어깨뼈 사이의 피부 아래에 의료기기를 주입</p>
-                  <p>
-                    체내 이물 반응이 없는 재질로 코팅된 쌀알 크기의
-                    동물용의료기기
-                  </p>
-                  <p>동물용의료기기 기준규격과 국제규격에 적합한 제품만 사용</p>
-                </div>
-                {/* <div className="card-image" /> */}
+              <div className="card-text way">
+                <h3>내장형 무선식별장치 개체 삽입</h3>
+                <span className="svg-container inside">
+                  <Cat className="cat" />
+                  <Pills className="pills" />
+                </span>
+                <p>동물 양쪽 어깨뼈 사이의 피부 아래에 의료기기를 주입</p>
+                <p>
+                  체내 이물 반응이 없는 재질로 코팅된 쌀알 크기의 동물용의료기기
+                </p>
+                <p>동물용의료기기 기준규격과 국제규격에 적합한 제품만 사용</p>
               </div>
             </div>
+          </div>
+          <div className="content">
+            <h1 className="content-header">등록 절차</h1>
           </div>
         </LicenseStyle>
       </ContentStyle>
