@@ -1416,7 +1416,7 @@ export const LicenseFullScreenStyle = styled.div`
 
   .clip-left {
     clip-path: polygon(0% 0%, 58% 0%, 42% 100%, 0% 100%);
-    background-image: url("https://pixabay.com/get/g254e03c7aaf4c1f02f969dfc8ed03d37672053d6bf732bcf63858b85a63c1e2d6c1a635defc0e8a0916287abfdf22b95995168b0b3d2cf9f5248e4f849728347d5f8742bc8d960034051c9ab6e0a6209_1920.jpg");
+    background-image: url("https://pixabay.com/get/gdaa79419e6db0e32e0ff7ff0020ddc99deb60a2907eb351cf15a3dfb5069730d8cfbef59c72a686f1308e20376d5b1a29950072baca375655c6cd05312495ed5a224ab762defc54e868aa5500390393f_1920.jpg?attachment=");
     z-index: 1;
 
     &:hover {
@@ -1428,7 +1428,7 @@ export const LicenseFullScreenStyle = styled.div`
 
   .clip-right {
     clip-path: polygon(58% 0%, 100% 0%, 100% 100%, 42% 100%);
-    background-image: url("https://pixabay.com/get/ge6e08b16064f8ee7f65ebeccc97c7c857ced25ff55dc399bc591ee74693d3badb5500efd0601c68ad9772950497f7367ceeae25c3e998f80662fc06a37ee506b38856e9b85100ccb5096db0f341c4198_1920.jpg");
+    background-image: url("https://pixabay.com/get/gf4dacb454c896cb80c6fc752d1774261f26ffb91e0dd988e7e7758b89f7f2ff5143c46a7db855de552a84e841dc94527526ddc790f602eb3d2e1cc3d79735a16456c78c27835e2d804fadfde1fae6111_1920.jpg?attachment=");
     z-index: 1;
 
     &:hover {
@@ -1665,11 +1665,10 @@ export const LicenseStyle = styled.div`
   }
 
   .process-container {
-    /* min-width: 720px; */
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    column-gap: 15px;
-    row-gap: 15px;
+    column-gap: 30px;
+    row-gap: 10px;
     position: relative;
     margin-bottom: 20px;
   }
