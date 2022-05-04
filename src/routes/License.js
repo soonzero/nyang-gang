@@ -5,6 +5,7 @@ import { ReactComponent as Dog } from "images/dog.svg";
 import { ReactComponent as Cat } from "images/cat.svg";
 import { ReactComponent as Pills } from "images/pills.svg";
 import { ReactComponent as NameTag } from "images/name-tag.svg";
+import { ReactComponent as Flow } from "images/next.svg";
 import {
   ContentStyle,
   LicenseFullScreenStyle,
@@ -148,6 +149,7 @@ export default function License() {
           <div className="content">
             <h1 className="content-header">등록 절차</h1>
             <div className="process-container">
+              <div className="divider"></div>
               <div className="process g11-12">
                 <span>
                   등록대행업체 방문 등록
@@ -162,6 +164,15 @@ export default function License() {
                   (무선식별장치가 장착된 경우만 가능)
                 </span>
               </div>
+              <div className="process flow">
+                <Flow />
+              </div>
+              <div className="process flow">
+                <Flow />
+              </div>
+              <div className="process flow g13-14">
+                <Flow />
+              </div>
               <div className="process">
                 <span>
                   무선식별장치 장착
@@ -175,6 +186,15 @@ export default function License() {
               <div className="process g13-14">
                 <span>무선식별장치 장착확인</span>
               </div>
+              <div className="process flow">
+                <Flow />
+              </div>
+              <div className="process flow">
+                <Flow />
+              </div>
+              <div className="process flow g13-14">
+                <Flow />
+              </div>
               <div className="process g11-12">
                 <span>
                   동물등록신청서 등 작성 및 제출/수수료 납부 (내장 만원, 외장
@@ -187,11 +207,23 @@ export default function License() {
                   3천원)
                 </span>
               </div>
+              <div className="process flow g11-12">
+                <Flow />
+              </div>
+              <div className="process flow g13-14">
+                <Flow />
+              </div>
               <div className="process g11-12">
                 <span>검토 및 등록사항 기록 등</span>
               </div>
               <div className="process g13-14">
                 <span>검토 및 등록사항 기록 등</span>
+              </div>
+              <div className="process flow g11-12">
+                <Flow />
+              </div>
+              <div className="process flow g13-14">
+                <Flow />
               </div>
               <div className="process g11-12">
                 <span>시군구청 등록 승인 후 등록증 수령</span>

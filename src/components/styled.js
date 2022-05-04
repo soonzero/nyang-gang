@@ -509,7 +509,7 @@ export const NavStyle = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
   border-bottom: 1px solid #f5f5f5;
 
   &::after {
@@ -519,7 +519,7 @@ export const NavStyle = styled.div`
     width: 100%;
     height: 80px;
     box-shadow: rgb(0 0 0 / 12%) 0px 6px 16px;
-    z-index: 2;
+    z-index: 3;
     transition: opacity 200ms ease;
     /* border-bottom: 1px solid #f5f5f5; */
     opacity: ${(props) => (props.shadow == true ? 1 : 0)};
@@ -536,7 +536,7 @@ export const NavStyle = styled.div`
     padding: 0 40px;
     margin: 0 auto;
     position: relative;
-    z-index: 3;
+    z-index: 4;
   }
 
   .nav-container {
@@ -1512,7 +1512,7 @@ export const LicenseStyle = styled.div`
 
   .content-cards {
     display: grid;
-    column-gap: 15px;
+    grid-gap: 15px;
     margin-bottom: 20px;
   }
 
@@ -1635,7 +1635,7 @@ export const LicenseStyle = styled.div`
 
     .name-tag {
       width: 5rem;
-      z-index: 2;
+      z-index: 1;
     }
 
     .pills {
@@ -1646,6 +1646,7 @@ export const LicenseStyle = styled.div`
     .cat {
       opacity: 0;
       fill: lightgray;
+      z-index: 0;
     }
   }
 
@@ -1664,6 +1665,7 @@ export const LicenseStyle = styled.div`
   }
 
   .process-container {
+    /* min-width: 720px; */
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     column-gap: 15px;
@@ -1695,15 +1697,62 @@ export const LicenseStyle = styled.div`
     grid-column-end: 5;
   }
 
+  .flow {
+    background-color: transparent;
+    padding: 0;
+    cursor: default;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      color: lightgrey;
+      transform: rotate(90deg);
+    }
+  }
+
+  .divider {
+    position: absolute;
+    left: 50%;
+    height: 100%;
+    border-right: 1px dashed lightgrey;
+    border-left: 1px dashed lightgrey;
+    transform: translateX(-50%);
+  }
+
   @media screen and (max-width: 1210px) {
     .content-cards.license {
       grid-template-columns: repeat(2, 1fr);
-      row-gap: 40px;
-      column-gap: 40px;
+      grid-gap: 15px;
     }
 
     .card-image::before {
       padding-top: 50%;
+    }
+  }
+
+  @media screen and (max-width: 1123px) {
+    .card-text {
+      p {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .divider {
+      display: none;
+    }
+
+    .content-cards.way {
+      grid-template-columns: 1fr 1fr;
+
+      p {
+        font-size: 1rem;
+      }
+    }
+
+    .process-container {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
