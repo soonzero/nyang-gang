@@ -786,10 +786,20 @@ export const ContentStyle = styled.div`
     column-gap: 10px;
   }
 
+  @media screen and (max-width: 1210px) {
+    .content-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr;
+      row-gap: 10px;
+    }
+  }
+`;
+
+export const LoadingStyle = styled.div`
   .loading {
     text-align: center;
     color: #f57977;
-    font-size: 2rem;
+    font-size: ${(props) => (props.modal ? "1rem" : "2rem")};
     font-weight: 500;
     padding-top: 285px;
     position: relative;
@@ -802,19 +812,11 @@ export const ContentStyle = styled.div`
     transform: translateX(-50%);
     width: 3rem;
     height: 3rem;
-    stroke: #e5e5e5;
+    stroke: #f57977;
     animation: ${rotateAnimation} 2s linear infinite;
 
     & .path {
       animation: ${dashAnimation} 1.5s ease-in-out infinite;
-    }
-  }
-
-  @media screen and (max-width: 1210px) {
-    .content-container {
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr;
-      row-gap: 10px;
     }
   }
 
@@ -1416,7 +1418,7 @@ export const LicenseFullScreenStyle = styled.div`
 
   .clip-left {
     clip-path: polygon(0% 0%, 58% 0%, 42% 100%, 0% 100%);
-    background-image: url("https://pixabay.com/get/gdaa79419e6db0e32e0ff7ff0020ddc99deb60a2907eb351cf15a3dfb5069730d8cfbef59c72a686f1308e20376d5b1a29950072baca375655c6cd05312495ed5a224ab762defc54e868aa5500390393f_1920.jpg?attachment=");
+    background-image: url("https://firebasestorage.googleapis.com/v0/b/nyang-gang.appspot.com/o/kitten-gdaa79419e_1920.jpg?alt=media&token=f985377d-3e2c-49bb-825b-6c64644c630d");
     z-index: 1;
 
     &:hover {
@@ -1428,7 +1430,7 @@ export const LicenseFullScreenStyle = styled.div`
 
   .clip-right {
     clip-path: polygon(58% 0%, 100% 0%, 100% 100%, 42% 100%);
-    background-image: url("https://pixabay.com/get/gf4dacb454c896cb80c6fc752d1774261f26ffb91e0dd988e7e7758b89f7f2ff5143c46a7db855de552a84e841dc94527526ddc790f602eb3d2e1cc3d79735a16456c78c27835e2d804fadfde1fae6111_1920.jpg?attachment=");
+    background-image: url("https://firebasestorage.googleapis.com/v0/b/nyang-gang.appspot.com/o/fetch-gf4dacb454_1920.jpg?alt=media&token=5424f5d7-fdea-4e61-b96b-08a88a56f080");
     z-index: 1;
 
     &:hover {
@@ -1758,6 +1760,105 @@ export const LicenseStyle = styled.div`
   @media screen and (max-width: 768px) {
     .content-cards {
       grid-template-columns: 1fr;
+    }
+  }
+`;
+
+export const DimStyle = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+export const ModalStyle = styled.div`
+  width: 550px;
+  height: 800px;
+  background-color: #ebebeb;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  animation: ${opacityAnimation} 500ms ease-in-out;
+
+  .container {
+    position: relative;
+    padding: 40px;
+    display: flex;
+    box-sizing: border-box;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .header {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .exit {
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .sigun-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2px;
+    margin-bottom: 20px;
+  }
+
+  .sigun {
+    border: 1px solid lightgrey;
+    padding: 8px 12px;
+    text-align: center;
+    cursor: pointer;
+
+    &.selected {
+      background-color: lightgrey;
+      font-weight: 500;
+    }
+
+    span {
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+  }
+
+  .lists {
+    max-height: 100%;
+    height: 100%;
+    overflow: scroll;
+    border: 1px solid lightgrey;
+    padding: 10px;
+  }
+
+  .list {
+    padding: 5px 10px;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
 `;
