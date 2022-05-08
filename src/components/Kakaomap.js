@@ -75,6 +75,30 @@ export default function Kakaomap(props) {
           infoWindow.close();
         });
       });
+    } else if (props.modal && props.data) {
+      props.data.map((d) => {
+        const coords = new kakao.maps.LatLng(
+          d.REFINE_WGS84_LAT,
+          d.REFINE_WGS84_LOGT
+        );
+        const mark = new kakao.maps.Marker({
+          map: map,
+          position: coords,
+        });
+        const iwContent = `<div style="text-align: center; width: 100%; height: 100%;">
+        ${d.DIV_NM}
+        </div>`;
+
+        const infoWindow = new kakao.maps.InfoWindow({
+          content: iwContent,
+        });
+        kakao.maps.event.addListener(mark, "mouseover", function () {
+          infoWindow.open(map, mark);
+        });
+        kakao.maps.event.addListener(mark, "mouseout", function () {
+          infoWindow.close();
+        });
+      });
     }
   }, [props.center, props.data, props.currentPosition]);
 

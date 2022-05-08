@@ -1686,6 +1686,12 @@ export const LicenseStyle = styled.div`
     word-break: keep-all;
     line-height: 1.5;
     cursor: pointer;
+    transition: all 500ms ease-in-out;
+  }
+
+  .process.selected {
+    background-color: #f57977;
+    color: white;
   }
 
   .g11-12 {
@@ -1835,7 +1841,8 @@ export const ModalStyle = styled.div`
     cursor: pointer;
 
     &.selected {
-      background-color: lightgrey;
+      background-color: #f57977;
+      color: white;
       font-weight: 500;
     }
 
@@ -1851,14 +1858,34 @@ export const ModalStyle = styled.div`
     overflow: scroll;
     border: 1px solid lightgrey;
     padding: 10px;
+    background-color: #efefef;
+  }
+
+  .lists.agency {
+    .list {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 
   .list {
     padding: 5px 10px;
-    cursor: pointer;
+    text-decoration: none;
 
-    &:hover {
-      text-decoration: underline;
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
+  }
+
+  .map-container {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
   }
 `;

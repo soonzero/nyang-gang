@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { ReactComponent as Exit } from "images/exit-modal.svg";
 import { ModalStyle } from "./styled";
 import Loading from "./Loading";
+import Kakaomap from "./Kakaomap";
 
 export default function Modal(props) {
   let didCancel = false;
@@ -45,6 +46,8 @@ export default function Modal(props) {
   const [data, setData] = useState();
   const [display, setDisplay] = useState();
   const [selected, setSelected] = useState();
+  const [currentPosition, setCurrentPosition] = useState();
+  const [center, setCenter] = useState();
 
   const getData = async () => {
     didCancel = false;
@@ -94,12 +97,38 @@ export default function Modal(props) {
   const filterData = async (keyword) => {
     const result = await data.filter((d) => d.SIGUN_NM == keyword);
     setDisplay(result);
+    if (props.choice == "gov") {
+      if (result.length > 0) {
+        setCenter({
+          lat: result[0].REFINE_WGS84_LAT,
+          lon: result[0].REFINE_WGS84_LOGT,
+        });
+      } else {
+        alert("화성시에 대한 정보가 아직 없어요!");
+      }
+    }
+  };
+
+  const onGeoOk = (position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    setCurrentPosition({
+      lat: lat,
+      lon: lon,
+    });
+  };
+
+  const onGeoError = () => {
+    alert("위치를 찾을 수 없어요!");
   };
 
   useEffect(() => {
     getData();
+    navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
+    document.body.style.overflow = "hidden";
     return () => {
       didCancel = true;
+      document.body.style.overflow = "unset";
     };
   }, []);
 
@@ -133,20 +162,37 @@ export default function Modal(props) {
                 );
               })}
             </ul>
-            {display && (
-              <ul className="lists">
+            {display && props.choice == "agency" && (
+              <ul className="lists agency">
                 {display.length > 0 ? (
-                  display.map((d) => {
-                    return (
-                      <li className="list">
-                        {props.choice == "gov" ? d.DIV_NM : d.ENTRPS_NM}
-                      </li>
-                    );
-                  })
+                  display
+                    .filter((i) => !i.DETAIL_TELNO.includes("*"))
+                    .map((d) => {
+                      return (
+                        <div className="list">
+                          <span>{d.ENTRPS_NM}</span>
+                          <a href={`${`tel:${d.DETAIL_TELNO}`}`}>
+                            {d.DETAIL_TELNO}
+                          </a>
+                        </div>
+                      );
+                    })
                 ) : (
                   <li className="list">검색된 결과가 없어요 😭</li>
                 )}
               </ul>
+            )}
+            {display && props.choice == "gov" && (
+              <div className="lists gov">
+                <div className="map-container">
+                  <Kakaomap
+                    modal
+                    data={display}
+                    center={center}
+                    currentPosition={currentPosition}
+                  />
+                </div>
+              </div>
             )}
           </div>
         ) : (

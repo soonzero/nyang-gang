@@ -37,7 +37,7 @@ export default function License() {
 
   return (
     <>
-      {modal ? <Dim /> : null}
+      {modal ? <Dim setModal={setModal} /> : null}
       {modal ? <Modal choice={choice} setModal={setModal} /> : null}
       <LicenseFullScreenStyle>
         <div className="container">
@@ -169,7 +169,7 @@ export default function License() {
                 <div className="divider"></div>
                 <div
                   name="agency"
-                  className="process g11-12"
+                  className={`process g11-12 ${agency ? "selected" : ""}`}
                   onMouseEnter={() => setAgency(true)}
                   onMouseLeave={() => setAgency(false)}
                   onClick={select}
@@ -186,7 +186,7 @@ export default function License() {
                 </div>
                 <div
                   name="gov"
-                  className="process g13-14"
+                  className={`process g13-14 ${govOffice ? "selected" : ""}`}
                   onMouseEnter={() => setGovOffice(true)}
                   onMouseLeave={() => setGovOffice(false)}
                   onClick={select}
@@ -272,9 +272,6 @@ export default function License() {
             </div>
           </LicenseStyle>
         </ContentStyle>
-        {/* <ContentStyle>
-        <Agency />
-      </ContentStyle> */}
       </>
     </>
   );
