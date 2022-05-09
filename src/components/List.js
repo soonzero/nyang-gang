@@ -38,7 +38,6 @@ export default function List(props) {
         num * pageIndex
       );
     }
-    // console.log(filteredArray);
     setFilteredData(filteredArray);
     setIsLoading(false);
   };

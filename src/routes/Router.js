@@ -11,6 +11,7 @@ import MyAccount from "./MyAccount";
 import DeleteAccount from "./DeleteAccount";
 import ChangePW from "./ChangePW";
 import License from "./License";
+import Pharmacy from "./Pharmacy";
 
 export default function AppRouter(props) {
   return (
@@ -20,6 +21,7 @@ export default function AppRouter(props) {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/hospital" element={<Hospital />} />
+        <Route path="/pharmacy" element={<Pharmacy />} />
         <Route path="/shelter" element={<Shelter />} />
         <Route path="/abandoned" element={<Abandoned />} />
         <Route path="/abandoned/:id" element={<AnimalDetail />} />
