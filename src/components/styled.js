@@ -673,6 +673,35 @@ export const NavStyle = styled.div`
     color: black;
   }
 
+  .float-menu {
+    position: relative;
+  }
+
+  .float-sub {
+    position: absolute;
+    padding-top: 32px;
+    width: 100%;
+    animation: ${opacityAnimation} 200ms ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .float-submenu {
+    width: 200%;
+    text-align: center;
+    padding: 10px 30px;
+    background-color: rgba(255, 255, 255, 0.8);
+    height: 100%;
+    color: black;
+    font-size: 0.9rem;
+
+    &:hover {
+      font-weight: 500;
+    }
+  }
+
   @media screen and (max-width: 768px) {
     .nav-menu:not(:last-child) {
       display: none;

@@ -6,6 +6,8 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { authService } from "./fbase/fbase";
 
 export default function Navbar(props) {
+  const [hospitalSub, setHospitalSub] = useState(false);
+  const [abandSub, setAbandSub] = useState(false);
   const [subMenu, setSubMenu] = useState(false);
   const [shadow, setShadow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState();
@@ -79,14 +81,39 @@ export default function Navbar(props) {
           </Link>
           {!props.auth && (
             <div className="nav-side">
-              <li className="nav-menu">
-                <Link to="/hospital">병원 찾기</Link>
+              <li
+                className="nav-menu float-menu"
+                onMouseOver={() => setHospitalSub(true)}
+                onMouseLeave={() => setHospitalSub(false)}
+              >
+                <Link to="/hospital">병원 / 약국</Link>
+                {hospitalSub && (
+                  <ul className="float-sub">
+                    <Link to="/hospital" className="float-submenu">
+                      <span>동물 병원</span>
+                    </Link>
+                    <Link to="/pharmacy" className="float-submenu">
+                      <span>동물 약국</span>
+                    </Link>
+                  </ul>
+                )}
               </li>
-              <li className="nav-menu">
-                <Link to="/shelter">유기동물 보호소</Link>
-              </li>
-              <li className="nav-menu">
-                <Link to="/abandoned">유기동물 조회</Link>
+              <li
+                className="nav-menu float-menu"
+                onMouseOver={() => setAbandSub(true)}
+                onMouseLeave={() => setAbandSub(false)}
+              >
+                <Link to="/shelter">유기 동물</Link>
+                {abandSub && (
+                  <ul className="float-sub">
+                    <Link to="/shelter" className="float-submenu">
+                      <span>보호소 찾기</span>
+                    </Link>
+                    <Link to="/abandoned" className="float-submenu">
+                      <span>유기 동물 조회</span>
+                    </Link>
+                  </ul>
+                )}
               </li>
               {isLoggedIn ? (
                 <>
