@@ -115,11 +115,15 @@ export default function Navbar(props) {
                   </ul>
                 )}
               </li>
+              <li className="nav-menu">
+                <Link to="/adoption">입양</Link>
+              </li>
+              <li className="nav-menu">
+                <Link to="/license">반려동물 등록</Link>
+              </li>
+
               {isLoggedIn ? (
                 <>
-                  <li className="nav-menu">
-                    <Link to="/license">반려동물 등록</Link>
-                  </li>
                   <li className="nav-menu">
                     <div
                       className="profile"

@@ -12,6 +12,7 @@ import DeleteAccount from "./DeleteAccount";
 import ChangePW from "./ChangePW";
 import License from "./License";
 import Pharmacy from "./Pharmacy";
+import Adoption from "./Adoption";
 
 export default function AppRouter(props) {
   return (
@@ -29,6 +30,7 @@ export default function AppRouter(props) {
         <Route path="/delete" element={<DeleteAccount />} />
         <Route path="/change" element={<ChangePW />} />
         <Route path="/license" element={<License />} />
+        <Route path="/adoption" element={<Adoption />} />
       </Routes>
     </Router>
   );

@@ -1918,3 +1918,115 @@ export const ModalStyle = styled.div`
     grid-template-rows: 1fr;
   }
 `;
+
+export const AdoptionStyle = styled.div`
+  position: relative;
+  display: flex;
+
+  .part.side {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+  }
+
+  .part.main {
+    margin-left: 1rem;
+    flex: 3.5 0 0;
+  }
+`;
+
+export const PanelStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  overflow: hidden;
+  color: grey;
+  position: sticky;
+  top: 106px;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+`;
+
+export const ProfilePanelStyle = styled.div`
+  .content:not(:last-child) {
+    border-bottom: 1px solid #f5f5f5;
+    padding: 1rem;
+  }
+
+  .my-profile {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .profile-img {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid grey;
+    margin-right: 0.75rem;
+    border-radius: 50%;
+  }
+
+  .profile-name {
+    font-weight: 500;
+  }
+
+  .articles {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .my-articles {
+    display: flex;
+    justify-content: space-between;
+
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .new-article {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+  }
+
+  .write {
+    border-radius: 4px;
+    padding: 1rem;
+    background-color: #f57977;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`;
+
+export const TodayPanelStyle = styled.div`
+  padding: 1rem;
+
+  *:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
+  .title {
+    font-weight: 500;
+  }
+
+  .img {
+    display: inline-block;
+    width: 100%;
+    height: 200px;
+    background-color: lightgrey;
+    border-radius: 8px;
+  }
+`;
