@@ -1,6 +1,7 @@
-import InfoPanel from "components/InfoPanel";
+import ProfilePanel from "components/ProfilePanel";
 import Navbar from "components/Navbar";
 import { AdoptionStyle, ContentStyle, PanelStyle } from "components/styled";
+import Feed from "components/Feed";
 import TodayPanel from "components/TodayPanel";
 
 export default function Adoption() {
@@ -11,13 +12,15 @@ export default function Adoption() {
         <AdoptionStyle>
           <div className="part side">
             <PanelStyle>
-              <InfoPanel />
+              <ProfilePanel />
             </PanelStyle>
             <PanelStyle>
               <TodayPanel />
             </PanelStyle>
           </div>
-          <div className="part main">main</div>
+          <div className="part main">
+            <Feed />
+          </div>
         </AdoptionStyle>
       </ContentStyle>
     </>
