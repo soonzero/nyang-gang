@@ -249,7 +249,7 @@ export const SearchStyle = styled.div`
 export const AuthStyle = styled.div`
   min-width: 568px;
   width: 100vw;
-  height: ${(props) => (props.signup ? "calc(100vh - 80px)" : "100vh")};
+  height: ${(props) => (props.signup ? "unset" : "100vh")};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1983,9 +1983,12 @@ export const ProfilePanelStyle = styled.div`
     display: inline-block;
     width: 2rem;
     height: 2rem;
-    border: 1px solid grey;
+    border: 1px solid #e5e5e5;
     margin-right: 0.75rem;
     border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
   }
 
   .profile-name {
