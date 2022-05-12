@@ -1,4 +1,4 @@
-import { authService } from "components/fbase/fbase";
+import { authService, db } from "components/fbase/fbase";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { AuthStyle } from "components/styled";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "components/Navbar";
 import SocialAuth from "components/SocialAuth";
 import ProfileImage from "components/ProfileImage";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const [emailConfirm, setEmailConfirm] = useState(false);
   const [pwConfirm, setPWConfirm] = useState(true);
+  const [nickname, setNickname] = useState();
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -34,6 +36,8 @@ export default function SignUp() {
       setPassword(value);
     } else if (name == "password-check") {
       setPasswordCheck(value);
+    } else if (name == "nickname") {
+      setNickname(value);
     }
   };
 
@@ -48,9 +52,12 @@ export default function SignUp() {
             email,
             password
           );
+          await setDoc(doc(db, "users", data.user.uid), {
+            nickname: nickname,
+          });
+
           const storage = getStorage();
           const storageRef = ref(storage, `images/${data.user.uid}.png`);
-          console.log(file[0]);
           uploadBytes(storageRef, file[0]).then((snapshot) => {
             console.log(snapshot);
           });
@@ -106,8 +113,9 @@ export default function SignUp() {
     setEmail(email);
     setPassword(password);
     setPasswordCheck(passwordCheck);
+    setNickname(nickname);
     checkValid();
-  }, [email, password, passwordCheck]);
+  }, [email, password, passwordCheck, nickname]);
 
   return (
     <>
@@ -178,6 +186,21 @@ export default function SignUp() {
                   required
                 />
                 <div className="confirm-text">{error}</div>
+              </div>
+              <div className="form-confirm">
+                <label className="input-label" htmlFor="nickname">
+                  닉네임
+                </label>
+                <input
+                  id="nickname"
+                  className="nickname"
+                  name="nickname"
+                  type="text"
+                  value={nickname}
+                  onChange={onChangeHandler}
+                  placeholder="닉네임"
+                  required
+                />
               </div>
               <div className="form-confirm">
                 <ProfileImage file={file} setFile={setFile} />
