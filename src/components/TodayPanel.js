@@ -5,7 +5,7 @@ import Loading from "./Loading";
 import { TodayPanelStyle } from "./styled";
 
 export default function TodayPanel() {
-  let didCancel;
+  let didCancel = false;
   const API_KEY = process.env.REACT_APP_PUB_DATA_API_KEY;
   const navigate = useNavigate();
 
@@ -21,11 +21,6 @@ export default function TodayPanel() {
         url: `https://openapi.gg.go.kr/AbdmAnimalProtect?KEY=${API_KEY}&Type=json&pIndex=1&pSize=15&STATE_NM=보호중`,
       });
       if (!didCancel) {
-        console.log(
-          result.data.AbdmAnimalProtect[1].row.filter(
-            (d) => d.IMAGE_COURS != undefined
-          )
-        );
         setData(
           result.data.AbdmAnimalProtect[1].row.filter(
             (d) => d.IMAGE_COURS != undefined
