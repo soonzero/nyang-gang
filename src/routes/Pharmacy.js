@@ -109,7 +109,7 @@ export default function Pharmacy() {
                 currentPosition={currentPosition}
               />
               <List
-                hospital
+                pharmacy
                 data={data}
                 isLoading={isLoading}
                 city={city}

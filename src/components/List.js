@@ -5,10 +5,8 @@ import { ReactComponent as EmptyStar } from "images/star-empty.svg";
 import Pagination from "./Pagination";
 import {
   doc,
-  collection,
   setDoc,
   getDoc,
-  getDocs,
   updateDoc,
   arrayUnion,
   arrayRemove,
@@ -59,33 +57,50 @@ export default function List(props) {
       navigate("/login");
     } else {
       try {
-        const usersRef = await getDocs(collection(db, "users"));
-        if (usersRef.docs.length == 0) {
-          await setDoc(doc(db, "users", sessionStorage.getItem("uid")), {
-            hospital: [],
-            shelter: [],
-          });
-        }
+        const obj = target.getAttribute("name");
         const userRef = doc(db, "users", sessionStorage.getItem("uid"));
         const userSnap = await getDoc(userRef);
-        if (target.getAttribute("name") == "hospital") {
-          const userHospital = await userSnap.data().hospital;
-          const searchHospital = await userHospital.filter(
-            (i) => i.name == item.BIZPLC_NM && i.date == item.LICENSG_DE
+        const userObjSnap = userSnap.data()[obj];
+        if (userSnap.data()[obj] == undefined) {
+          await setDoc(
+            userRef,
+            {
+              [obj]: [],
+            },
+            {
+              merge: true,
+            }
           );
-          if (searchHospital.length > 0) {
-            await updateDoc(userRef, {
-              hospital: arrayRemove({
-                name: item.BIZPLC_NM,
-                date: item.LICENSG_DE,
-                zip: item.REFINE_ZIP_CD,
-                address: item.REFINE_ROADNM_ADDR,
-                tel: item.LOCPLC_FACLT_TELNO,
-              }),
-            });
+        }
+        if (obj == "hospital" || obj == "pharmacy") {
+          if (userObjSnap != undefined) {
+            const search = await userObjSnap.filter(
+              (i) => i.name == item.BIZPLC_NM && i.date == item.LICENSG_DE
+            );
+            if (search.length > 0) {
+              await updateDoc(userRef, {
+                [obj]: arrayRemove({
+                  name: item.BIZPLC_NM,
+                  date: item.LICENSG_DE,
+                  zip: item.REFINE_ZIP_CD,
+                  address: item.REFINE_ROADNM_ADDR,
+                  tel: item.LOCPLC_FACLT_TELNO,
+                }),
+              });
+            } else {
+              await updateDoc(userRef, {
+                [obj]: arrayUnion({
+                  name: item.BIZPLC_NM,
+                  date: item.LICENSG_DE,
+                  zip: item.REFINE_ZIP_CD,
+                  address: item.REFINE_ROADNM_ADDR,
+                  tel: item.LOCPLC_FACLT_TELNO,
+                }),
+              });
+            }
           } else {
             await updateDoc(userRef, {
-              hospital: arrayUnion({
+              [obj]: arrayUnion({
                 name: item.BIZPLC_NM,
                 date: item.LICENSG_DE,
                 zip: item.REFINE_ZIP_CD,
@@ -94,23 +109,33 @@ export default function List(props) {
               }),
             });
           }
-        } else if (target.getAttribute("name") == "shelter") {
-          const userShelter = await userSnap.data().shelter;
-          const searchShelter = await userShelter.filter(
-            (i) => i.name == item.ENTRPS_NM
-          );
-          if (searchShelter.length > 0) {
-            await updateDoc(userRef, {
-              shelter: arrayRemove({
-                name: item.ENTRPS_NM,
-                zip: item.REFINE_ZIP_CD,
-                address: item.REFINE_ROADNM_ADDR,
-                tel: item.ENTRPS_TELNO,
-              }),
-            });
+        } else if (obj == "shelter") {
+          if (userObjSnap != undefined) {
+            const search = await userObjSnap.filter(
+              (i) => i.name == item.ENTRPS_NM
+            );
+            if (search.length > 0) {
+              await updateDoc(userRef, {
+                [obj]: arrayRemove({
+                  name: item.ENTRPS_NM,
+                  zip: item.REFINE_ZIP_CD,
+                  address: item.REFINE_ROADNM_ADDR,
+                  tel: item.ENTRPS_TELNO,
+                }),
+              });
+            } else {
+              await updateDoc(userRef, {
+                [obj]: arrayUnion({
+                  name: item.ENTRPS_NM,
+                  zip: item.REFINE_ZIP_CD,
+                  address: item.REFINE_ROADNM_ADDR,
+                  tel: item.ENTRPS_TELNO,
+                }),
+              });
+            }
           } else {
             await updateDoc(userRef, {
-              shelter: arrayUnion({
+              [obj]: arrayUnion({
                 name: item.ENTRPS_NM,
                 zip: item.REFINE_ZIP_CD,
                 address: item.REFINE_ROADNM_ADDR,
@@ -130,8 +155,8 @@ export default function List(props) {
       {!isLoading ? (
         <>
           <div className="list-box">
-            {props.hospital &&
-              filteredData.map((item) => {
+            {(props.hospital || props.pharmacy) &&
+              filteredData.map((item, index) => {
                 return (
                   <div
                     key={`${item.BIZPLC_NM} ${item.LICENSG_DE}`}
@@ -147,8 +172,15 @@ export default function List(props) {
                     <p className="address">{`[${item.REFINE_ZIP_CD}] ${item.REFINE_ROADNM_ADDR}`}</p>
                     <p className="tel">{item.LOCPLC_FACLT_TELNO}</p>
                     <button
-                      name="hospital"
+                      name={`${
+                        props.pharmacy
+                          ? "pharmacy"
+                          : props.hospital
+                          ? "hospital"
+                          : ""
+                      }`}
                       className="star"
+                      index={index}
                       onClick={(event) => manageWishlist(event, item)}
                     >
                       {/* <FilledStar fill="#FFCB00" /> */}
