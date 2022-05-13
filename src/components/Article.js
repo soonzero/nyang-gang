@@ -13,7 +13,7 @@ export default function Article() {
         </h3>
       </div>
       <div className="content">
-        <img className="content-img" />
+        <span className="content-img"></span>
         <p className="content-text">내용</p>
       </div>
       <div className="comments">
