@@ -134,7 +134,9 @@ export default function Navbar(props) {
                         <Link to="/myaccount">
                           <li className="nav-submenu">내 계정</li>
                         </Link>
-                        <li className="nav-submenu">내 반려동물</li>
+                        <Link to="/favorite">
+                          <li className="nav-submenu">내 즐겨찾기</li>
+                        </Link>
                         <li className="nav-submenu" onClick={logout}>
                           로그아웃
                         </li>
@@ -165,6 +167,42 @@ export default function Navbar(props) {
                 비밀번호변경
               </li>
             </Link>
+          </ul>
+        </div>
+      )}
+      {props.favorite && (
+        <div className="nav-wrapper sub-nav-wrapper">
+          <ul className="sub-nav-container">
+            <li
+              className={`sub-nav-menu ${props.filter == "all" ? "open" : ""}`}
+              onClick={() => props.setFilter("all")}
+            >
+              모아보기
+            </li>
+            <li
+              className={`sub-nav-menu ${
+                props.filter == "hospital" ? "open" : ""
+              }`}
+              onClick={() => props.setFilter("hospital")}
+            >
+              병원
+            </li>
+            <li
+              className={`sub-nav-menu ${
+                props.filter == "pharmacy" ? "open" : ""
+              }`}
+              onClick={() => props.setFilter("pharmacy")}
+            >
+              약국
+            </li>
+            <li
+              className={`sub-nav-menu ${
+                props.filter == "shelter" ? "open" : ""
+              }`}
+              onClick={() => props.setFilter("shelter")}
+            >
+              보호소
+            </li>
           </ul>
         </div>
       )}
