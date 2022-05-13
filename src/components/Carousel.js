@@ -11,15 +11,19 @@ const array = [
       "https://uploads-ssl.webflow.com/60cd7ae35efaf14623f555c5/612e8aa3021b4224d2cc6511_how%20do%20i%20care%20for%20a%20sick%20dog.jpg",
     title: "반려동물이 아픈가요?",
     text: "병원 찾기",
+    text2: "약국 찾기",
     link: "/hospital",
+    link2: "/pharmacy",
   },
   {
     id: 1,
     cover:
       "https://images.pexels.com/photos/5733168/pexels-photo-5733168.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     title: "여러분을 기다리고 있어요",
-    text: "유기동물 조회",
-    link: "/abandoned",
+    text: "보호소 조회",
+    text2: "유기동물 조회",
+    link: "/shelter",
+    link2: "/abandoned",
   },
   {
     id: 2,
@@ -67,9 +71,16 @@ export default function Carousel() {
       >
         <div className="img-desc">
           <div className="desc-title">{i.title}</div>
-          <Link to={i.link} className="desc-button">
-            <span className="button">{i.text}</span>
-          </Link>
+          <div className="buttons">
+            <Link to={i.link} className="desc-button">
+              <span className="button">{i.text}</span>
+            </Link>
+            {i.link2 && (
+              <Link to={i.link2} className="desc-button">
+                <span className="button">{i.text2}</span>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     );
