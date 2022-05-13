@@ -1,8 +1,6 @@
 import { combineReducers } from "redux";
-import moveCenter from "./moveCenter";
+import manageFavorite from "./manageFavorite";
 
-const rootReducer = combineReducers({
-  moveCenter,
-});
+const rootReducer = combineReducers({ manageFavorite });
 
 export default rootReducer;
