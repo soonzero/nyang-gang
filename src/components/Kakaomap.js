@@ -25,7 +25,39 @@ export default function Kakaomap(props) {
       map.setCenter(coords);
     }
 
-    if (props.hospital && props.data) {
+    if (props.favorite && props.data) {
+      const imageSrc =
+        "https://firebasestorage.googleapis.com/v0/b/nyang-gang.appspot.com/o/favorite.png?alt=media&token=dbb69059-4a52-482b-9652-b74c91c80151";
+      const imageSize = new kakao.maps.Size(30, 45);
+      const imageOption = { offset: new kakao.maps.Point(15, 45) };
+      const markerImg = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
+      props.data.hospital.map((d) => {
+        const coords = new kakao.maps.LatLng(d.lat, d.lon);
+        const mark = new kakao.maps.Marker({
+          map: map,
+          position: coords,
+          image: markerImg,
+        });
+
+        const iwContent = `<div style="padding: 10px; text-align: center; width: 100%; height: 100%;">
+        ${d.name}
+        </div>`;
+
+        const infoWindow = new kakao.maps.InfoWindow({
+          content: iwContent,
+        });
+        kakao.maps.event.addListener(mark, "mouseover", function () {
+          infoWindow.open(map, mark);
+        });
+        kakao.maps.event.addListener(mark, "mouseout", function () {
+          infoWindow.close();
+        });
+      });
+    } else if (props.hospital && props.data) {
       const imageSrc =
         "https://firebasestorage.googleapis.com/v0/b/nyang-gang.appspot.com/o/hospital.png?alt=media&token=5087021d-9b96-4f8b-a209-c038aa181d1c";
       const imageSize = new kakao.maps.Size(30, 45);
@@ -35,7 +67,6 @@ export default function Kakaomap(props) {
         imageSize,
         imageOption
       );
-
       props.data
         .filter((d) => d.BSN_STATE_NM !== "폐업")
         .map((d) => {

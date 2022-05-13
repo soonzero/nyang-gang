@@ -85,6 +85,8 @@ export default function List(props) {
                   zip: item.REFINE_ZIP_CD,
                   address: item.REFINE_ROADNM_ADDR,
                   tel: item.LOCPLC_FACLT_TELNO,
+                  lat: item.REFINE_WGS84_LAT,
+                  lon: item.REFINE_WGS84_LOGT,
                 }),
               });
             } else {
@@ -95,6 +97,8 @@ export default function List(props) {
                   zip: item.REFINE_ZIP_CD,
                   address: item.REFINE_ROADNM_ADDR,
                   tel: item.LOCPLC_FACLT_TELNO,
+                  lat: item.REFINE_WGS84_LAT,
+                  lon: item.REFINE_WGS84_LOGT,
                 }),
               });
             }
@@ -106,6 +110,8 @@ export default function List(props) {
                 zip: item.REFINE_ZIP_CD,
                 address: item.REFINE_ROADNM_ADDR,
                 tel: item.LOCPLC_FACLT_TELNO,
+                lat: item.REFINE_WGS84_LAT,
+                lon: item.REFINE_WGS84_LOGT,
               }),
             });
           }
@@ -121,6 +127,8 @@ export default function List(props) {
                   zip: item.REFINE_ZIP_CD,
                   address: item.REFINE_ROADNM_ADDR,
                   tel: item.ENTRPS_TELNO,
+                  lat: item.REFINE_WGS84_LAT,
+                  lon: item.REFINE_WGS84_LOGT,
                 }),
               });
             } else {
@@ -130,6 +138,8 @@ export default function List(props) {
                   zip: item.REFINE_ZIP_CD,
                   address: item.REFINE_ROADNM_ADDR,
                   tel: item.ENTRPS_TELNO,
+                  lat: item.REFINE_WGS84_LAT,
+                  lon: item.REFINE_WGS84_LOGT,
                 }),
               });
             }
@@ -140,6 +150,8 @@ export default function List(props) {
                 zip: item.REFINE_ZIP_CD,
                 address: item.REFINE_ROADNM_ADDR,
                 tel: item.ENTRPS_TELNO,
+                lat: item.REFINE_WGS84_LAT,
+                lon: item.REFINE_WGS84_LOGT,
               }),
             });
           }
