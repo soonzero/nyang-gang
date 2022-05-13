@@ -536,7 +536,7 @@ export const NavStyle = styled.div`
     padding: 0 40px;
     margin: 0 auto;
     position: relative;
-    z-index: 4;
+    z-index: 5;
   }
 
   .nav-container {
@@ -649,6 +649,7 @@ export const NavStyle = styled.div`
 
   .nav-wrapper.sub-nav-wrapper {
     height: 100%;
+    z-index: 3;
   }
 
   .sub-nav-container {
@@ -766,12 +767,20 @@ export const CarouselStyle = styled.div`
     text-align: right;
   }
 
-  .desc-button {
+  .buttons {
     margin-top: 40px;
+    display: flex;
+  }
+
+  .desc-button {
     padding: 12px 20px;
     border-radius: 8px;
     background-color: white;
     cursor: pointer;
+
+    &:not(:last-child) {
+      margin-right: 1.5rem;
+    }
   }
 
   .slide-button {
@@ -813,6 +822,12 @@ export const ContentStyle = styled.div`
     grid-template-columns: 1fr 1fr;
     padding-top: 20px;
     column-gap: 10px;
+  }
+
+  .full-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: 550px;
   }
 
   @media screen and (max-width: 1210px) {
@@ -1109,7 +1124,7 @@ export const AnimalsStyle = styled.div`
 export const MyAccountStyle = styled.div`
   border: 1px solid #e5e5e5;
   border-radius: 8px;
-  padding: 60px;
+  padding: 4rem;
 
   .edit-header {
     display: flex;
@@ -2109,6 +2124,14 @@ export const ArticleStyle = styled.div`
     border-bottom: 1px solid #e5e5e5;
   }
 
+  .content-img {
+    width: 15rem;
+    height: 15rem;
+    border: 1px solid #e5e5e5;
+    margin-right: 1rem;
+    border-radius: 4px;
+  }
+
   .comments {
     width: 100%;
     box-sizing: border-box;
@@ -2196,5 +2219,72 @@ export const CommentStyle = styled.div`
     background-color: #f57977;
     color: white;
     cursor: pointer;
+  }
+`;
+
+export const FavoriteStyle = styled.div`
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 3rem;
+
+  .container:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  .header {
+    font-size: 2rem;
+    font-weight: 600;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .contents {
+    padding-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+  }
+
+  .content {
+    > :not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .name {
+    font-weight: 500;
+  }
+
+  .delete {
+    cursor: pointer;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      fill: darkgray;
+      transition: fill 250ms ease;
+    }
+
+    &:hover {
+      svg {
+        fill: #f57977;
+      }
+    }
+  }
+
+  .address,
+  .tel {
+    font-size: 0.8rem;
+  }
+
+  .no-content {
+    font-weight: 500;
+    /* font-size: 0.8rem; */
   }
 `;
