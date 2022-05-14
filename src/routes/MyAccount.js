@@ -1,14 +1,12 @@
 import Navbar from "components/Navbar";
 import { ContentStyle, MyAccountStyle } from "components/styled";
-import {
-  getAuth,
-  updateEmail,
-  reauthenticateWithCredential,
-} from "firebase/auth";
+import { getAuth, updateEmail } from "firebase/auth";
 import React, { useState, useEffect } from "react";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { authService } from "components/fbase/fbase";
 import { Link, useNavigate } from "react-router-dom";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "components/fbase/fbase";
 
 export default function MyAccount() {
   const navigate = useNavigate();
@@ -17,7 +15,11 @@ export default function MyAccount() {
 
   const [file, setFile] = useState();
   const [email, setEmail] = useState();
-  const [disabled, setDisabled] = useState(true);
+  const [originEmail, setOriginEmail] = useState();
+  const [emailDisabled, setEmailDisabled] = useState(true);
+  const [nickname, setNickname] = useState();
+  const [originNickname, setOriginNickname] = useState();
+  const [nicknameDisabled, setNicknameDisabled] = useState(true);
 
   const onChangeHandler = (event) => {
     if (event.target.name == "file") {
@@ -25,6 +27,8 @@ export default function MyAccount() {
       setFile(image);
     } else if (event.target.name == "email") {
       setEmail(event.target.value);
+    } else if (event.target.name == "nickname") {
+      setNickname(event.target.value);
     }
   };
 
@@ -53,6 +57,23 @@ export default function MyAccount() {
     }
   };
 
+  const getData = async () => {
+    try {
+      if (getAuth().currentUser) {
+        setOriginEmail(getAuth().currentUser.email);
+        const docRef = doc(db, "users", getAuth().currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        setOriginNickname(docSnap.data().nickname);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   useEffect(() => {
     setFile(file);
     if (file) {
@@ -62,18 +83,25 @@ export default function MyAccount() {
 
   useEffect(() => {
     setEmail(email);
-    if (getAuth().currentUser) {
-      if (email == getAuth().currentUser.email) {
-        setDisabled(true);
+    if (email == originEmail) {
+      setEmailDisabled(true);
+    } else {
+      if (emailReg.test(email)) {
+        setEmailDisabled(false);
       } else {
-        if (emailReg.test(email)) {
-          setDisabled(false);
-        } else {
-          setDisabled(true);
-        }
+        setEmailDisabled(true);
       }
     }
   }, [email]);
+
+  useEffect(() => {
+    setNickname(nickname);
+    if (nickname == originNickname) {
+      setNicknameDisabled(true);
+    } else {
+      setNicknameDisabled(false);
+    }
+  }, [nickname]);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -101,6 +129,17 @@ export default function MyAccount() {
         });
       } else {
         alert("이미지를 업로드해주세요!");
+      }
+    } else if (event.target.name == "nickname") {
+      try {
+        const userRef = doc(db, "users", getAuth().currentUser.uid);
+        await updateDoc(userRef, {
+          nickname: nickname,
+        });
+        alert("닉네임이 변경되었어요!");
+        navigate("/");
+      } catch (e) {
+        console.log(e);
       }
     }
   };
@@ -130,18 +169,33 @@ export default function MyAccount() {
                 onChange={onChangeHandler}
                 value={email}
               ></input>
-              <button className="edit-button" disabled={disabled} type="submit">
+              <button
+                className="edit-button"
+                disabled={emailDisabled}
+                type="submit"
+              >
                 이메일 변경하기
               </button>
             </form>
-            {/* <form className="edit-form password">
-              <h3 className="edit-target">비밀번호</h3>
+            <form
+              className="edit-form nickname"
+              name="nickname"
+              onSubmit={onSubmitHandler}
+            >
+              <h3 className="edit-target">닉네임</h3>
               <div>
-                <input className="edit-input" type="password"></input>
-                <input className="edit-input-confirm" type="password"></input>
+                <input
+                  className="edit-input"
+                  type="text"
+                  name="nickname"
+                  onChange={onChangeHandler}
+                  value={nickname}
+                ></input>
               </div>
-              <button className="edit-button">비밀번호 변경하기</button>
-            </form> */}
+              <button className="edit-button" disabled={nicknameDisabled}>
+                닉네임 변경하기
+              </button>
+            </form>
             <form
               className="edit-form profile-img"
               name="profile-img"
