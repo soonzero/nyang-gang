@@ -1987,6 +1987,10 @@ export const PanelStyle = styled.div`
 `;
 
 export const ProfilePanelStyle = styled.div`
+  a {
+    text-decoration: none;
+  }
+
   .content:not(:last-child) {
     border-bottom: 1px solid #f5f5f5;
     padding: 1rem;

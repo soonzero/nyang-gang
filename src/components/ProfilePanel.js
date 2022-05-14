@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ProfilePanelStyle } from "./styled";
 import { doc, getDoc } from "firebase/firestore";
 import Loading from "./Loading";
+import { Link } from "react-router-dom";
 
 export default function ProfilePanel(props) {
   let didCancel = false;
@@ -58,7 +59,9 @@ export default function ProfilePanel(props) {
             </div>
           </div>
           <div className="content new-article">
-            <div className="write">글쓰기</div>
+            <Link to="/adoption/write">
+              <div className="write">글쓰기</div>
+            </Link>
           </div>
         </>
       ) : (
