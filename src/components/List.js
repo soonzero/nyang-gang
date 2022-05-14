@@ -16,6 +16,7 @@ import { ListStyle } from "./styled";
 import { useNavigate } from "react-router-dom";
 
 export default function List(props) {
+  let didCancel = false;
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -23,32 +24,84 @@ export default function List(props) {
   const [filteredData, setFilteredData] = useState([]);
   const [page, setPage] = useState(1);
 
-  const filter = async (code, num, pageIndex = 1) => {
+  const filter = async (code, num, item, pageIndex = 1) => {
     let filteredArray;
-    if (code == "") {
-      setAllData(props.data);
-      filteredArray = props.data.slice(num * (pageIndex - 1), num * pageIndex);
-    } else {
-      filteredArray = await props.data.filter((d) => d.SIGUN_CD == code);
-      setAllData(filteredArray);
-      filteredArray = filteredArray.slice(
-        num * (pageIndex - 1),
-        num * pageIndex
-      );
+    if (!didCancel) {
+      if (code == "") {
+        setAllData(props.data);
+        filteredArray = props.data.slice(
+          num * (pageIndex - 1),
+          num * pageIndex
+        );
+      } else {
+        filteredArray = await props.data.filter((d) => d.SIGUN_CD == code);
+        setAllData(filteredArray);
+        filteredArray = filteredArray.slice(
+          num * (pageIndex - 1),
+          num * pageIndex
+        );
+      }
     }
-    setFilteredData(filteredArray);
-    setIsLoading(false);
+
+    const docRef = doc(db, "users", sessionStorage.getItem("uid"));
+    const docSnap = await getDoc(docRef);
+    if (props.hospital) {
+      for (let i = 0; i < docSnap.data().hospital.length; i++) {
+        for (let j = 0; j < filteredArray.length; j++) {
+          if (
+            docSnap.data().hospital[i].name == filteredArray[j].BIZPLC_NM &&
+            docSnap.data().hospital[i].address ==
+              filteredArray[j].REFINE_ROADNM_ADDR
+          ) {
+            filteredArray[j].FAVORITE = true;
+          }
+        }
+      }
+    } else if (props.pharmacy) {
+      for (let i = 0; i < docSnap.data().pharmacy.length; i++) {
+        for (let j = 0; j < filteredArray.length; j++) {
+          if (
+            docSnap.data().pharmacy[i].name == filteredArray[j].BIZPLC_NM &&
+            docSnap.data().pharmacy[i].address ==
+              filteredArray[j].REFINE_ROADNM_ADDR
+          ) {
+            filteredArray[j].FAVORITE = true;
+          }
+        }
+      }
+    } else if (props.shelter) {
+      for (let i = 0; i < docSnap.data().shelter.length; i++) {
+        for (let j = 0; j < filteredArray.length; j++) {
+          if (
+            docSnap.data().shelter[i].name == filteredArray[j].ENTRPS_NM &&
+            docSnap.data().shelter[i].address ==
+              filteredArray[j].REFINE_ROADNM_ADDR
+          ) {
+            filteredArray[j].FAVORITE = true;
+          }
+        }
+      }
+    }
+    updateFilter();
+    if (!didCancel) {
+      setFilteredData(filteredArray);
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     if (!props.isLoading) {
-      if (props.city != undefined) {
-        filter(props.city, props.number, page);
-      } else {
-        filter("", props.number, page);
-      }
+      updateFilter();
     }
   }, [props.isLoading, props.city, props.number, page]);
+
+  const updateFilter = () => {
+    if (props.city != undefined) {
+      filter(props.city, props.number, page);
+    } else {
+      filter("", props.number, page);
+    }
+  };
 
   const manageWishlist = async (event, item) => {
     const target = event.currentTarget;
@@ -156,11 +209,18 @@ export default function List(props) {
             });
           }
         }
+        updateFilter();
       } catch (e) {
         console.log(e);
       }
     }
   };
+
+  useEffect(() => {
+    return () => {
+      didCancel = true;
+    };
+  }, []);
 
   return (
     <ListStyle>
@@ -195,8 +255,14 @@ export default function List(props) {
                       index={index}
                       onClick={(event) => manageWishlist(event, item)}
                     >
-                      {/* <FilledStar fill="#FFCB00" /> */}
-                      <EmptyStar className="icon star" />
+                      {item.FAVORITE == true ? (
+                        <FilledStar
+                          fill="#FFCB00"
+                          className="icon star favorite"
+                        />
+                      ) : (
+                        <EmptyStar className="icon star" />
+                      )}
                     </button>
                   </div>
                 );
@@ -230,8 +296,14 @@ export default function List(props) {
                       className="star"
                       onClick={(event) => manageWishlist(event, item)}
                     >
-                      {/* <FilledStar fill="#FFCB00" /> */}
-                      <EmptyStar className="icon star" />
+                      {item.FAVORITE == true ? (
+                        <FilledStar
+                          fill="#FFCB00"
+                          className="icon star favorite"
+                        />
+                      ) : (
+                        <EmptyStar className="icon star" />
+                      )}
                     </button>
                   </div>
                 );

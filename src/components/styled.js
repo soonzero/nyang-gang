@@ -977,6 +977,10 @@ export const ListStyle = styled.div`
     }
   }
 
+  .icon.star.favorite {
+    fill: #ffcb00;
+  }
+
   .pagination {
     visibility: hidden;
     z-index: 2;
