@@ -52,7 +52,11 @@ export default function Pharmacy() {
         ];
       }
       if (!didCancel) {
-        setData(pharmacyArray.filter((p) => p.BSN_STATE_NM == "정상"));
+        setData(
+          pharmacyArray.filter(
+            (p) => p.BSN_STATE_NM == "정상" && p.REFINE_ROADNM_ADDR != null
+          )
+        );
         setIsLoading(false);
       }
     } catch (e) {
