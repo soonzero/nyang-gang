@@ -42,47 +42,49 @@ export default function List(props) {
         );
       }
     }
-
-    const docRef = doc(db, "users", sessionStorage.getItem("uid"));
-    const docSnap = await getDoc(docRef);
-    if (props.hospital) {
-      for (let i = 0; i < docSnap.data().hospital.length; i++) {
-        for (let j = 0; j < filteredArray.length; j++) {
-          if (
-            docSnap.data().hospital[i].name == filteredArray[j].BIZPLC_NM &&
-            docSnap.data().hospital[i].address ==
-              filteredArray[j].REFINE_ROADNM_ADDR
-          ) {
-            filteredArray[j].FAVORITE = true;
+    if (sessionStorage.getItem("uid")) {
+      const docRef = doc(db, "users", sessionStorage.getItem("uid"));
+      const docSnap = await getDoc(docRef);
+      if (props.hospital) {
+        for (let i = 0; i < docSnap.data().hospital.length; i++) {
+          for (let j = 0; j < filteredArray.length; j++) {
+            if (
+              docSnap.data().hospital[i].name == filteredArray[j].BIZPLC_NM &&
+              docSnap.data().hospital[i].address ==
+                filteredArray[j].REFINE_ROADNM_ADDR
+            ) {
+              filteredArray[j].FAVORITE = true;
+            }
+          }
+        }
+      } else if (props.pharmacy) {
+        for (let i = 0; i < docSnap.data().pharmacy.length; i++) {
+          for (let j = 0; j < filteredArray.length; j++) {
+            if (
+              docSnap.data().pharmacy[i].name == filteredArray[j].BIZPLC_NM &&
+              docSnap.data().pharmacy[i].address ==
+                filteredArray[j].REFINE_ROADNM_ADDR
+            ) {
+              filteredArray[j].FAVORITE = true;
+            }
+          }
+        }
+      } else if (props.shelter) {
+        for (let i = 0; i < docSnap.data().shelter.length; i++) {
+          for (let j = 0; j < filteredArray.length; j++) {
+            if (
+              docSnap.data().shelter[i].name == filteredArray[j].ENTRPS_NM &&
+              docSnap.data().shelter[i].address ==
+                filteredArray[j].REFINE_ROADNM_ADDR
+            ) {
+              filteredArray[j].FAVORITE = true;
+            }
           }
         }
       }
-    } else if (props.pharmacy) {
-      for (let i = 0; i < docSnap.data().pharmacy.length; i++) {
-        for (let j = 0; j < filteredArray.length; j++) {
-          if (
-            docSnap.data().pharmacy[i].name == filteredArray[j].BIZPLC_NM &&
-            docSnap.data().pharmacy[i].address ==
-              filteredArray[j].REFINE_ROADNM_ADDR
-          ) {
-            filteredArray[j].FAVORITE = true;
-          }
-        }
-      }
-    } else if (props.shelter) {
-      for (let i = 0; i < docSnap.data().shelter.length; i++) {
-        for (let j = 0; j < filteredArray.length; j++) {
-          if (
-            docSnap.data().shelter[i].name == filteredArray[j].ENTRPS_NM &&
-            docSnap.data().shelter[i].address ==
-              filteredArray[j].REFINE_ROADNM_ADDR
-          ) {
-            filteredArray[j].FAVORITE = true;
-          }
-        }
-      }
+      updateFilter();
     }
-    updateFilter();
+
     if (!didCancel) {
       setFilteredData(filteredArray);
       setIsLoading(false);
