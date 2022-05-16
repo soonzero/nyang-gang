@@ -876,6 +876,7 @@ export const LoadingStyle = styled.div`
       align-items: center;
       justify-content: center;
       padding: 0;
+      margin: 0 auto;
     }
 
     .loading-spinner {
@@ -2109,7 +2110,15 @@ export const ArticleStyle = styled.div`
     padding: 1rem;
   }
 
+  .author-container {
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .author {
+    display: flex;
     align-items: center;
   }
 
@@ -2119,11 +2128,33 @@ export const ArticleStyle = styled.div`
     border-radius: 50%;
     border: 1px solid #e5e5e5;
     margin-right: 1rem;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
   }
 
   .author-name {
     display: flex;
     align-items: flex-end;
+  }
+
+  .author-extra {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem;
+
+    svg {
+      fill: #b5b5b5;
+      transition: fill 200ms ease;
+    }
+
+    &:hover {
+      svg {
+        fill: black;
+      }
+    }
   }
 
   .updated-time {
@@ -2132,8 +2163,23 @@ export const ArticleStyle = styled.div`
     color: #b5b5b5;
   }
 
+  .title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
   .content {
     border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content-text {
+    margin-bottom: 1rem;
+  }
+
+  .content-imgs {
+    display: flex;
   }
 
   .content-img {
@@ -2142,6 +2188,9 @@ export const ArticleStyle = styled.div`
     border: 1px solid #e5e5e5;
     margin-right: 1rem;
     border-radius: 4px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
   }
 
   .comments {
@@ -2179,6 +2228,9 @@ export const ArticleStyle = styled.div`
     border-radius: 50%;
     border: 1px solid #e5e5e5;
     margin-right: 0.5rem;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
   }
 
   .commenter-name {
@@ -2206,7 +2258,7 @@ export const ArticleStyle = styled.div`
   }
 `;
 
-export const CommentStyle = styled.div`
+export const WriteCommentStyle = styled.div`
   flex: 1 0 auto;
 
   form {
@@ -2304,8 +2356,6 @@ export const FavoriteStyle = styled.div`
 export const WriteArticleStyle = styled.form`
   display: flex;
   flex-direction: column;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
   padding: 1rem;
 
   .form-header {
@@ -2313,7 +2363,6 @@ export const WriteArticleStyle = styled.form`
     font-weight: 600;
     padding: 1rem;
     border-bottom: 2px solid #e5e5e5;
-    color: #f57977;
     margin-bottom: 2rem;
   }
 
@@ -2340,11 +2389,38 @@ export const WriteArticleStyle = styled.form`
   .form-footer {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .upload-preview {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e5e5e5;
   }
 
   .image-label {
     padding: 1rem;
-    border: 1px solid #e5e5e5;
+    cursor: pointer;
+  }
+
+  .preview-container {
+    padding: 1rem;
+    display: flex;
+  }
+
+  .image0,
+  .image1,
+  .image2 {
+    width: 5rem;
+    height: 5rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    cursor: pointer;
+
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
   }
 
   .image {
@@ -2352,7 +2428,7 @@ export const WriteArticleStyle = styled.form`
   }
 
   .write-button {
-    padding: 0 1.5rem;
+    padding: 0.75rem 1.5rem;
     margin: 0;
     border: none;
     outline: none;
@@ -2360,11 +2436,10 @@ export const WriteArticleStyle = styled.form`
     color: white;
     cursor: pointer;
     border-radius: 4px;
-    font-weight: 600;
-    font-size: 1rem;
+    font-size: 0.85rem;
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.9;
     }
   }
 `;
