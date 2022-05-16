@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 export default function ProfileImage(props) {
-  const onChangeHandler = async (event) => {
+  const onChangeHandler = (event) => {
     const image = event.target.files;
     props.setFile(image);
   };
