@@ -45,7 +45,8 @@ export default function List(props) {
     if (sessionStorage.getItem("uid")) {
       const docRef = doc(db, "users", sessionStorage.getItem("uid"));
       const docSnap = await getDoc(docRef);
-      if (props.hospital) {
+
+      if (props.hospital && docSnap.data().hospital) {
         for (let i = 0; i < docSnap.data().hospital.length; i++) {
           for (let j = 0; j < filteredArray.length; j++) {
             if (
@@ -57,7 +58,7 @@ export default function List(props) {
             }
           }
         }
-      } else if (props.pharmacy) {
+      } else if (props.pharmacy && docSnap.data().pharmacy) {
         for (let i = 0; i < docSnap.data().pharmacy.length; i++) {
           for (let j = 0; j < filteredArray.length; j++) {
             if (
@@ -69,7 +70,7 @@ export default function List(props) {
             }
           }
         }
-      } else if (props.shelter) {
+      } else if (props.shelter && docSnap.data().shelter) {
         for (let i = 0; i < docSnap.data().shelter.length; i++) {
           for (let j = 0; j < filteredArray.length; j++) {
             if (
@@ -82,6 +83,7 @@ export default function List(props) {
           }
         }
       }
+
       updateFilter();
     }
 
