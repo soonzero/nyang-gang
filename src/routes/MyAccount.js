@@ -34,7 +34,9 @@ export default function MyAccount() {
 
   if (sessionStorage.getItem("uid")) {
     const storage = getStorage();
-    getDownloadURL(ref(storage, `images/${sessionStorage.getItem("uid")}.png`))
+    getDownloadURL(
+      ref(storage, `users/${sessionStorage.getItem("uid")}/profile-image.png`)
+    )
       .then((url) => {
         const img = document.querySelector(".image-preview");
         img.setAttribute("src", url);
