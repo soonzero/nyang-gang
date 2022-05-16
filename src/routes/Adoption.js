@@ -11,6 +11,7 @@ export default function Adoption() {
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState();
+  const [nickname, setNickname] = useState();
   const [imageUrl, setImageUrl] = useState();
 
   if (sessionStorage.getItem("uid")) {
@@ -45,14 +46,18 @@ export default function Adoption() {
         <AdoptionStyle>
           <div className="part side">
             <PanelStyle>
-              <ProfilePanel image={imageUrl} />
+              <ProfilePanel
+                nickname={nickname}
+                setNickname={setNickname}
+                image={imageUrl}
+              />
             </PanelStyle>
             <PanelStyle>
               <TodayPanel />
             </PanelStyle>
           </div>
           <div className="part main">
-            <Feed />
+            <Feed nickname={nickname} image={imageUrl} />
           </div>
         </AdoptionStyle>
       </ContentStyle>

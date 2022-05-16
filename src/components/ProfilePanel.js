@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 export default function ProfilePanel(props) {
   let didCancel = false;
 
-  const [nickname, setNickname] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   const getData = async () => {
@@ -18,7 +17,7 @@ export default function ProfilePanel(props) {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         if (!didCancel) {
-          setNickname(docSnap.data().nickname);
+          props.setNickname(docSnap.data().nickname);
           setIsLoading(false);
         }
       }
@@ -42,20 +41,20 @@ export default function ProfilePanel(props) {
               className="profile-img"
               style={{ backgroundImage: `url(${props.image})` }}
             ></span>
-            <h3 className="profile-name">{nickname}</h3>
+            <h3 className="profile-name">{props.nickname}</h3>
           </div>
           <div className="content articles">
             <div className="my-articles complete">
               <span>대기중</span>
-              <span>1개</span>
+              <span>준비 중</span>
             </div>
             <div className="my-articles waiting">
               <span>승인 완료</span>
-              <span>5개</span>
+              <span>준비 중</span>
             </div>
             <div className="my-articles rejected">
               <span>승인 거절</span>
-              <span>2개</span>
+              <span>준비 중</span>
             </div>
           </div>
           <div className="content new-article">
