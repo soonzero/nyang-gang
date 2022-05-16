@@ -1,7 +1,9 @@
 import Navbar from "components/Navbar";
 import { ContentStyle, DeleteAccountStyle } from "components/styled";
 import { deleteUser, getAuth } from "firebase/auth";
+import { doc, deleteDoc } from "firebase/firestore";
 import { deleteObject, ref, getStorage } from "firebase/storage";
+import { db } from "components/fbase/fbase";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -27,11 +29,12 @@ export default function DeleteAccount() {
         const auth = getAuth();
         const user = auth.currentUser;
         try {
+          await deleteDoc(doc(db, "users", user.uid));
           const deleteUserAccount = await deleteUser(user);
           const storage = getStorage();
           const imageRef = ref(
             storage,
-            `images/${sessionStorage.getItem("uid")}.png`
+            `users/${sessionStorage.getItem("uid")}/profile-image.png`
           );
           const deleteImg = await deleteObject(imageRef);
           sessionStorage.clear();
@@ -40,7 +43,7 @@ export default function DeleteAccount() {
           console.log(e);
         }
       } else {
-        navigate("/");
+        navigate("/myaccount");
       }
     } else {
       alert("내용을 꼭 확인해주세요.");
