@@ -15,7 +15,7 @@ export default function Navbar(props) {
   if (sessionStorage.getItem("uid") && !props.auth) {
     const storage = getStorage();
     getDownloadURL(
-      ref(storage, `users/${sessionStorage.getItem("uid")}/profile-image.png`)
+      ref(storage, `users/${sessionStorage.getItem("uid")}/profile-image`)
     )
       .then((url) => {
         const img = document.querySelector(".profile-image");

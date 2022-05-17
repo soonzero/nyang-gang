@@ -59,7 +59,7 @@ export default function SignUp() {
           const storage = getStorage();
           const storageRef = ref(
             storage,
-            `users/${data.user.uid}/profile-image.png`
+            `users/${data.user.uid}/profile-image`
           );
           uploadBytes(storageRef, file[0]).then((snapshot) => {
             console.log(snapshot);

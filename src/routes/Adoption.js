@@ -17,7 +17,7 @@ export default function Adoption() {
   if (sessionStorage.getItem("uid")) {
     const storage = getStorage();
     getDownloadURL(
-      ref(storage, `users/${sessionStorage.getItem("uid")}/profile-image.png`)
+      ref(storage, `users/${sessionStorage.getItem("uid")}/profile-image`)
     )
       .then((url) => {
         setImageUrl(url);

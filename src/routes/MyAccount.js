@@ -123,7 +123,7 @@ export default function MyAccount() {
         const storage = getStorage();
         const storageRef = ref(
           storage,
-          `images/${sessionStorage.getItem("uid")}.png`
+          `users/${sessionStorage.getItem("uid")}/profile-image`
         );
         uploadBytes(storageRef, file[0]).then((snapshot) => {
           alert("프로필 이미지가 변경되었어요!");
