@@ -3,7 +3,8 @@ import { NavStyle } from "./styled";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "images/nyang-gang.svg";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { authService } from "./fbase/fbase";
+import { authService, db } from "./fbase/fbase";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function Navbar(props) {
   const [hospitalSub, setHospitalSub] = useState(false);
@@ -11,6 +12,10 @@ export default function Navbar(props) {
   const [subMenu, setSubMenu] = useState(false);
   const [shadow, setShadow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState();
+  const [admin, setAdmin] = useState(false);
+  const [menusInProfile, setMenusInProfile] = useState(
+    window.innerWidth <= 768
+  );
 
   if (sessionStorage.getItem("uid") && !props.auth) {
     const storage = getStorage();
@@ -25,6 +30,16 @@ export default function Navbar(props) {
         console.log(e);
       });
   }
+
+  const setAuthority = async () => {
+    const userRef = doc(db, "users", sessionStorage.getItem("uid"));
+    const userSnap = await getDoc(userRef);
+    if (userSnap.data().auth) {
+      setAdmin(true);
+    } else {
+      return;
+    }
+  };
 
   const logout = () => {
     sessionStorage.removeItem("accessToken");
@@ -50,6 +65,18 @@ export default function Navbar(props) {
     }
   });
 
+  const handleResize = useCallback(() => {
+    if (window.innerWidth <= 768) {
+      setMenusInProfile(true);
+    } else {
+      setMenusInProfile(false);
+    }
+  });
+
+  useEffect(() => {
+    setAuthority();
+  }, []);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
 
@@ -57,6 +84,13 @@ export default function Navbar(props) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [handleScroll]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -70,7 +104,7 @@ export default function Navbar(props) {
   });
 
   return (
-    <NavStyle shadow={shadow}>
+    <NavStyle shadow={shadow} subnav={props.subnav}>
       <div className="nav-wrapper">
         <ul className="nav-container">
           <Link to="/">
@@ -133,12 +167,39 @@ export default function Navbar(props) {
                     >
                       <img className="profile-image" />
                       <ul className={`nav-sub ${subMenu ? "open" : ""}`}>
+                        {menusInProfile && (
+                          <>
+                            <Link to="/hospital">
+                              <li className="nav-submenu">병원 찾기</li>
+                            </Link>
+                            <Link to="/pharmacy">
+                              <li className="nav-submenu">약국 찾기</li>
+                            </Link>
+                            <Link to="/shelter">
+                              <li className="nav-submenu">보호소 찾기</li>
+                            </Link>
+                            <Link to="/abandoned">
+                              <li className="nav-submenu">유기 동물 조회</li>
+                            </Link>
+                            <Link to="/adoption">
+                              <li className="nav-submenu">입양</li>
+                            </Link>
+                            <Link to="/license">
+                              <li className="nav-submenu">반려동물 등록</li>
+                            </Link>
+                          </>
+                        )}
                         <Link to="/myaccount">
                           <li className="nav-submenu">내 계정</li>
                         </Link>
                         <Link to="/favorite">
                           <li className="nav-submenu">내 즐겨찾기</li>
                         </Link>
+                        {admin && (
+                          <Link to="/admin">
+                            <li className="nav-submenu">관리자 메뉴</li>
+                          </Link>
+                        )}
                         <li className="nav-submenu" onClick={logout}>
                           로그아웃
                         </li>
