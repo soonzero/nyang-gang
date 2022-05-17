@@ -1,20 +1,28 @@
 import WriteComment from "./WriteComment";
 import { ArticleStyle } from "./styled";
-import { doc, getDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "./fbase/fbase";
 import { useState, useEffect } from "react";
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref,
+} from "firebase/storage";
 import Loading from "./Loading";
 import Comment from "./Comment";
 import { ReactComponent as Extra } from "images/extra.svg";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Article(props) {
   let didCancel = false;
+  const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(true);
   const [nickname, setNickname] = useState();
   const [authorImg, setAuthorImg] = useState();
   const [images, setImages] = useState();
+  const [articleSubmenu, setArticleSubmenu] = useState(false);
 
   const getData = async () => {
     try {
@@ -23,7 +31,7 @@ export default function Article(props) {
       const docSnap = await getDoc(docRef);
       const storage = getStorage();
       const url = await getDownloadURL(
-        ref(storage, `users/${props.data.author}/profile-image.png`)
+        ref(storage, `users/${props.data.author}/profile-image`)
       );
       for (let i = 0; i < props.data.images; i++) {
         const contentImgs = await getDownloadURL(
@@ -35,6 +43,7 @@ export default function Article(props) {
       if (!didCancel) {
         setNickname(docSnap.data().nickname);
         setAuthorImg(url);
+        dispatch({ type: "SET_COMMENTS", data: props.data.comments });
         setIsLoading(false);
       }
     } catch (e) {
@@ -64,6 +73,27 @@ export default function Article(props) {
       return `${Math.floor(time / (3600 * 24 * 365 * 1000) + 1970)}년`;
     }
   };
+
+  const deleteArticle = async (article) => {
+    try {
+      if (
+        window.confirm("삭제된 글은 다시 복구할 수 없습니다. 진행하시겠습니까?")
+      ) {
+        const id = article.id;
+        const storage = getStorage();
+        await deleteDoc(doc(db, "adoption", id));
+        for (let i = 0; i < article.images; i++) {
+          const imageRef = ref(storage, `articles/${id}/${i}`);
+          deleteObject(imageRef);
+        }
+        dispatch({ type: "DELETE_ARTICLE", data: id });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const commentsList = useSelector((state) => state.manageComments);
 
   useEffect(() => {
     getData();
@@ -97,9 +127,23 @@ export default function Article(props) {
                 </span>
               </h3>
             </div>
-            <div className="author-extra">
-              <Extra />
-            </div>
+            {props.data.author == sessionStorage.getItem("uid") && (
+              <div className="author-extra">
+                <span
+                  className="extra-button"
+                  onClick={() => setArticleSubmenu((prev) => !prev)}
+                >
+                  <Extra />
+                </span>
+                {articleSubmenu && (
+                  <ul className="extra-sub">
+                    <li onClick={() => deleteArticle(props.data)}>
+                      글 삭제하기
+                    </li>
+                  </ul>
+                )}
+              </div>
+            )}
           </div>
           <div className="title-container">
             <h2 className="title">{props.data.title}</h2>
@@ -120,9 +164,9 @@ export default function Article(props) {
           </div>
           <div className="comments">
             <ul className="comments-list">
-              {props.data.comments &&
-                props.data.comments.map((c, i) => {
-                  return <Comment key={i} data={c} />;
+              {commentsList &&
+                commentsList.map((c, i) => {
+                  return <Comment key={i} article={props.data.id} data={c} />;
                 })}
               <li className="comment-container">
                 <div className="comment">

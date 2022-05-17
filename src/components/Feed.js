@@ -2,11 +2,12 @@ import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Article from "./Article";
 import { db } from "./fbase/fbase";
-import { FeedStyle } from "./styled";
+import { FeedStyle, NoArticleStyle } from "./styled";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Feed(props) {
   let didCancel = false;
-  const [articles, setArticles] = useState();
+  const dispatch = useDispatch();
 
   const getArticles = async () => {
     const articlesSnapshot = await getDocs(collection(db, "adoption"));
@@ -15,9 +16,11 @@ export default function Feed(props) {
       articlesArray.push(doc.data());
     });
     if (!didCancel) {
-      setArticles(articlesArray);
+      dispatch({ type: "SET_ARTICLES", data: articlesArray });
     }
   };
+
+  const articlesList = useSelector((state) => state.manageArticles);
 
   useEffect(() => {
     getArticles();
@@ -28,8 +31,8 @@ export default function Feed(props) {
 
   return (
     <FeedStyle>
-      {articles &&
-        articles.map((article) => {
+      {articlesList && articlesList.length > 0 ? (
+        articlesList.map((article) => {
           return (
             <Article
               image={props.image}
@@ -38,7 +41,10 @@ export default function Feed(props) {
               data={article}
             />
           );
-        })}
+        })
+      ) : (
+        <NoArticleStyle>글이 없어요</NoArticleStyle>
+      )}
     </FeedStyle>
   );
 }

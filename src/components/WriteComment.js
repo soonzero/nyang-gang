@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { WriteCommentStyle } from "./styled";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "./fbase/fbase";
+import { useDispatch } from "react-redux";
 
 export default function WriteCommment(props) {
+  const dispatch = useDispatch();
   const [text, setText] = useState();
 
   const onChangeHandler = (event) => {
@@ -13,14 +15,26 @@ export default function WriteCommment(props) {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     try {
+      const time = new Date().getTime();
+      const author = sessionStorage.getItem("uid");
       const articleRef = doc(db, "adoption", props.id);
       await updateDoc(articleRef, {
         comments: arrayUnion({
-          author: sessionStorage.getItem("uid"),
-          time: new Date().getTime(),
+          author: author,
+          time: time,
           content: text,
         }),
       });
+      dispatch({
+        type: "ADD_COMMENT",
+        data: {
+          author: author,
+          time: time,
+          content: text,
+        },
+      });
+      alert("댓글이 등록되었어요");
+      setText("");
     } catch (e) {
       console.log(e);
     }

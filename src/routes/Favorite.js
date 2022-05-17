@@ -20,7 +20,7 @@ export default function Favorite() {
     const docRef = doc(db, "users", sessionStorage.getItem("uid"));
     const docSnap = await getDoc(docRef);
     if (!didCancel) {
-      dispatch({ type: "SET", data: docSnap.data() });
+      dispatch({ type: "SET_FAVORITES", data: docSnap.data() });
       setIsLoading(false);
     }
   };
@@ -53,7 +53,10 @@ export default function Favorite() {
           }),
         });
       }
-      dispatch({ type: "DELETE", data: { type: target, content: item } });
+      dispatch({
+        type: "DELETE_FAVORITE",
+        data: { type: target, content: item },
+      });
     } catch (e) {
       console.log(e);
     }

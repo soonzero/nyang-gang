@@ -7,13 +7,19 @@ const initialState = {
 const manageFavorite = (currentState = initialState, action) => {
   const newState = { ...currentState };
   switch (action.type) {
-    case "SET": {
-      newState.hospital = [...action.data.hospital];
-      newState.shelter = [...action.data.shelter];
-      newState.pharmacy = [...action.data.pharmacy];
+    case "SET_FAVORITES": {
+      if (action.data.hospital) {
+        newState.hospital = [...action.data.hospital];
+      }
+      if (action.data.pharmacy) {
+        newState.pharmacy = [...action.data.pharmacy];
+      }
+      if (action.data.shelter) {
+        newState.shelter = [...action.data.shelter];
+      }
       return newState;
     }
-    case "DELETE": {
+    case "DELETE_FAVORITE": {
       const content = action.data.content;
       const type = action.data.type;
       const filteredList = newState[type].filter((_, i) => {
