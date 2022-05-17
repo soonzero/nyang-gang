@@ -2096,6 +2096,8 @@ export const TodayPanelStyle = styled.div`
 `;
 
 export const FeedStyle = styled.div`
+  height: 100%;
+
   & > div:not(:last-child) {
     margin-bottom: 1rem;
   }
@@ -2144,6 +2146,12 @@ export const ArticleStyle = styled.div`
     cursor: pointer;
     width: 1rem;
     height: 1rem;
+    position: relative;
+  }
+
+  .extra-button {
+    width: 1rem;
+    height: 1rem;
 
     svg {
       fill: #b5b5b5;
@@ -2153,6 +2161,29 @@ export const ArticleStyle = styled.div`
     &:hover {
       svg {
         fill: black;
+      }
+    }
+  }
+
+  .extra-sub {
+    display: flex;
+    width: 120px;
+    position: absolute;
+    top: 150%;
+    right: 0;
+    border: 1px solid #e5e5e5;
+    overflow: hidden;
+    border-radius: 8px;
+    z-index: 5;
+
+    li {
+      background-color: white;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      font-size: 0.8rem;
+
+      &:hover {
+        background-color: #e5e5e5;
       }
     }
   }
@@ -2442,4 +2473,14 @@ export const WriteArticleStyle = styled.form`
       opacity: 0.9;
     }
   }
+`;
+
+export const NoArticleStyle = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #b5b5b5;
 `;
