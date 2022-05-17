@@ -109,15 +109,19 @@ export default function MyAccount() {
     event.preventDefault();
     const auth = getAuth();
     if (event.target.name == "email") {
-      updateEmail(auth.currentUser, email)
-        .then(() => {
-          alert("이메일이 변경되었어요. 다시 로그인해주세요!");
-          authService.signOut();
-          navigate("/login");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      if (email.includes("admin")) {
+        alert("이메일에 'admin' 등의 텍스트를 사용할 수 없습니다.");
+      } else {
+        updateEmail(auth.currentUser, email)
+          .then(() => {
+            alert("이메일이 변경되었어요. 다시 로그인해주세요!");
+            authService.signOut();
+            navigate("/login");
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
     } else if (event.target.name == "profile-img") {
       if (file) {
         const storage = getStorage();
@@ -133,15 +137,19 @@ export default function MyAccount() {
         alert("이미지를 업로드해주세요!");
       }
     } else if (event.target.name == "nickname") {
-      try {
-        const userRef = doc(db, "users", getAuth().currentUser.uid);
-        await updateDoc(userRef, {
-          nickname: nickname,
-        });
-        alert("닉네임이 변경되었어요!");
-        navigate("/");
-      } catch (e) {
-        console.log(e);
+      if (nickname.includes("관리자") || nickname.includes("admin")) {
+        alert("닉네임에 '관리자', 'admin' 등의 텍스트를 사용할 수 없습니다.");
+      } else {
+        try {
+          const userRef = doc(db, "users", getAuth().currentUser.uid);
+          await updateDoc(userRef, {
+            nickname: nickname,
+          });
+          alert("닉네임이 변경되었어요!");
+          navigate("/");
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
   };

@@ -43,35 +43,45 @@ export default function SignUp() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (email.length > 0 && password.length > 0 && passwordCheck.length > 0) {
-      if (password == passwordCheck) {
-        try {
-          let data;
-          data = await createUserWithEmailAndPassword(
-            authService,
-            email,
-            password
-          );
-          await setDoc(doc(db, "users", data.user.uid), {
-            nickname: nickname,
-          });
+    if (
+      email.includes("admin") ||
+      nickname.includes("admin") ||
+      nickname.includes("관리자")
+    ) {
+      alert(
+        "이메일과 닉네임에 'admin', '관리자' 등의 텍스트를 사용할 수 없습니다."
+      );
+    } else {
+      if (email.length > 0 && password.length > 0 && passwordCheck.length > 0) {
+        if (password == passwordCheck) {
+          try {
+            let data;
+            data = await createUserWithEmailAndPassword(
+              authService,
+              email,
+              password
+            );
+            await setDoc(doc(db, "users", data.user.uid), {
+              nickname: nickname,
+            });
 
-          const storage = getStorage();
-          const storageRef = ref(
-            storage,
-            `users/${data.user.uid}/profile-image`
-          );
-          uploadBytes(storageRef, file[0]).then((snapshot) => {
-            console.log(snapshot);
-          });
-          setEmail("");
-          navigate("/login");
-        } catch (error) {
-          console.log(error);
+            const storage = getStorage();
+            const storageRef = ref(
+              storage,
+              `users/${data.user.uid}/profile-image`
+            );
+            uploadBytes(storageRef, file[0]).then((snapshot) => {
+              console.log(snapshot);
+            });
+            setEmail("");
+            navigate("/login");
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          alert("비밀번호를 확인해주세요");
+          setPassword("");
         }
-      } else {
-        alert("비밀번호를 확인해주세요");
-        setPassword("");
       }
     }
   };
