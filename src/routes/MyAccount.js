@@ -156,7 +156,7 @@ export default function MyAccount() {
 
   return (
     <>
-      <Navbar auth setting myaccount />
+      <Navbar auth subnav setting myaccount />
       <ContentStyle>
         <MyAccountStyle>
           <div className="edit-header">

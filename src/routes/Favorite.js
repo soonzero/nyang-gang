@@ -73,7 +73,7 @@ export default function Favorite() {
 
   return (
     <>
-      <Navbar favorite filter={filter} setFilter={setFilter} />
+      <Navbar favorite subnav filter={filter} setFilter={setFilter} />
       {!isLoading ? (
         <>
           <ContentStyle>
