@@ -24,7 +24,7 @@ export default function List(props) {
   const [filteredData, setFilteredData] = useState([]);
   const [page, setPage] = useState(1);
 
-  const filter = async (code, num, item, pageIndex = 1) => {
+  const filter = async (code, num, pageIndex = 1) => {
     let filteredArray;
     if (!didCancel) {
       if (code == "") {
@@ -84,7 +84,7 @@ export default function List(props) {
         }
       }
 
-      updateFilter();
+      // updateFilter();
     }
 
     if (!didCancel) {
