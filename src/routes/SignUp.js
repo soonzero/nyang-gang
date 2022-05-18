@@ -26,7 +26,8 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const [emailConfirm, setEmailConfirm] = useState(false);
   const [pwConfirm, setPWConfirm] = useState(true);
-  const [nickname, setNickname] = useState();
+  const [nickname, setNickname] = useState("");
+  const [nicknameConfirm, setNicknameConfirm] = useState();
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -120,6 +121,16 @@ export default function SignUp() {
       setValidPassword();
       setPWConfirm(false);
     }
+
+    if (nickname.length > 0) {
+      if (nickname.length > 6) {
+        setNicknameConfirm(false);
+      } else {
+        setNicknameConfirm(true);
+      }
+    } else {
+      setNicknameConfirm();
+    }
   };
 
   useEffect(() => {
@@ -204,6 +215,15 @@ export default function SignUp() {
                 <label className="input-label" htmlFor="nickname">
                   닉네임
                 </label>
+                <div
+                  className={`password-text ${
+                    nicknameConfirm ? "valid" : "invalid"
+                  }`}
+                >
+                  {!nicknameConfirm
+                    ? "⚠️ 닉네임은 여섯 글자까지 이용 가능해요"
+                    : `✔️ 여섯 글자 이내로 입력 완료`}
+                </div>
                 <input
                   id="nickname"
                   className="nickname"
@@ -213,6 +233,7 @@ export default function SignUp() {
                   onChange={onChangeHandler}
                   placeholder="닉네임"
                   required
+                  maxLength={6}
                 />
               </div>
               <div className="form-confirm">
