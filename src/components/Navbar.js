@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { NavStyle } from "./styled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "images/nyang-gang.svg";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { authService, db } from "./fbase/fbase";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function Navbar(props) {
+  const navigate = useNavigate();
+
   const [hospitalSub, setHospitalSub] = useState(false);
   const [abandSub, setAbandSub] = useState(false);
   const [subMenu, setSubMenu] = useState(false);
@@ -42,6 +44,8 @@ export default function Navbar(props) {
   };
 
   const logout = () => {
+    alert("로그아웃이 완료되었습니다");
+    navigate("/");
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("uid");
     sessionStorage.removeItem("refreshToken");
@@ -51,10 +55,18 @@ export default function Navbar(props) {
 
   const handleScroll = useCallback(() => {
     if (props.license) {
-      if (window.scrollY > window.innerHeight) {
-        setShadow(true);
+      if (!menusInProfile) {
+        if (window.scrollY > window.innerHeight) {
+          setShadow(true);
+        } else {
+          setShadow(false);
+        }
       } else {
-        setShadow(false);
+        if (window.scrollY > 0) {
+          setShadow(true);
+        } else {
+          setShadow(false);
+        }
       }
     } else {
       if (window.scrollY <= 0) {
@@ -112,7 +124,7 @@ export default function Navbar(props) {
               <span className="logo-img">
                 <Logo color="#f57977" />
               </span>
-              <span className="logo-text">냥갱</span>
+              {!menusInProfile && <span className="logo-text">냥갱</span>}
             </li>
           </Link>
           {!props.auth && (
@@ -207,7 +219,7 @@ export default function Navbar(props) {
                         </Link>
                         {admin && (
                           <Link to="/admin">
-                            <li className="nav-submenu">관리자 메뉴</li>
+                            <li className="nav-submenu admin">관리자 메뉴</li>
                           </Link>
                         )}
                         <li className="nav-submenu signout" onClick={logout}>
@@ -275,6 +287,36 @@ export default function Navbar(props) {
               onClick={() => props.setFilter("shelter")}
             >
               보호소
+            </li>
+          </ul>
+        </div>
+      )}
+      {props.admin && (
+        <div className="nav-wrapper sub-nav-wrapper">
+          <ul className="sub-nav-container">
+            <li
+              className={`sub-nav-menu ${
+                props.filter == "waiting" ? "open" : ""
+              }`}
+              onClick={() => props.setFilter("waiting")}
+            >
+              승인 대기 중
+            </li>
+            <li
+              className={`sub-nav-menu ${
+                props.filter == "approved" ? "open" : ""
+              }`}
+              onClick={() => props.setFilter("approved")}
+            >
+              승인 완료
+            </li>
+            <li
+              className={`sub-nav-menu ${
+                props.filter == "rejected" ? "open" : ""
+              }`}
+              onClick={() => props.setFilter("rejected")}
+            >
+              승인 거절
             </li>
           </ul>
         </div>

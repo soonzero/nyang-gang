@@ -652,7 +652,8 @@ export const NavStyle = styled.div`
 
   .nav-submenu.shelter,
   .nav-submenu.adoption,
-  .nav-submenu.license {
+  .nav-submenu.license,
+  .nav-submenu.admin {
     border-top: 1px solid #e5e5e5;
   }
 
@@ -786,7 +787,7 @@ export const CarouselStyle = styled.div`
     font-weight: 600;
     color: white;
     word-break: keep-all;
-    width: 30%;
+    width: 35%;
     line-height: 1.2;
     text-align: right;
   }
@@ -846,7 +847,7 @@ export const CarouselStyle = styled.div`
       font-size: 2.5rem;
     }
   }
-
+  /* 
   @media screen and (max-width: 820px) {
     .img-desc {
       padding: 80px 40px;
@@ -860,7 +861,7 @@ export const CarouselStyle = styled.div`
       margin-right: 0;
       margin-bottom: 1rem;
     }
-  }
+  } */
 
   @media screen and (max-width: 768px) {
     .img-desc {
@@ -1678,6 +1679,10 @@ export const LicenseFullScreenStyle = styled.div`
       transform: translate(-50%, 0.25rem) rotate(90deg);
     }
   }
+
+  @media screen and (max-width: 765px) {
+    display: none;
+  }
 `;
 
 export const LicenseStyle = styled.div`
@@ -1845,20 +1850,26 @@ export const LicenseStyle = styled.div`
       border-radius: 8px;
       background-color: #f5f5f5;
       color: black;
+      text-align: center;
     }
+  }
+
+  .process-wrapper {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
   }
 
   .process-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    column-gap: 30px;
-    row-gap: 10px;
-    position: relative;
+    width: 49%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
     margin-bottom: 20px;
   }
 
   .process {
-    padding: 40px;
+    padding: 30px 0;
     border-radius: 12px;
     background-color: #f5f5f5;
     display: flex;
@@ -1867,23 +1878,21 @@ export const LicenseStyle = styled.div`
     text-align: center;
     word-break: keep-all;
     line-height: 1.5;
+    transition: all 250ms ease-in-out;
+  }
+
+  .process.type {
     cursor: pointer;
-    transition: all 500ms ease-in-out;
+  }
+
+  .process:not(.half) {
+    grid-column-start: 1;
+    grid-column-end: 3;
   }
 
   .process.selected {
     background-color: #f57977;
     color: white;
-  }
-
-  .g11-12 {
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
-
-  .g13-14 {
-    grid-column-start: 3;
-    grid-column-end: 5;
   }
 
   .flow {
@@ -1899,7 +1908,7 @@ export const LicenseStyle = styled.div`
     }
   }
 
-  .divider {
+  .process-divider {
     position: absolute;
     left: 50%;
     height: 100%;
@@ -1927,6 +1936,25 @@ export const LicenseStyle = styled.div`
     }
   }
 
+  @media screen and (max-width: 825px) {
+    .process-wrapper {
+      flex-direction: column;
+    }
+
+    .process-container {
+      width: 100%;
+
+      &:not(:last-child) {
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e5e5e5;
+      }
+    }
+
+    .process-divider {
+      display: none;
+    }
+  }
+
   @media screen and (max-width: 800px) {
     .divider {
       display: none;
@@ -1946,7 +1974,11 @@ export const LicenseStyle = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    .content-cards {
+    .content-cards.license {
+      grid-template-columns: 1fr;
+    }
+
+    .content-cards.way {
       grid-template-columns: 1fr;
     }
   }
@@ -2352,13 +2384,32 @@ export const ArticleStyle = styled.div`
     color: #b5b5b5;
   }
 
+  .manage-button {
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #f57977;
+    font-size: 0.8rem;
+    color: #f57977;
+    cursor: pointer;
+    transition: background-color 200ms ease, color 200ms ease;
+
+    &:not(:last-child) {
+      margin-right: 0.5rem;
+    }
+
+    &:hover {
+      background-color: #f57977;
+      color: white;
+    }
+  }
+
   .title {
     font-size: 1.1rem;
     font-weight: 600;
   }
 
   .content {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: ${(props) => (props.admin ? "none" : "1px solid #e5e5e5")};
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -2666,4 +2717,14 @@ export const NoArticleStyle = styled.div`
   font-size: 1.5rem;
   font-weight: 600;
   color: #b5b5b5;
+`;
+
+export const AdminStyle = styled.div`
+  .admin-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e5e5e5;
+    margin-bottom: 1rem;
+  }
 `;
