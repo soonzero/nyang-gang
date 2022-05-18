@@ -33,6 +33,14 @@ const array = [
     text: "반려동물 등록",
     link: "/license",
   },
+  {
+    id: 3,
+    cover:
+      "https://firebasestorage.googleapis.com/v0/b/nyang-gang.appspot.com/o/grandparents-gf660653e8_1920.jpg?alt=media&token=3c09682d-275a-49fd-9994-17f40ad706eb",
+    title: "사지 말고 입양하세요",
+    text: "입양",
+    link: "/adoption",
+  },
 ];
 
 export default function Carousel() {
