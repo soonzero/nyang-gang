@@ -1,7 +1,14 @@
 import { db } from "components/fbase/fbase";
 import { useEffect, useState } from "react";
 import { ProfilePanelStyle } from "./styled";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import Loading from "./Loading";
 import { Link } from "react-router-dom";
 
@@ -9,6 +16,7 @@ export default function ProfilePanel(props) {
   let didCancel = false;
 
   const [isLoading, setIsLoading] = useState(true);
+  const [articles, setArticles] = useState();
 
   const getData = async () => {
     setIsLoading(true);
@@ -21,6 +29,16 @@ export default function ProfilePanel(props) {
           setIsLoading(false);
         }
       }
+      const q = query(
+        collection(db, "adoption"),
+        where("author", "==", `${sessionStorage.getItem("uid")}`)
+      );
+      const querySnapshot = await getDocs(q);
+      const myArticlesArray = [];
+      querySnapshot.forEach((doc) => {
+        myArticlesArray.push(doc.data());
+      });
+      setArticles(myArticlesArray);
     } catch (e) {
       console.log(e);
     }
@@ -45,16 +63,28 @@ export default function ProfilePanel(props) {
           </div>
           <div className="content articles">
             <div className="my-articles complete">
-              <span>대기중</span>
-              <span>준비 중</span>
+              <span>대기 중</span>
+              <span>
+                {articles &&
+                  articles.filter((a) => a.status == "waiting").length}
+                개
+              </span>
             </div>
             <div className="my-articles waiting">
               <span>승인 완료</span>
-              <span>준비 중</span>
+              <span>
+                {articles &&
+                  articles.filter((a) => a.status == "approved").length}
+                개
+              </span>
             </div>
             <div className="my-articles rejected">
               <span>승인 거절</span>
-              <span>준비 중</span>
+              <span>
+                {articles &&
+                  articles.filter((a) => a.status == "rejected").length}
+                개
+              </span>
             </div>
           </div>
           <div className="content new-article">

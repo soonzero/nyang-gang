@@ -16,14 +16,22 @@ export default function Feed(props) {
       articlesArray.push(doc.data());
     });
     if (!didCancel) {
-      dispatch({ type: "SET_ARTICLES", data: articlesArray });
+      dispatch({
+        type: "SET_ARTICLES",
+        data: articlesArray.filter(
+          (a) => a.status == (props.admin ? "waiting" : "approved")
+        ),
+      });
     }
   };
 
   const articlesList = useSelector((state) => state.manageArticles);
 
   useEffect(() => {
-    getArticles();
+    if (!props.admin) {
+      getArticles();
+    }
+
     return () => {
       didCancel = true;
     };
@@ -31,19 +39,37 @@ export default function Feed(props) {
 
   return (
     <FeedStyle>
-      {articlesList && articlesList.length > 0 ? (
-        articlesList.map((article) => {
-          return (
-            <Article
-              image={props.image}
-              nickname={props.nickname}
-              key={article.id}
-              data={article}
-            />
-          );
-        })
-      ) : (
-        <NoArticleStyle>글이 없어요</NoArticleStyle>
+      {!props.admin && (
+        <>
+          {articlesList && articlesList.length > 0 ? (
+            articlesList.map((article) => {
+              return (
+                <Article
+                  admin={props.admin}
+                  image={props.image}
+                  nickname={props.nickname}
+                  key={article.id}
+                  data={article}
+                />
+              );
+            })
+          ) : (
+            <NoArticleStyle>글이 없어요</NoArticleStyle>
+          )}
+        </>
+      )}
+      {props.admin && (
+        <>
+          {props.data && props.data.length > 0 ? (
+            props.data.map((article) => {
+              return (
+                <Article admin={props.admin} key={article.id} data={article} />
+              );
+            })
+          ) : (
+            <NoArticleStyle>글이 없어요</NoArticleStyle>
+          )}
+        </>
       )}
     </FeedStyle>
   );

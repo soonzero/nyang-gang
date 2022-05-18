@@ -8,6 +8,13 @@ const manageArticles = (currentState = initialState, action) => {
       newList.push(...action.data);
       return newList;
     }
+    case "APPROVE_ARTICLE":
+    case "REJECT_ARTICLE": {
+      const filteredList = newState.filter(
+        (_, i) => newState[i].id != action.data.id
+      );
+      return filteredList;
+    }
     case "DELETE_ARTICLE": {
       const filteredList = newState.filter(
         (_, i) => newState[i].id !== action.data
