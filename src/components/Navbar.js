@@ -170,22 +170,32 @@ export default function Navbar(props) {
                         {menusInProfile && (
                           <>
                             <Link to="/hospital">
-                              <li className="nav-submenu">병원 찾기</li>
+                              <li className="nav-submenu hospital">
+                                병원 찾기
+                              </li>
                             </Link>
                             <Link to="/pharmacy">
-                              <li className="nav-submenu">약국 찾기</li>
+                              <li className="nav-submenu pharmacy">
+                                약국 찾기
+                              </li>
                             </Link>
                             <Link to="/shelter">
-                              <li className="nav-submenu">보호소 찾기</li>
+                              <li className="nav-submenu shelter">
+                                보호소 찾기
+                              </li>
                             </Link>
                             <Link to="/abandoned">
-                              <li className="nav-submenu">유기 동물 조회</li>
+                              <li className="nav-submenu abandoned">
+                                유기 동물 조회
+                              </li>
                             </Link>
                             <Link to="/adoption">
-                              <li className="nav-submenu">입양</li>
+                              <li className="nav-submenu adoption">입양</li>
                             </Link>
                             <Link to="/license">
-                              <li className="nav-submenu">반려동물 등록</li>
+                              <li className="nav-submenu license">
+                                반려동물 등록
+                              </li>
                             </Link>
                           </>
                         )}
@@ -200,7 +210,7 @@ export default function Navbar(props) {
                             <li className="nav-submenu">관리자 메뉴</li>
                           </Link>
                         )}
-                        <li className="nav-submenu" onClick={logout}>
+                        <li className="nav-submenu signout" onClick={logout}>
                           로그아웃
                         </li>
                       </ul>

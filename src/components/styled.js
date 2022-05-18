@@ -650,6 +650,20 @@ export const NavStyle = styled.div`
     }
   }
 
+  .nav-submenu.shelter,
+  .nav-submenu.adoption,
+  .nav-submenu.license {
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .nav-submenu.license {
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .nav-submenu.signout {
+    border-top: 1px solid #e5e5e5;
+  }
+
   .nav-wrapper.sub-nav-wrapper {
     height: 100%;
     z-index: 3;
@@ -851,6 +865,15 @@ export const CarouselStyle = styled.div`
   @media screen and (max-width: 768px) {
     .img-desc {
       justify-content: flex-end;
+    }
+
+    .buttons {
+      flex-direction: row;
+    }
+
+    .desc-button:not(:last-child) {
+      margin-right: 1rem;
+      margin-bottom: 0;
     }
 
     .desc-title {
@@ -1317,6 +1340,27 @@ export const MyAccountStyle = styled.div`
       font-size: 0.8rem;
     }
   }
+
+  @media screen and (max-width: 1123px) {
+    padding: 2rem;
+  }
+
+  @media screen and (max-width: 758px) {
+    .edit-form {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .edit-target {
+      margin-bottom: 1rem;
+    }
+
+    .edit-input,
+    .image-preview {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+  }
 `;
 
 export const DeleteAccountStyle = styled.div`
@@ -1433,6 +1477,20 @@ export const DeleteAccountStyle = styled.div`
       margin-right: 0;
     }
   }
+
+  @media screen and (max-width: 848px) {
+    .main {
+      padding: 1rem;
+    }
+
+    .header {
+      font-size: 1rem;
+    }
+
+    .content {
+      font-size: 0.9rem;
+    }
+  }
 `;
 
 export const PasswordStyle = styled.div`
@@ -1508,6 +1566,12 @@ export const PasswordStyle = styled.div`
 
     &:hover {
       opacity: 1;
+    }
+  }
+
+  @media screen and (max-width: 848px) {
+    .pw-desc {
+      font-size: 0.8rem;
     }
   }
 `;
