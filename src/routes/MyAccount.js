@@ -32,20 +32,6 @@ export default function MyAccount() {
     }
   };
 
-  if (sessionStorage.getItem("uid")) {
-    const storage = getStorage();
-    getDownloadURL(
-      ref(storage, `users/${sessionStorage.getItem("uid")}/profile-image.png`)
-    )
-      .then((url) => {
-        const img = document.querySelector(".image-preview");
-        img.setAttribute("src", url);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
   const preview = () => {
     const container = document.querySelector(".image-preview");
     if (file && file[0]) {
@@ -227,7 +213,7 @@ export default function MyAccount() {
                   accept="image/png, image/jpeg, image/jpg"
                   onChange={onChangeHandler}
                   className="edit-input"
-                  // required
+                  required
                   style={{
                     opacity: "0",
                     position: "absolute",
