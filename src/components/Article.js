@@ -1,6 +1,6 @@
 import WriteComment from "./WriteComment";
 import { ArticleStyle } from "./styled";
-import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "./fbase/fbase";
 import { useState, useEffect } from "react";
 import {
@@ -93,6 +93,27 @@ export default function Article(props) {
     }
   };
 
+  const manageArticle = async (event) => {
+    const target = event.currentTarget.getAttribute("name");
+    try {
+      if (target == "approve") {
+        const docRef = doc(db, "adoption", `${props.data.id}`);
+        await updateDoc(docRef, {
+          status: "approved",
+        });
+        dispatch({ type: "APPROVE_ARTICLE", data: props.data });
+      } else if (target == "reject") {
+        const docRef = doc(db, "adoption", `${props.data.id}`);
+        await updateDoc(docRef, {
+          status: "rejected",
+        });
+        dispatch({ type: "REJECT_ARTICLE", data: props.data });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const commentsList = useSelector((state) => state.manageComments);
 
   useEffect(() => {
@@ -111,7 +132,7 @@ export default function Article(props) {
   }, [authorImg]);
 
   return (
-    <ArticleStyle>
+    <ArticleStyle admin={props.admin}>
       {!isLoading ? (
         <>
           <div className="author-container">
@@ -144,6 +165,24 @@ export default function Article(props) {
                 )}
               </div>
             )}
+            {props.admin && (
+              <div className="manage-container">
+                <span
+                  name="approve"
+                  className="manage-button"
+                  onClick={manageArticle}
+                >
+                  승인
+                </span>
+                <span
+                  name="reject"
+                  className="manage-button"
+                  onClick={manageArticle}
+                >
+                  거절
+                </span>
+              </div>
+            )}
           </div>
           <div className="title-container">
             <h2 className="title">{props.data.title}</h2>
@@ -162,26 +201,28 @@ export default function Article(props) {
               })}
             </div>
           </div>
-          <div className="comments">
-            <ul className="comments-list">
-              {commentsList &&
-                commentsList.map((c, i) => {
-                  return <Comment key={i} article={props.data.id} data={c} />;
-                })}
-              <li className="comment-container">
-                <div className="comment">
-                  <div className="comment-content">
-                    <span
-                      className="commenter-img"
-                      style={{ backgroundImage: `url(${props.image})` }}
-                    ></span>
-                    <span className="commenter-name">{props.nickname}</span>
+          {!props.admin && (
+            <div className="comments">
+              <ul className="comments-list">
+                {commentsList &&
+                  commentsList.map((c, i) => {
+                    return <Comment key={i} article={props.data.id} data={c} />;
+                  })}
+                <li className="comment-container">
+                  <div className="comment">
+                    <div className="comment-content">
+                      <span
+                        className="commenter-img"
+                        style={{ backgroundImage: `url(${props.image})` }}
+                      ></span>
+                      <span className="commenter-name">{props.nickname}</span>
+                    </div>
+                    <WriteComment id={props.data.id} />
                   </div>
-                  <WriteComment id={props.data.id} />
-                </div>
-              </li>
-            </ul>
-          </div>
+                </li>
+              </ul>
+            </div>
+          )}
         </>
       ) : (
         <Loading notext />

@@ -17,6 +17,7 @@ import Favorite from "./Favorite";
 import { Provider } from "react-redux";
 import store from "reducers/store";
 import WriteArticle from "./WriteArticle";
+import Admin from "./Admin";
 
 export default function AppRouter() {
   return (
@@ -38,6 +39,7 @@ export default function AppRouter() {
           <Route path="/license" element={<License />} />
           <Route path="/adoption" element={<Adoption />} />
           <Route path="/adoption/write" element={<WriteArticle />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </Router>
     </Provider>
