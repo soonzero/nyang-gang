@@ -165,108 +165,130 @@ export default function License() {
           <LicenseStyle>
             <div className="content">
               <h1 className="content-header">등록 절차</h1>
-              <div className="process-container">
-                <div className="divider"></div>
-                <div
-                  name="agency"
-                  className={`process g11-12 ${agency ? "selected" : ""}`}
-                  onMouseEnter={() => setAgency(true)}
-                  onMouseLeave={() => setAgency(false)}
-                  onClick={select}
-                >
-                  {agency ? (
-                    <span>등록대행 업체 검색</span>
-                  ) : (
+              <div className="process-wrapper">
+                <div className="process-container">
+                  <div
+                    className={`process type ${agency ? "selected" : ""}`}
+                    name="agency"
+                    onMouseEnter={() => setAgency(true)}
+                    onMouseLeave={() => setAgency(false)}
+                    onClick={select}
+                  >
+                    {agency ? (
+                      <span>
+                        등록대행 업체 검색하기
+                        <br />
+                        (지정 동물병원, 동물보호센터)
+                      </span>
+                    ) : (
+                      <span>
+                        등록대행 업체 방문 등록
+                        <br />
+                        (지정 동물병원, 동물보호센터)
+                      </span>
+                    )}
+                  </div>
+                  <div className="process flow half">
+                    <Flow />
+                  </div>
+                  <div className="process flow half">
+                    <Flow />
+                  </div>
+                  <div className="process half">
                     <span>
-                      등록대행업체 방문 등록
+                      무선식별장치 장착
                       <br />
-                      (지정 동물병원, 동물보호센터)
+                      (장치 비용 및 시술비 발생)
                     </span>
-                  )}
-                </div>
-                <div
-                  name="gov"
-                  className={`process g13-14 ${govOffice ? "selected" : ""}`}
-                  onMouseEnter={() => setGovOffice(true)}
-                  onMouseLeave={() => setGovOffice(false)}
-                  onClick={select}
-                >
-                  {govOffice ? (
-                    <span>시군구청 위치 조회</span>
-                  ) : (
+                  </div>
+                  <div className="process half">
                     <span>
-                      시군구청 방문 등록
+                      무선식별장치
                       <br />
-                      (무선식별장치가 장착된 경우만 가능)
+                      장착확인
                     </span>
-                  )}
+                  </div>
+                  <div className="process flow half">
+                    <Flow />
+                  </div>
+                  <div className="process flow half">
+                    <Flow />
+                  </div>
+                  <div className="process">
+                    <span>
+                      동물등록신청서 등 작성 및 제출/수수료 납부
+                      <br />
+                      (내장 만원, 외장 3천원)
+                    </span>
+                  </div>
+                  <div className="process flow">
+                    <Flow />
+                  </div>
+                  <div className="process">
+                    <span>검토 및 등록사항 기록 등</span>
+                  </div>
+                  <div className="process flow">
+                    <Flow />
+                  </div>
+                  <div className="process">
+                    <span>시군구청 등록 승인 후 등록증 수령</span>
+                  </div>
                 </div>
-                <div className="process flow">
-                  <Flow />
-                </div>
-                <div className="process flow">
-                  <Flow />
-                </div>
-                <div className="process flow g13-14">
-                  <Flow />
-                </div>
-                <div className="process">
-                  <span>
-                    무선식별장치 장착
-                    <br />
-                    (장치 비용 및 시술비 발생)
-                  </span>
-                </div>
-                <div className="process">
-                  <span>무선식별장치 장착확인</span>
-                </div>
-                <div className="process g13-14">
-                  <span>무선식별장치 장착확인</span>
-                </div>
-                <div className="process flow">
-                  <Flow />
-                </div>
-                <div className="process flow">
-                  <Flow />
-                </div>
-                <div className="process flow g13-14">
-                  <Flow />
-                </div>
-                <div className="process g11-12">
-                  <span>
-                    동물등록신청서 등 작성 및 제출/수수료 납부 (내장 만원, 외장
-                    3천원)
-                  </span>
-                </div>
-                <div className="process g13-14">
-                  <span>
-                    동물등록신청서 등 작성 및 제출/수수료 납부 (내장 만원, 외장
-                    3천원)
-                  </span>
-                </div>
-                <div className="process flow g11-12">
-                  <Flow />
-                </div>
-                <div className="process flow g13-14">
-                  <Flow />
-                </div>
-                <div className="process g11-12">
-                  <span>검토 및 등록사항 기록 등</span>
-                </div>
-                <div className="process g13-14">
-                  <span>검토 및 등록사항 기록 등</span>
-                </div>
-                <div className="process flow g11-12">
-                  <Flow />
-                </div>
-                <div className="process flow g13-14">
-                  <Flow />
-                </div>
-                <div className="process g11-12">
-                  <span>시군구청 등록 승인 후 등록증 수령</span>
-                </div>
-                <div className="process g13-14">
-                  <span>등록증 수령</span>
+                <div className="process-divider"></div>
+                <div className="process-container">
+                  <div
+                    name="gov"
+                    className={`process type ${govOffice ? "selected" : ""}`}
+                    onMouseEnter={() => setGovOffice(true)}
+                    onMouseLeave={() => setGovOffice(false)}
+                    onClick={select}
+                  >
+                    {govOffice ? (
+                      <span>
+                        시군구청 위치 조회
+                        <br />
+                        (무선식별장치가 장착된 경우만 가능)
+                      </span>
+                    ) : (
+                      <span>
+                        시군구청 방문 등록
+                        <br />
+                        (무선식별장치가 장착된 경우만 가능)
+                      </span>
+                    )}
+                  </div>
+                  <div className="process flow">
+                    <Flow />
+                  </div>
+                  <div className="process">
+                    <span>
+                      무선식별장치
+                      <br />
+                      장착확인
+                    </span>
+                  </div>
+                  <div className="process flow">
+                    <Flow />
+                  </div>
+                  <div className="process">
+                    <span>
+                      동물등록신청서 등 작성 및 제출/수수료 납부
+                      <br />
+                      (내장 만원, 외장 3천원)
+                    </span>
+                  </div>
+                  <div className="process flow">
+                    <Flow />
+                  </div>
+                  <div className="process">
+                    <span>검토 및 등록사항 기록 등</span>
+                  </div>
+                  <div className="process flow">
+                    <Flow />
+                  </div>
+                  <div className="process">
+                    <span>등록증 수령</span>
+                  </div>
                 </div>
               </div>
             </div>
