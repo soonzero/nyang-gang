@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "components/Navbar";
 import { ContentStyle, WriteArticleStyle } from "components/styled";
-import { collection, addDoc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 import { db } from "components/fbase/fbase";
 import { getAuth } from "firebase/auth";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 
 export default function WriteArticle() {
@@ -70,6 +76,8 @@ export default function WriteArticle() {
           thumbnail: thumbnail,
           comments: [],
           images: images.length,
+          status: "waiting",
+          imageslink: [],
         });
         await setDoc(
           docRef,
@@ -83,7 +91,15 @@ export default function WriteArticle() {
         const storage = getStorage();
         for (let i = 0; i < images.length; i++) {
           const storageRef = ref(storage, `articles/${docRef.id}/${i}`);
-          uploadBytes(storageRef, images[i]).then((snapshot) => {});
+          uploadBytes(storageRef, images[i]).then((snapshot) => {
+            getDownloadURL(ref(storage, `articles/${docRef.id}/${i}`)).then(
+              (url) => {
+                updateDoc(docRef, {
+                  imageslink: arrayUnion(url),
+                });
+              }
+            );
+          });
         }
         alert("등록이 완료되었어요");
         navigate("/adoption");

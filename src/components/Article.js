@@ -21,25 +21,16 @@ export default function Article(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [nickname, setNickname] = useState();
   const [authorImg, setAuthorImg] = useState();
-  const [images, setImages] = useState();
   const [articleSubmenu, setArticleSubmenu] = useState(false);
 
   const getData = async () => {
     try {
-      let imagesArray = [];
       const docRef = doc(db, "users", `${props.data.author}`);
       const docSnap = await getDoc(docRef);
       const storage = getStorage();
       const url = await getDownloadURL(
         ref(storage, `users/${props.data.author}/profile-image`)
       );
-      for (let i = 0; i < props.data.images; i++) {
-        const contentImgs = await getDownloadURL(
-          ref(storage, `articles/${props.data.id}/${i}`)
-        );
-        imagesArray.push(contentImgs);
-      }
-      setImages(imagesArray);
       if (!didCancel) {
         setNickname(docSnap.data().nickname);
         setAuthorImg(url);
@@ -190,7 +181,7 @@ export default function Article(props) {
           <div className="content">
             <div className="content-text">{props.data.main}</div>
             <div className="content-imgs">
-              {images.map((i) => {
+              {props.data.imageslink.map((i) => {
                 return (
                   <div
                     key={i}
