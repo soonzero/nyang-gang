@@ -29,10 +29,15 @@ export default function ProfilePanel(props) {
           setIsLoading(false);
         }
       }
-      const q = query(
-        collection(db, "adoption"),
-        where("author", "==", `${sessionStorage.getItem("uid")}`)
-      );
+      let q;
+      if (docSnap.data().auth) {
+        q = query(collection(db, "adoption"));
+      } else {
+        q = query(
+          collection(db, "adoption"),
+          where("author", "==", `${sessionStorage.getItem("uid")}`)
+        );
+      }
       const querySnapshot = await getDocs(q);
       const myArticlesArray = [];
       querySnapshot.forEach((doc) => {
