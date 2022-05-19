@@ -1300,6 +1300,13 @@ export const MyAccountStyle = styled.div`
     }
   }
 
+  .origin-container {
+    display: inline-block;
+    width: 15rem;
+    padding: 10px 12px;
+    margin-right: 25px;
+  }
+
   .edit-input-profile-img {
     appearance: none;
   }
@@ -1340,6 +1347,10 @@ export const MyAccountStyle = styled.div`
     span {
       font-size: 0.8rem;
     }
+  }
+
+  .reauth-desc {
+    margin: 1rem 0;
   }
 
   @media screen and (max-width: 1123px) {
