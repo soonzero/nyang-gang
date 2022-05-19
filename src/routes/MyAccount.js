@@ -1,8 +1,13 @@
 import Navbar from "components/Navbar";
 import { ContentStyle, MyAccountStyle } from "components/styled";
-import { getAuth, updateEmail } from "firebase/auth";
+import {
+  EmailAuthProvider,
+  getAuth,
+  reauthenticateWithCredential,
+  updateEmail,
+} from "firebase/auth";
 import React, { useState, useEffect } from "react";
-import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { authService } from "components/fbase/fbase";
 import { Link, useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -13,13 +18,16 @@ export default function MyAccount() {
   const emailReg =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
+  const [display, setDisplay] = useState(false);
   const [file, setFile] = useState();
+  const [changeMode, setChangeMode] = useState();
   const [email, setEmail] = useState();
   const [originEmail, setOriginEmail] = useState();
   const [emailDisabled, setEmailDisabled] = useState(true);
   const [nickname, setNickname] = useState();
   const [originNickname, setOriginNickname] = useState();
   const [nicknameDisabled, setNicknameDisabled] = useState(true);
+  const [password, setPassword] = useState();
 
   const onChangeHandler = (event) => {
     if (event.target.name == "file") {
@@ -29,6 +37,8 @@ export default function MyAccount() {
       setEmail(event.target.value);
     } else if (event.target.name == "nickname") {
       setNickname(event.target.value);
+    } else if (event.target.name == "password") {
+      setPassword(event.target.value);
     }
   };
 
@@ -84,12 +94,20 @@ export default function MyAccount() {
 
   useEffect(() => {
     setNickname(nickname);
-    if (nickname == originNickname) {
-      setNicknameDisabled(true);
+    if (nickname && nickname.length > 0) {
+      if (nickname == originNickname) {
+        setNicknameDisabled(true);
+      } else {
+        setNicknameDisabled(false);
+      }
     } else {
-      setNicknameDisabled(false);
+      setNicknameDisabled(true);
     }
   }, [nickname]);
+
+  useEffect(() => {
+    setPassword(password);
+  }, [password]);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -102,6 +120,7 @@ export default function MyAccount() {
           .then(() => {
             alert("이메일이 변경되었어요. 다시 로그인해주세요!");
             authService.signOut();
+            sessionStorage.clear();
             navigate("/login");
           })
           .catch((e) => {
@@ -123,19 +142,40 @@ export default function MyAccount() {
         alert("이미지를 업로드해주세요!");
       }
     } else if (event.target.name == "nickname") {
-      if (nickname.includes("관리자") || nickname.includes("admin")) {
-        alert("닉네임에 '관리자', 'admin' 등의 텍스트를 사용할 수 없습니다.");
-      } else {
-        try {
-          const userRef = doc(db, "users", getAuth().currentUser.uid);
-          await updateDoc(userRef, {
-            nickname: nickname,
-          });
-          alert("닉네임이 변경되었어요!");
-          navigate("/");
-        } catch (e) {
-          console.log(e);
+      if (nickname && nickname.length > 0) {
+        if (nickname.includes("관리자") || nickname.includes("admin")) {
+          alert("닉네임에 '관리자', 'admin' 등의 텍스트를 사용할 수 없습니다.");
+        } else {
+          try {
+            const userRef = doc(db, "users", getAuth().currentUser.uid);
+            await updateDoc(userRef, {
+              nickname: nickname,
+            });
+            alert("닉네임이 변경되었어요!");
+            navigate("/");
+          } catch (e) {
+            console.log(e);
+          }
         }
+      } else {
+        alert("변경하실 닉네임을 입력해주세요");
+      }
+    } else if (event.target.name == "password") {
+      if (password && password.length > 0) {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const credential = EmailAuthProvider.credential(user.email, password);
+        reauthenticateWithCredential(user, credential)
+          .then(() => {
+            setDisplay(true);
+          })
+          .catch((e) => {
+            if (e.message.includes("wrong-password")) {
+              alert("비밀번호를 잘못 입력하셨습니다. 다시 입력해주세요.");
+            }
+          });
+      } else {
+        alert("비밀번호를 입력해주세요");
       }
     }
   };
@@ -145,88 +185,158 @@ export default function MyAccount() {
       <Navbar auth subnav setting myaccount />
       <ContentStyle>
         <MyAccountStyle>
-          <div className="edit-header">
-            <h2>회원정보수정</h2>
-            <Link to="/delete">
-              <span>회원 탈퇴</span>
-            </Link>
-          </div>
-          <div className="edit-main">
-            <form
-              className="edit-form email"
-              name="email"
-              onSubmit={onSubmitHandler}
-            >
-              <h3 className="edit-target">이메일</h3>
-              <input
-                className="edit-input"
-                type="email"
-                name="email"
-                onChange={onChangeHandler}
-                value={email}
-              ></input>
-              <button
-                className="edit-button"
-                disabled={emailDisabled}
-                type="submit"
-              >
-                이메일 변경하기
-              </button>
-            </form>
-            <form
-              className="edit-form nickname"
-              name="nickname"
-              onSubmit={onSubmitHandler}
-            >
-              <h3 className="edit-target">닉네임</h3>
-              <div>
-                <input
-                  className="edit-input"
-                  type="text"
-                  name="nickname"
-                  onChange={onChangeHandler}
-                  value={nickname}
-                ></input>
+          {display ? (
+            <>
+              <div className="edit-header">
+                <h2>회원정보수정</h2>
+                <Link to="/delete">
+                  <span>회원 탈퇴</span>
+                </Link>
               </div>
-              <button className="edit-button" disabled={nicknameDisabled}>
-                닉네임 변경하기
-              </button>
-            </form>
-            <form
-              className="edit-form profile-img"
-              name="profile-img"
-              onSubmit={onSubmitHandler}
-            >
-              <h3 className="edit-target">프로필 이미지</h3>
-              <label className="image-preview" htmlFor="edit-input-profile-img">
-                {file && file[0] ? null : (
-                  <span className="click-here">
-                    여기를 눌러 원하는 프로필 이미지를 등록해주세요
-                    <br />
-                    <span>(png, jpeg, jpg)</span>
-                  </span>
-                )}
+              <div className="edit-main">
+                <form
+                  className="edit-form email"
+                  name="email"
+                  onSubmit={onSubmitHandler}
+                >
+                  <h3 className="edit-target">이메일</h3>
+                  {changeMode == "email" ? (
+                    <>
+                      <input
+                        className="edit-input"
+                        type="email"
+                        name="email"
+                        onChange={onChangeHandler}
+                        value={email}
+                        placeholder="변경할 이메일을 입력해주세요"
+                      ></input>
+                      <button
+                        className="edit-button"
+                        disabled={emailDisabled}
+                        type="submit"
+                      >
+                        입력한 이메일로 변경하기
+                      </button>
+                    </>
+                  ) : (
+                    <div className="ex-container">
+                      <span className="origin-container">
+                        {originEmail && originEmail}
+                      </span>
+                      <button
+                        type="button"
+                        className="edit-button"
+                        onClick={() => setChangeMode("email")}
+                      >
+                        이메일 변경
+                      </button>
+                    </div>
+                  )}
+                </form>
+                <form
+                  className="edit-form nickname"
+                  name="nickname"
+                  onSubmit={onSubmitHandler}
+                >
+                  <h3 className="edit-target">닉네임</h3>
+                  {changeMode == "nickname" ? (
+                    <>
+                      <div>
+                        <input
+                          className="edit-input"
+                          type="text"
+                          name="nickname"
+                          onChange={onChangeHandler}
+                          value={nickname}
+                          placeholder="변경할 닉네임을 입력해주세요"
+                        ></input>
+                      </div>
+                      <button
+                        className="edit-button"
+                        disabled={nicknameDisabled}
+                      >
+                        입력한 닉네임으로 변경하기
+                      </button>
+                    </>
+                  ) : (
+                    <div className="ex-container">
+                      <span className="origin-container">
+                        {originNickname && originNickname}
+                      </span>
+                      <button
+                        className="edit-button"
+                        type="button"
+                        onClick={() => setChangeMode("nickname")}
+                      >
+                        닉네임 변경
+                      </button>
+                    </div>
+                  )}
+                </form>
+                <form
+                  className="edit-form profile-img"
+                  name="profile-img"
+                  onSubmit={onSubmitHandler}
+                >
+                  <h3 className="edit-target">프로필 이미지</h3>
+                  <label
+                    className="image-preview"
+                    htmlFor="edit-input-profile-img"
+                  >
+                    {file && file[0] ? null : (
+                      <span className="click-here">
+                        여기를 눌러 원하는 프로필 이미지를 등록해주세요
+                        <br />
+                        <span>(png, jpeg, jpg)</span>
+                      </span>
+                    )}
+                    <input
+                      type="file"
+                      name="file"
+                      id="edit-input-profile-img"
+                      accept="image/png, image/jpeg, image/jpg"
+                      onChange={onChangeHandler}
+                      className="edit-input"
+                      required
+                      style={{
+                        opacity: "0",
+                        position: "absolute",
+                        width: "0",
+                        height: "0",
+                      }}
+                    />
+                  </label>
+                  <button className="edit-button" type="submit">
+                    프로필 이미지 변경하기
+                  </button>
+                </form>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="edit-header">
+                <h2>비밀번호 입력</h2>
+              </div>
+              <p className="reauth-desc">
+                회원정보 수정을 위해 비밀번호를 입력해주세요
+              </p>
+              <form
+                name="password"
+                className="edit-form"
+                onSubmit={onSubmitHandler}
+              >
+                <h3 className="edit-target">비밀번호</h3>
                 <input
-                  type="file"
-                  name="file"
-                  id="edit-input-profile-img"
-                  accept="image/png, image/jpeg, image/jpg"
-                  onChange={onChangeHandler}
+                  name="password"
                   className="edit-input"
-                  required
-                  style={{
-                    opacity: "0",
-                    position: "absolute",
-                    width: "0",
-                    height: "0",
-                  }}
+                  type="password"
+                  value={password}
+                  onChange={onChangeHandler}
                 />
-              </label>
-              <button className="edit-button" type="submit">
-                프로필 이미지 변경하기
-              </button>
-            </form>
-          </div>
+                <button className="edit-button">회원정보 수정하기</button>
+              </form>
+            </>
+          )}
         </MyAccountStyle>
       </ContentStyle>
     </>
