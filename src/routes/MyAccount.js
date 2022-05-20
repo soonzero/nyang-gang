@@ -68,9 +68,15 @@ export default function MyAccount() {
     }
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     getData();
-  }, []);
+    const userRef = doc(db, "users", sessionStorage.getItem("uid"));
+    const userSnap = await getDoc(userRef);
+    if (display && userSnap.data()) {
+      const target = document.querySelector(".click-here");
+      target.style.backgroundImage = `url(${userSnap.data().profileimagelink})`;
+    }
+  }, [display]);
 
   useEffect(() => {
     setFile(file);
@@ -199,7 +205,7 @@ export default function MyAccount() {
                   name="email"
                   onSubmit={onSubmitHandler}
                 >
-                  <h3 className="edit-target">이메일</h3>
+                  <h3 className="edit-target">나의 이메일</h3>
                   {changeMode == "email" ? (
                     <>
                       <input
@@ -238,7 +244,7 @@ export default function MyAccount() {
                   name="nickname"
                   onSubmit={onSubmitHandler}
                 >
-                  <h3 className="edit-target">닉네임</h3>
+                  <h3 className="edit-target">나의 닉네임</h3>
                   {changeMode == "nickname" ? (
                     <>
                       <div>
@@ -278,17 +284,20 @@ export default function MyAccount() {
                   name="profile-img"
                   onSubmit={onSubmitHandler}
                 >
-                  <h3 className="edit-target">프로필 이미지</h3>
+                  <h3 className="edit-target">나의 프로필 이미지</h3>
                   <label
                     className="image-preview"
                     htmlFor="edit-input-profile-img"
                   >
                     {file && file[0] ? null : (
-                      <span className="click-here">
-                        여기를 눌러 원하는 프로필 이미지를 등록해주세요
-                        <br />
-                        <span>(png, jpeg, jpg)</span>
-                      </span>
+                      <>
+                        <div className="click-here"></div>
+                        <span>
+                          이곳을 눌러 새로운 프로필
+                          <br />
+                          이미지를 선택해주세요.
+                        </span>
+                      </>
                     )}
                     <input
                       type="file"
