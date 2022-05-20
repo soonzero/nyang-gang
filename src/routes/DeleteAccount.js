@@ -1,7 +1,7 @@
 import Navbar from "components/Navbar";
 import { ContentStyle, DeleteAccountStyle } from "components/styled";
 import { deleteUser, getAuth } from "firebase/auth";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, setDoc } from "firebase/firestore";
 import { deleteObject, ref, getStorage } from "firebase/storage";
 import { db } from "components/fbase/fbase";
 import React, { useState } from "react";
@@ -29,14 +29,10 @@ export default function DeleteAccount() {
         const auth = getAuth();
         const user = auth.currentUser;
         try {
-          await deleteDoc(doc(db, "users", user.uid));
-          const deleteUserAccount = await deleteUser(user);
-          const storage = getStorage();
-          const imageRef = ref(
-            storage,
-            `users/${sessionStorage.getItem("uid")}/profile-image.png`
-          );
-          const deleteImg = await deleteObject(imageRef);
+          await setDoc(doc(db, "users", user.uid), {
+            status: "deleted",
+          });
+          await deleteUser(user);
           sessionStorage.clear();
           navigate("/");
         } catch (e) {
