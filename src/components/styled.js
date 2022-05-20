@@ -1332,21 +1332,35 @@ export const MyAccountStyle = styled.div`
       width: 100%;
       padding-top: 100%;
     }
+
+    span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      background-color: white;
+      word-break: keep-all;
+      text-align: center;
+      line-height: 1.5;
+      color: black;
+    }
   }
 
   .click-here {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    word-break: keep-all;
-    text-align: center;
-    line-height: 1.2;
-    color: grey;
-
-    span {
-      font-size: 0.8rem;
-    }
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.5;
   }
 
   .reauth-desc {
