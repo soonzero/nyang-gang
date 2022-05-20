@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import { NavStyle } from "./styled";
 import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "images/nyang-gang.svg";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { authService, db } from "./fbase/fbase";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -19,19 +18,24 @@ export default function Navbar(props) {
     window.innerWidth <= 768
   );
 
-  if (sessionStorage.getItem("uid") && !props.auth) {
-    const storage = getStorage();
-    getDownloadURL(
-      ref(storage, `users/${sessionStorage.getItem("uid")}/profile-image`)
-    )
-      .then((url) => {
-        const img = document.querySelector(".profile-image");
-        img.setAttribute("src", url);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
+  const getProfileImg = useCallback(async () => {
+    try {
+      if (sessionStorage.getItem("uid") && !props.auth) {
+        const userRef = doc(db, "users", sessionStorage.getItem("uid"));
+        const userSnap = await getDoc(userRef);
+        if (userSnap.data()) {
+          const img = document.querySelector(".profile-image");
+          img.setAttribute("src", userSnap.data().profileimagelink);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  useEffect(() => {
+    getProfileImg();
+  }, []);
 
   const setAuthority = async () => {
     const userRef = doc(db, "users", sessionStorage.getItem("uid"));
@@ -46,9 +50,7 @@ export default function Navbar(props) {
   const logout = () => {
     alert("로그아웃이 완료되었습니다");
     navigate("/");
-    sessionStorage.removeItem("accessToken");
-    sessionStorage.removeItem("uid");
-    sessionStorage.removeItem("refreshToken");
+    sessionStorage.clear();
     authService.signOut();
     props.setIsLoggedIn(false);
   };
