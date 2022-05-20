@@ -1,5 +1,5 @@
 import { authService, db } from "components/fbase/fbase";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { AuthStyle } from "components/styled";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect, useState } from "react";
@@ -24,7 +24,7 @@ export default function SignUp() {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [validPassword, setValidPassword] = useState();
   const [error, setError] = useState("");
-  const [emailConfirm, setEmailConfirm] = useState(false);
+  // const [emailConfirm, setEmailConfirm] = useState(false);
   const [pwConfirm, setPWConfirm] = useState(true);
   const [nickname, setNickname] = useState("");
   const [nicknameConfirm, setNicknameConfirm] = useState();
@@ -64,6 +64,7 @@ export default function SignUp() {
             );
             await setDoc(doc(db, "users", data.user.uid), {
               nickname: nickname,
+              status: "alive",
             });
 
             const storage = getStorage();
@@ -72,7 +73,17 @@ export default function SignUp() {
               `users/${data.user.uid}/profile-image`
             );
             uploadBytes(storageRef, file[0]).then((snapshot) => {
-              console.log(snapshot);
+              getDownloadURL(
+                ref(storage, `users/${data.user.uid}/profile-image`)
+              ).then((url) => {
+                setDoc(
+                  doc(db, "users", data.user.uid),
+                  {
+                    profileimagelink: url,
+                  },
+                  { merge: true }
+                );
+              });
             });
             setEmail("");
             alert("회원가입이 완료되었습니다. 로그인해주세요!");
@@ -92,14 +103,14 @@ export default function SignUp() {
     if (email.length > 0) {
       if (emailReg.test(email)) {
         setValidEmail(true);
-        setEmailConfirm(true);
+        // setEmailConfirm(true);
       } else {
         setValidEmail(false);
-        setEmailConfirm(false);
+        // setEmailConfirm(false);
       }
     } else {
       setValidEmail();
-      setEmailConfirm(false);
+      // setEmailConfirm(false);
     }
 
     if (password.length > 0) {
@@ -168,13 +179,15 @@ export default function SignUp() {
                   placeholder="이메일"
                   required
                 />
-                <button
+                {/* 
+                  이메일 중복 확인 로직 추후에 구현하기
+                  <button
                   className="auth-button confirm"
                   type="button"
                   disabled={!emailConfirm}
                 >
                   이메일 확인하기
-                </button>
+                </button> */}
               </div>
               <div className="form-confirm">
                 <label className="input-label" htmlFor="password">
