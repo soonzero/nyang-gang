@@ -3,6 +3,7 @@ import { ContentStyle, MyAccountStyle } from "components/styled";
 import {
   EmailAuthProvider,
   getAuth,
+  onAuthStateChanged,
   reauthenticateWithCredential,
   updateEmail,
 } from "firebase/auth";
@@ -57,25 +58,28 @@ export default function MyAccount() {
 
   const getData = async () => {
     try {
-      if (getAuth().currentUser) {
-        setOriginEmail(getAuth().currentUser.email);
-        const docRef = doc(db, "users", getAuth().currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        setOriginNickname(docSnap.data().nickname);
-      }
+      const auth = getAuth();
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          setOriginEmail(user.email);
+          const userRef = doc(db, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+          setOriginNickname(userSnap.data().nickname);
+          if (display) {
+            const target = document.querySelector(".click-here");
+            target.style.backgroundImage = `url(${
+              userSnap.data().profileimagelink
+            })`;
+          }
+        }
+      });
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     getData();
-    const userRef = doc(db, "users", sessionStorage.getItem("uid"));
-    const userSnap = await getDoc(userRef);
-    if (display && userSnap.data()) {
-      const target = document.querySelector(".click-here");
-      target.style.backgroundImage = `url(${userSnap.data().profileimagelink})`;
-    }
   }, [display]);
 
   useEffect(() => {
@@ -142,6 +146,9 @@ export default function MyAccount() {
         );
         uploadBytes(storageRef, file[0]).then((snapshot) => {
           alert("프로필 이미지가 변경되었어요!");
+          alert(
+            "변경된 이미지가 적용되는 데에 수 분이 걸릴 수 있으니 조금만 기다려주세요!"
+          );
           navigate("/");
         });
       } else {
@@ -307,12 +314,6 @@ export default function MyAccount() {
                       onChange={onChangeHandler}
                       className="edit-input"
                       required
-                      style={{
-                        opacity: "0",
-                        position: "absolute",
-                        width: "0",
-                        height: "0",
-                      }}
                     />
                   </label>
                   <button className="edit-button" type="submit">
