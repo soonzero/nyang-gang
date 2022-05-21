@@ -45,8 +45,12 @@ export default function Login() {
       );
       sessionStorage.setItem("uid", data.user.uid);
       navigate("/");
-    } catch (error) {
-      alert(error.message);
+    } catch (e) {
+      if (e.message.includes("user-not-found")) {
+        alert("가입된 이메일이 없습니다. 이메일을 다시 한 번 확인해주세요.");
+      } else if (e.message.includes("wrong-password")) {
+        alert("비밀번호가 올바르지 않습니다. 다시 입력해주세요. ");
+      }
     }
   };
 
