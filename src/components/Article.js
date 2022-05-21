@@ -61,7 +61,7 @@ export default function Article(props) {
     } else if (timePassed < 7 * day) {
       return `${Math.trunc(timePassed / day)}일 전`;
     } else {
-      return `${Math.floor(time / (3600 * 24 * 365 * 1000) + 1970)}년`;
+      return `${Math.floor(time / (day * 365 * 1000) + 1970)}년`;
     }
   };
 

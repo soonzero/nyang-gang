@@ -732,6 +732,7 @@ export const CarouselStyle = styled.div`
   max-width: 1130px;
   max-height: 522.625px;
   width: 100%;
+  height: auto;
   display: block;
   margin: 0 auto;
   position: relative;
@@ -751,13 +752,6 @@ export const CarouselStyle = styled.div`
     width: 100%;
     position: relative;
     box-sizing: border-box;
-
-    &:before {
-      content: "";
-      position: absolute;
-      width: 100%;
-      padding-top: 46.25%;
-    }
   }
 
   .carousel-list {
@@ -847,10 +841,16 @@ export const CarouselStyle = styled.div`
       font-size: 2.5rem;
     }
   }
-  /* 
-  @media screen and (max-width: 820px) {
+
+  @media screen and (max-width: 1024px) {
+    .carousel-wrapper {
+      height: 400px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
     .img-desc {
-      padding: 80px 40px;
+      padding: 40px 60px;
     }
 
     .buttons {
@@ -858,26 +858,19 @@ export const CarouselStyle = styled.div`
     }
 
     .desc-button:not(:last-child) {
-      margin-right: 0;
       margin-bottom: 1rem;
+      margin-right: 0;
     }
-  } */
+  }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 425px) {
+    border-radius: 0;
+
+    .carousel-wrapper {
+      height: 200px;
+    }
+
     .img-desc {
-      justify-content: flex-end;
-    }
-
-    .buttons {
-      flex-direction: row;
-    }
-
-    .desc-button:not(:last-child) {
-      margin-right: 1rem;
-      margin-bottom: 0;
-    }
-
-    .desc-title {
       display: none;
     }
   }
@@ -908,6 +901,10 @@ export const ContentStyle = styled.div`
       grid-template-rows: 1fr 1fr;
       row-gap: 10px;
     }
+  }
+
+  @media screen and (max-width: 425px) {
+    padding: 0;
   }
 `;
 
@@ -1269,6 +1266,13 @@ export const MyAccountStyle = styled.div`
     border: 1px solid #e5e5e5;
     border-radius: 8px;
     font-size: 1rem;
+  }
+
+  .edit-input[type="file"] {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
   }
 
   .edit-button {

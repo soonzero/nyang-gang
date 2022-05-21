@@ -38,12 +38,14 @@ export default function Navbar(props) {
   }, []);
 
   const setAuthority = async () => {
-    const userRef = doc(db, "users", sessionStorage.getItem("uid"));
-    const userSnap = await getDoc(userRef);
-    if (userSnap.data().auth) {
-      setAdmin(true);
-    } else {
-      return;
+    if (sessionStorage.getItem("uid")) {
+      const userRef = doc(db, "users", sessionStorage.getItem("uid"));
+      const userSnap = await getDoc(userRef);
+      if (userSnap.data().auth) {
+        setAdmin(true);
+      } else {
+        return;
+      }
     }
   };
 

@@ -38,7 +38,7 @@ export default function Animals(props) {
     };
   }, [handleScroll]);
 
-  const goToTop = () => {
+  const scrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -82,7 +82,7 @@ export default function Animals(props) {
       </div>
       <div
         className={`top-button ${button ? "display" : ""}`}
-        onClick={goToTop}
+        onClick={scrollToTop}
       >
         <Top />
       </div>
