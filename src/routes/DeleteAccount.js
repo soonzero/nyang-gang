@@ -2,7 +2,6 @@ import Navbar from "components/Navbar";
 import { ContentStyle, DeleteAccountStyle } from "components/styled";
 import { deleteUser, getAuth } from "firebase/auth";
 import { doc, deleteDoc, setDoc } from "firebase/firestore";
-import { deleteObject, ref, getStorage } from "firebase/storage";
 import { db } from "components/fbase/fbase";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +33,7 @@ export default function DeleteAccount() {
           });
           await deleteUser(user);
           sessionStorage.clear();
+          alert("회원 탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.");
           navigate("/");
         } catch (e) {
           console.log(e);
