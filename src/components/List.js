@@ -12,12 +12,15 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import { db } from "./fbase/fbase";
-import { ListStyle } from "./styled";
+import { FavoriteStyle, ListStyle } from "./styled";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function List(props) {
   let didCancel = false;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.manageFavorite);
 
   const [isLoading, setIsLoading] = useState(true);
   const [allData, setAllData] = useState();
@@ -41,63 +44,11 @@ export default function List(props) {
           num * pageIndex
         );
       }
-    }
-    if (sessionStorage.getItem("uid")) {
-      const docRef = doc(db, "users", sessionStorage.getItem("uid"));
-      const docSnap = await getDoc(docRef);
-
-      if (props.hospital && docSnap.data().hospital) {
-        for (let i = 0; i < docSnap.data().hospital.length; i++) {
-          for (let j = 0; j < filteredArray.length; j++) {
-            if (
-              docSnap.data().hospital[i].name == filteredArray[j].BIZPLC_NM &&
-              docSnap.data().hospital[i].address ==
-                filteredArray[j].REFINE_ROADNM_ADDR
-            ) {
-              filteredArray[j].FAVORITE = true;
-            }
-          }
-        }
-      } else if (props.pharmacy && docSnap.data().pharmacy) {
-        for (let i = 0; i < docSnap.data().pharmacy.length; i++) {
-          for (let j = 0; j < filteredArray.length; j++) {
-            if (
-              docSnap.data().pharmacy[i].name == filteredArray[j].BIZPLC_NM &&
-              docSnap.data().pharmacy[i].address ==
-                filteredArray[j].REFINE_ROADNM_ADDR
-            ) {
-              filteredArray[j].FAVORITE = true;
-            }
-          }
-        }
-      } else if (props.shelter && docSnap.data().shelter) {
-        for (let i = 0; i < docSnap.data().shelter.length; i++) {
-          for (let j = 0; j < filteredArray.length; j++) {
-            if (
-              docSnap.data().shelter[i].name == filteredArray[j].ENTRPS_NM &&
-              docSnap.data().shelter[i].address ==
-                filteredArray[j].REFINE_ROADNM_ADDR
-            ) {
-              filteredArray[j].FAVORITE = true;
-            }
-          }
-        }
-      }
-
-      // updateFilter();
-    }
-
-    if (!didCancel) {
       setFilteredData(filteredArray);
+      compareLists(filteredArray);
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (!props.isLoading) {
-      updateFilter();
-    }
-  }, [props.isLoading, props.city, props.number, page]);
 
   const updateFilter = () => {
     if (props.city != undefined) {
@@ -116,9 +67,11 @@ export default function List(props) {
       try {
         const obj = target.getAttribute("name");
         const userRef = doc(db, "users", sessionStorage.getItem("uid"));
-        const userSnap = await getDoc(userRef);
-        const userObjSnap = userSnap.data()[obj];
-        if (userSnap.data()[obj] == undefined) {
+        let userSnap = await getDoc(userRef);
+        let userObjSnap = userSnap.data()[obj];
+        let search;
+        // firestore에 해당 즐겨찾기 카테고리가 없으면 추가
+        if (userObjSnap == undefined) {
           await setDoc(
             userRef,
             {
@@ -128,91 +81,89 @@ export default function List(props) {
               merge: true,
             }
           );
+          // 변경된 이후에 새로운 정보를 받아와야 함
+          userSnap = await getDoc(userRef);
+          userObjSnap = userSnap.data()[obj];
         }
+
+        // hospital이나 pharmacy를 선택했을 때
         if (obj == "hospital" || obj == "pharmacy") {
-          if (userObjSnap != undefined) {
-            const search = await userObjSnap.filter(
-              (i) => i.name == item.BIZPLC_NM && i.date == item.LICENSG_DE
-            );
-            if (search.length > 0) {
-              await updateDoc(userRef, {
-                [obj]: arrayRemove({
-                  name: item.BIZPLC_NM,
-                  date: item.LICENSG_DE,
-                  zip: item.REFINE_ZIP_CD,
-                  address: item.REFINE_ROADNM_ADDR,
-                  tel: item.LOCPLC_FACLT_TELNO,
-                  lat: item.REFINE_WGS84_LAT,
-                  lon: item.REFINE_WGS84_LOGT,
-                }),
-              });
-            } else {
-              await updateDoc(userRef, {
-                [obj]: arrayUnion({
-                  name: item.BIZPLC_NM,
-                  date: item.LICENSG_DE,
-                  zip: item.REFINE_ZIP_CD,
-                  address: item.REFINE_ROADNM_ADDR,
-                  tel: item.LOCPLC_FACLT_TELNO,
-                  lat: item.REFINE_WGS84_LAT,
-                  lon: item.REFINE_WGS84_LOGT,
-                }),
-              });
-            }
-          } else {
-            await updateDoc(userRef, {
-              [obj]: arrayUnion({
-                name: item.BIZPLC_NM,
-                date: item.LICENSG_DE,
-                zip: item.REFINE_ZIP_CD,
-                address: item.REFINE_ROADNM_ADDR,
-                tel: item.LOCPLC_FACLT_TELNO,
-                lat: item.REFINE_WGS84_LAT,
-                lon: item.REFINE_WGS84_LOGT,
-              }),
-            });
-          }
+          // 선택한 카테고리에 추가된 즐겨찾기 업체가 뭐라도 있을 때
+          // 내가 선택한 업체가 그 카테고리 안에 있는 지의 여부 확인하는 배열
+          search = await userObjSnap.filter(
+            (i) => i.name == item.BIZPLC_NM && i.date == item.LICENSG_DE
+          );
         } else if (obj == "shelter") {
-          if (userObjSnap != undefined) {
-            const search = await userObjSnap.filter(
-              (i) => i.name == item.ENTRPS_NM
-            );
-            if (search.length > 0) {
-              await updateDoc(userRef, {
-                [obj]: arrayRemove({
-                  name: item.ENTRPS_NM,
-                  zip: item.REFINE_ZIP_CD,
-                  address: item.REFINE_ROADNM_ADDR,
-                  tel: item.ENTRPS_TELNO,
-                  lat: item.REFINE_WGS84_LAT,
-                  lon: item.REFINE_WGS84_LOGT,
-                }),
-              });
-            } else {
-              await updateDoc(userRef, {
-                [obj]: arrayUnion({
-                  name: item.ENTRPS_NM,
-                  zip: item.REFINE_ZIP_CD,
-                  address: item.REFINE_ROADNM_ADDR,
-                  tel: item.ENTRPS_TELNO,
-                  lat: item.REFINE_WGS84_LAT,
-                  lon: item.REFINE_WGS84_LOGT,
-                }),
-              });
-            }
-          } else {
-            await updateDoc(userRef, {
-              [obj]: arrayUnion({
-                name: item.ENTRPS_NM,
+          search = await userObjSnap.filter((i) => i.name == item.ENTRPS_NM);
+        }
+        // 1개라도 있으면
+        if (search.length > 0) {
+          // 삭제하기
+          await updateDoc(userRef, {
+            [obj]: arrayRemove({
+              name: obj == "shelter" ? item.ENTRPS_NM : item.BIZPLC_NM,
+              date: obj == "shelter" ? item.SUM_YY : item.LICENSG_DE,
+              zip: item.REFINE_ZIP_CD,
+              address: item.REFINE_ROADNM_ADDR,
+              tel:
+                obj == "shelter" ? item.ENTRPS_TELNO : item.LOCPLC_FACLT_TELNO,
+              lat: item.REFINE_WGS84_LAT,
+              lon: item.REFINE_WGS84_LOGT,
+            }),
+          });
+          dispatch({
+            type: "DELETE_FAVORITE",
+            data: {
+              type: obj,
+              content: {
+                name: obj == "shelter" ? item.ENTRPS_NM : item.BIZPLC_NM,
+                date: obj == "shelter" ? item.SUM_YY : item.LICENSG_DE,
                 zip: item.REFINE_ZIP_CD,
                 address: item.REFINE_ROADNM_ADDR,
-                tel: item.ENTRPS_TELNO,
+                tel:
+                  obj == "shelter"
+                    ? item.ENTRPS_TELNO
+                    : item.LOCPLC_FACLT_TELNO,
                 lat: item.REFINE_WGS84_LAT,
                 lon: item.REFINE_WGS84_LOGT,
-              }),
-            });
-          }
+              },
+            },
+          });
+          // 없으면?
+        } else {
+          // 추가하기
+          await updateDoc(userRef, {
+            [obj]: arrayUnion({
+              name: obj == "shelter" ? item.ENTRPS_NM : item.BIZPLC_NM,
+              date: obj == "shelter" ? item.SUM_YY : item.LICENSG_DE,
+              zip: item.REFINE_ZIP_CD,
+              address: item.REFINE_ROADNM_ADDR,
+              tel:
+                obj == "shelter" ? item.ENTRPS_TELNO : item.LOCPLC_FACLT_TELNO,
+              lat: item.REFINE_WGS84_LAT,
+              lon: item.REFINE_WGS84_LOGT,
+            }),
+          });
+          dispatch({
+            type: "ADD_FAVORITE",
+            data: {
+              type: obj,
+              content: {
+                name: obj == "shelter" ? item.ENTRPS_NM : item.BIZPLC_NM,
+                date: obj == "shelter" ? item.SUM_YY : item.LICENSG_DE,
+                zip: item.REFINE_ZIP_CD,
+                address: item.REFINE_ROADNM_ADDR,
+                tel:
+                  obj == "shelter"
+                    ? item.ENTRPS_TELNO
+                    : item.LOCPLC_FACLT_TELNO,
+                lat: item.REFINE_WGS84_LAT,
+                lon: item.REFINE_WGS84_LOGT,
+              },
+            },
+          });
         }
+
         updateFilter();
       } catch (e) {
         console.log(e);
@@ -220,11 +171,69 @@ export default function List(props) {
     }
   };
 
+  const compareLists = async (array) => {
+    if (favorites && props.hospital && favorites.hospital) {
+      for (let i = 0; i < array.length; i++) {
+        for (let j = 0; j < favorites.hospital.length; j++) {
+          if (
+            array[i].BIZPLC_NM == favorites.hospital[j].name &&
+            array[i].REFINE_ROADNM_ADDR == favorites.hospital[j].address
+          ) {
+            array[i].FAVORITE = true;
+          }
+        }
+      }
+    } else if (favorites && props.pharmacy && favorites.pharmacy) {
+      for (let i = 0; i < array.length; i++) {
+        for (let j = 0; j < favorites.pharmacy.length; j++) {
+          if (
+            array[i].BIZPLC_NM == favorites.pharmacy[j].name &&
+            array[i].REFINE_ROADNM_ADDR == favorites.pharmacy[j].address
+          ) {
+            array[i].FAVORITE = true;
+          }
+        }
+      }
+    } else if (favorites && props.shelter && favorites.shelter) {
+      for (let i = 0; i < array.length; i++) {
+        for (let j = 0; j < favorites.shelter.length; j++) {
+          if (
+            array[i].BIZPLC_NM == favorites.shelter[j].name &&
+            array[i].REFINE_ROADNM_ADDR == favorites.shelter[j].address
+          ) {
+            array[i].FAVORITE = true;
+          }
+        }
+      }
+    }
+  };
+
+  const getFavorites = async () => {
+    const docRef = doc(db, "users", sessionStorage.getItem("uid"));
+    const docSnap = await getDoc(docRef);
+    dispatch({ type: "SET_FAVORITES", data: docSnap.data() });
+    if (!didCancel) {
+      updateFilter();
+    }
+  };
+
   useEffect(() => {
+    getFavorites();
+
     return () => {
       didCancel = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!props.isLoading) {
+      updateFilter();
+    }
+  }, [props.isLoading, props.city, props.number, page, favorites]);
+
+  useEffect(() => {
+    setFilteredData(filteredData);
+  }, [filteredData]);
 
   return (
     <ListStyle>
