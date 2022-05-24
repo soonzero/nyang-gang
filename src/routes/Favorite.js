@@ -29,30 +29,17 @@ export default function Favorite() {
     try {
       const target = event.currentTarget.getAttribute("name");
       const userRef = doc(db, "users", sessionStorage.getItem("uid"));
-      if (target == "hospital" || target == "pharmacy") {
-        await updateDoc(userRef, {
-          [target]: arrayRemove({
-            name: item.name,
-            date: item.date,
-            zip: item.zip,
-            address: item.address,
-            tel: item.tel,
-            lat: item.lat,
-            lon: item.lon,
-          }),
-        });
-      } else {
-        await updateDoc(userRef, {
-          [target]: arrayRemove({
-            name: item.name,
-            zip: item.zip,
-            address: item.address,
-            tel: item.tel,
-            lat: item.lat,
-            lon: item.lon,
-          }),
-        });
-      }
+      await updateDoc(userRef, {
+        [target]: arrayRemove({
+          name: item.name,
+          date: item.date,
+          zip: item.zip,
+          address: item.address,
+          tel: item.tel,
+          lat: item.lat,
+          lon: item.lon,
+        }),
+      });
       dispatch({
         type: "DELETE_FAVORITE",
         data: { type: target, content: item },
