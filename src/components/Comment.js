@@ -48,9 +48,12 @@ export default function Comment(props) {
         dispatch({
           type: "DELETE_COMMENT",
           data: {
-            author: comment.author,
-            content: comment.content,
-            time: comment.time,
+            id: props.article,
+            comment: {
+              author: comment.author,
+              content: comment.content,
+              time: comment.time,
+            },
           },
         });
       }

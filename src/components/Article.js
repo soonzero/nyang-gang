@@ -34,7 +34,6 @@ export default function Article(props) {
       if (!didCancel) {
         setNickname(docSnap.data().nickname);
         setAuthorImg(url);
-        dispatch({ type: "SET_COMMENTS", data: props.data.comments });
         setIsLoading(false);
       }
     } catch (e) {
@@ -105,8 +104,6 @@ export default function Article(props) {
     }
   };
 
-  const commentsList = useSelector((state) => state.manageComments);
-
   useEffect(() => {
     getData();
     return () => {
@@ -139,23 +136,24 @@ export default function Article(props) {
                 </span>
               </h3>
             </div>
-            {props.data.author == sessionStorage.getItem("uid") && (
-              <div className="author-extra">
-                <span
-                  className="extra-button"
-                  onClick={() => setArticleSubmenu((prev) => !prev)}
-                >
-                  <Extra />
-                </span>
-                {articleSubmenu && (
-                  <ul className="extra-sub">
-                    <li onClick={() => deleteArticle(props.data)}>
-                      글 삭제하기
-                    </li>
-                  </ul>
-                )}
-              </div>
-            )}
+            {!props.admin &&
+              props.data.author == sessionStorage.getItem("uid") && (
+                <div className="author-extra">
+                  <span
+                    className="extra-button"
+                    onClick={() => setArticleSubmenu((prev) => !prev)}
+                  >
+                    <Extra />
+                  </span>
+                  {articleSubmenu && (
+                    <ul className="extra-sub">
+                      <li onClick={() => deleteArticle(props.data)}>
+                        글 삭제하기
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              )}
             {props.admin && (
               <div className="manage-container">
                 <span
@@ -195,8 +193,8 @@ export default function Article(props) {
           {!props.admin && (
             <div className="comments">
               <ul className="comments-list">
-                {commentsList &&
-                  commentsList.map((c, i) => {
+                {props.comments[props.data.id] &&
+                  props.comments[props.data.id].map((c, i) => {
                     return <Comment key={i} article={props.data.id} data={c} />;
                   })}
                 <li className="comment-container">

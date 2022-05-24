@@ -18,14 +18,18 @@ export default function Feed(props) {
     if (!didCancel) {
       dispatch({
         type: "SET_ARTICLES",
-        data: articlesArray.filter(
-          (a) => a.status == (props.admin ? "waiting" : "approved")
-        ),
+        data: articlesArray.filter((a) => a.status == "approved"),
       });
+      let comments = {};
+      articlesArray.map((a) => {
+        comments[a.id] = a.comments;
+      });
+      dispatch({ type: "SET_COMMENTS", data: comments });
     }
   };
 
   const articlesList = useSelector((state) => state.manageArticles);
+  const commentsList = useSelector((state) => state.manageComments);
 
   useEffect(() => {
     if (!props.admin) {
@@ -50,6 +54,7 @@ export default function Feed(props) {
                   nickname={props.nickname}
                   key={article.id}
                   data={article}
+                  comments={commentsList}
                 />
               );
             })

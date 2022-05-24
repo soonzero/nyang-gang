@@ -28,6 +28,7 @@ export default function WriteCommment(props) {
       dispatch({
         type: "ADD_COMMENT",
         data: {
+          id: props.id,
           author: author,
           time: time,
           content: text,
