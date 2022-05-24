@@ -1,4 +1,4 @@
-# 🐾 냥갱
+# 냥갱
 
 <img src="./markdown/images/main.png">
 
@@ -44,5 +44,7 @@
 
 ## 👀 프로젝트 상세 내용
 
-- [프로젝트 보러가기 📝](https://abounding-primrose-d9a.notion.site/60cdd0d1c2f24a488bbfb0cb9df115f5, "Notion으로 이동")
+- [프로젝트 보러가기 📝](https://www.notion.so/60cdd0d1c2f24a488bbfb0cb9df115f5, "Notion으로 이동")
 - [시연 영상 🎬](https://drive.google.com/file/d/1AGNiThBoy7zJX6zi_sgGa7Kt8F-29L1B/view, "Google Drive로 이동")
+
+<img src="./src/images/nyang-gang.png">
