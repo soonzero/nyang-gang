@@ -19,6 +19,18 @@ const manageFavorite = (currentState = initialState, action) => {
       }
       return newState;
     }
+    case "ADD_FAVORITE": {
+      if (action.data.type == "hospital") {
+        newState.hospital.push(action.data.content);
+      }
+      if (action.data.type == "pharmacy") {
+        newState.pharmacy.push(action.data.content);
+      }
+      if (action.data.type == "shelter") {
+        newState.shelter.push(action.data.content);
+      }
+      return newState;
+    }
     case "DELETE_FAVORITE": {
       const content = action.data.content;
       const type = action.data.type;
