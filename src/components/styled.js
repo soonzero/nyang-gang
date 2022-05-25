@@ -1593,10 +1593,16 @@ export const PasswordStyle = styled.div`
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
+    margin-top: 15px;
 
-    &:hover {
+    &:not(:disabled):hover {
       opacity: 1;
     }
+  }
+
+  .change-button:disabled {
+    background-color: #b5b5b5;
+    cursor: default;
   }
 
   @media screen and (max-width: 848px) {

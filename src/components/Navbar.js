@@ -243,9 +243,16 @@ export default function Navbar(props) {
                 회원정보수정
               </li>
             </Link>
+            <Link to="/verification">
+              <li
+                className={`sub-nav-menu ${props.verification ? "open" : ""}`}
+              >
+                이메일 인증
+              </li>
+            </Link>
             <Link to="/change">
               <li className={`sub-nav-menu ${props.password ? "open" : ""}`}>
-                비밀번호변경
+                비밀번호 변경
               </li>
             </Link>
           </ul>

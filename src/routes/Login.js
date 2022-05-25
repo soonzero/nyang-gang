@@ -1,7 +1,11 @@
 import { authService } from "components/fbase/fbase";
 import { ReactComponent as Logo } from "images/nyang-gang.svg";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { AuthStyle } from "components/styled";
 import SocialAuth from "components/SocialAuth";
@@ -44,7 +48,20 @@ export default function Login() {
         data.user.stsTokenManager.refreshToken
       );
       sessionStorage.setItem("uid", data.user.uid);
-      navigate("/");
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          if (user.emailVerified) {
+            navigate("/");
+          } else {
+            if (window.confirm("지금 이메일 인증을 진행하실래요?")) {
+              navigate("/verification");
+            } else {
+              navigate("/");
+            }
+          }
+        }
+      });
     } catch (e) {
       if (e.message.includes("user-not-found")) {
         alert("가입된 이메일이 없습니다. 이메일을 다시 한 번 확인해주세요.");

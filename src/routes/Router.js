@@ -18,6 +18,7 @@ import { Provider } from "react-redux";
 import store from "reducers/store";
 import WriteArticle from "./WriteArticle";
 import Admin from "./Admin";
+import Verification from "./Verification";
 
 export default function AppRouter() {
   return (
@@ -33,6 +34,7 @@ export default function AppRouter() {
           <Route path="/abandoned" element={<Abandoned />} />
           <Route path="/abandoned/:id" element={<AnimalDetail />} />
           <Route path="/myaccount" element={<MyAccount />} />
+          <Route path="/verification" element={<Verification />} />
           <Route path="/favorite" element={<Favorite />} />
           <Route path="/delete" element={<DeleteAccount />} />
           <Route path="/change" element={<ChangePW />} />
