@@ -194,9 +194,21 @@ export default function Article(props) {
             <div className="comments">
               <ul className="comments-list">
                 {props.comments[props.data.id] &&
-                  props.comments[props.data.id].map((c, i) => {
-                    return <Comment key={i} article={props.data.id} data={c} />;
-                  })}
+                  props.comments[props.data.id]
+                    .sort((a, b) => {
+                      if (a.time < b.time) {
+                        return 1;
+                      }
+                      if (a.time > b.time) {
+                        return -1;
+                      }
+                      return 0;
+                    })
+                    .map((c, i) => {
+                      return (
+                        <Comment key={i} article={props.data.id} data={c} />
+                      );
+                    })}
                 <li className="comment-container">
                   <div className="comment">
                     <div className="comment-content">

@@ -69,7 +69,7 @@ export default function Admin() {
           <Navbar admin subnav filter={filter} setFilter={setFilter} />
           <ContentStyle>
             <AdminStyle>
-              <Feed admin data={articlesList} />
+              <Feed admin filter={filter} data={articlesList} />
             </AdminStyle>
           </ContentStyle>
         </>
