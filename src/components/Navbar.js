@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "images/nyang-gang.svg";
 import { authService, db } from "./fbase/fbase";
 import { doc, getDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function Navbar(props) {
   const navigate = useNavigate();
@@ -33,10 +34,6 @@ export default function Navbar(props) {
     }
   });
 
-  useEffect(() => {
-    getProfileImg();
-  }, []);
-
   const setAuthority = async () => {
     if (sessionStorage.getItem("uid")) {
       const userRef = doc(db, "users", sessionStorage.getItem("uid"));
@@ -50,11 +47,10 @@ export default function Navbar(props) {
   };
 
   const logout = () => {
-    alert("로그아웃이 완료되었습니다");
-    navigate("/");
     sessionStorage.clear();
     authService.signOut();
-    props.setIsLoggedIn(false);
+    alert("로그아웃이 완료되었습니다");
+    navigate("/");
   };
 
   const handleScroll = useCallback(() => {
@@ -90,7 +86,21 @@ export default function Navbar(props) {
   });
 
   useEffect(() => {
-    setAuthority();
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        setAuthority();
+        getProfileImg();
+      } else {
+        setIsLoggedIn(false);
+      }
+    });
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   useEffect(() => {
@@ -100,24 +110,6 @@ export default function Navbar(props) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [handleScroll]);
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (
-      sessionStorage.getItem("accessToken") &&
-      sessionStorage.getItem("uid")
-    ) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  });
 
   return (
     <NavStyle shadow={shadow} subnav={props.subnav}>

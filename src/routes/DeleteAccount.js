@@ -29,7 +29,7 @@ export default function DeleteAccount() {
         const auth = getAuth();
         const user = auth.currentUser;
         const storage = getStorage();
-        const imgRef = ref(storage, `users/${user.uid}/profile-img`);
+        const imgRef = ref(storage, `users/${user.uid}/profile-image`);
         try {
           await setDoc(doc(db, "users", user.uid), {
             status: "deleted",
