@@ -12,7 +12,7 @@ import {
 import Loading from "./Loading";
 import Comment from "./Comment";
 import { ReactComponent as Extra } from "images/extra.svg";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function Article(props) {
   let didCancel = false;
@@ -28,12 +28,25 @@ export default function Article(props) {
       const docRef = doc(db, "users", `${props.data.author}`);
       const docSnap = await getDoc(docRef);
       const storage = getStorage();
-      const url = await getDownloadURL(
-        ref(storage, `users/${props.data.author}/profile-image`)
-      );
+      getDownloadURL(ref(storage, `users/${props.data.author}/profile-image`))
+        .then((url) => {
+          if (!didCancel) {
+            setAuthorImg(url);
+          }
+        })
+        .catch((e) => {
+          if (e.code == "storage/object-not-found") {
+            setAuthorImg(
+              "https://firebasestorage.googleapis.com/v0/b/nyang-gang.appspot.com/o/deleted-account.png?alt=media&token=b341e4dc-fb85-403d-950d-d07ea878992a"
+            );
+          }
+        });
       if (!didCancel) {
-        setNickname(docSnap.data().nickname);
-        setAuthorImg(url);
+        setNickname(
+          docSnap.data().nickname == undefined
+            ? "탈퇴한 사용자"
+            : docSnap.data().nickname
+        );
         setIsLoading(false);
       }
     } catch (e) {

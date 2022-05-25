@@ -18,12 +18,25 @@ export default function Comment(props) {
       const docRef = doc(db, "users", `${props.data.author}`);
       const docSnap = await getDoc(docRef);
       const storage = getStorage();
-      const url = await getDownloadURL(
-        ref(storage, `users/${props.data.author}/profile-image`)
-      );
+      getDownloadURL(ref(storage, `users/${props.data.author}/profile-image`))
+        .then((url) => {
+          if (!didCancel) {
+            setImage(url);
+          }
+        })
+        .catch((error) => {
+          if (error.code == "storage/object-not-found") {
+            setImage(
+              "https://firebasestorage.googleapis.com/v0/b/nyang-gang.appspot.com/o/deleted-account.png?alt=media&token=b341e4dc-fb85-403d-950d-d07ea878992a"
+            );
+          }
+        });
       if (!didCancel) {
-        setNickname(docSnap.data().nickname);
-        setImage(url);
+        setNickname(
+          docSnap.data().nickname == undefined
+            ? "탈퇴한 사용자"
+            : docSnap.data().nickname
+        );
       }
     } catch (e) {
       console.log(e);
