@@ -5,6 +5,7 @@ import { doc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "components/fbase/fbase";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { deleteObject, getStorage, ref } from "firebase/storage";
 
 export default function DeleteAccount() {
   const navigate = useNavigate();
@@ -27,10 +28,13 @@ export default function DeleteAccount() {
       ) {
         const auth = getAuth();
         const user = auth.currentUser;
+        const storage = getStorage();
+        const imgRef = ref(storage, `users/${user.uid}/profile-img`);
         try {
           await setDoc(doc(db, "users", user.uid), {
             status: "deleted",
           });
+          await deleteObject(imgRef);
           await deleteUser(user);
           sessionStorage.clear();
           alert("회원 탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.");
