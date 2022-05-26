@@ -17,12 +17,10 @@ export default function Adoption() {
   const [nickname, setNickname] = useState();
   const [imageUrl, setImageUrl] = useState();
 
-  const getData = async () => {
-    if (sessionStorage.getItem("uid")) {
+  const getData = async (user) => {
+    if (user.uid) {
       const storage = getStorage();
-      getDownloadURL(
-        ref(storage, `users/${sessionStorage.getItem("uid")}/profile-image`)
-      )
+      getDownloadURL(ref(storage, `users/${user.uid}/profile-image`))
         .then((url) => {
           setImageUrl(url);
         })
@@ -32,27 +30,27 @@ export default function Adoption() {
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const setAuth = async (user, auth) => {
+    const userRef = doc(db, "users", auth.currentUser.uid);
+    const userSnap = await getDoc(userRef);
+    if (user.emailVerified) {
+      setIsLoggedIn(true);
+    } else {
+      if (userSnap.data().auth) {
+        setIsLoggedIn(true);
+      } else {
+        alert("이메일 인증 후 사용 가능해요!");
+        navigate("/verification");
+      }
+    }
+  };
 
   useEffect(async () => {
     const auth = getAuth();
-
     await onAuthStateChanged(auth, async (user) => {
-      const userRef = doc(db, "users", auth.currentUser.uid);
-      const userSnap = await getDoc(userRef);
       if (user) {
-        if (user.emailVerified) {
-          setIsLoggedIn(true);
-        } else {
-          if (userSnap.data().auth) {
-            setIsLoggedIn(true);
-          } else {
-            alert("이메일 인증 후 사용 가능해요!");
-            navigate("/verification");
-          }
-        }
+        await setAuth(user, auth);
+        await getData(user);
       } else {
         alert("먼저 로그인 해주세요!");
         navigate("/login");
