@@ -25,3 +25,11 @@ yarn-error.log*
 
 # design/image
 /design
+
+#firebase
+/.firebase
+.firebaserc
+firestore.rules
+storage.rules
+firebase.json
+firestore.indexes.json
