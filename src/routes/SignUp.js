@@ -89,8 +89,13 @@ export default function SignUp() {
             alert("회원가입이 완료되었습니다. 로그인해주세요!");
             navigate("/login");
           } catch (error) {
-            if (error.message.includes("weak-password")) {
-              alert("비밀번호의 조건을 다시 확인해주세요!");
+            switch (error.code) {
+              case "auth/weak-password": {
+                alert("비밀번호의 조건을 다시 확인해주세요!");
+              }
+              case "auth/email-already-in-use": {
+                alert("이미 사용 중인 이메일입니다.");
+              }
             }
           }
         } else {
