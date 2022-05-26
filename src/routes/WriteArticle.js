@@ -53,12 +53,12 @@ export default function WriteArticle() {
 
   const selectThumbnail = (event) => {
     const idx = event.target.getAttribute("name");
-    if (idx == "0") {
-      setThumbnail("0");
-    } else if (idx == "1") {
-      setThumbnail("1");
-    } else if (idx == "2") {
-      setThumbnail("2");
+    if (idx == 0) {
+      setThumbnail(0);
+    } else if (idx == 1) {
+      setThumbnail(1);
+    } else if (idx == 2) {
+      setThumbnail(2);
     }
   };
 
@@ -160,7 +160,7 @@ export default function WriteArticle() {
                   {images[0] && (
                     <div
                       className="image0"
-                      name="0"
+                      name={0}
                       onClick={selectThumbnail}
                       style={{
                         border: `2px solid ${
@@ -172,7 +172,7 @@ export default function WriteArticle() {
                   {images[1] && (
                     <div
                       className="image1"
-                      name="1"
+                      name={1}
                       onClick={selectThumbnail}
                       style={{
                         border: `2px solid ${
@@ -184,7 +184,7 @@ export default function WriteArticle() {
                   {images[2] && (
                     <div
                       className="image2"
-                      name="2"
+                      name={2}
                       onClick={selectThumbnail}
                       style={{
                         border: `2px solid ${

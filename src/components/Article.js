@@ -28,6 +28,7 @@ export default function Article(props) {
       const docRef = doc(db, "users", `${props.data.author}`);
       const docSnap = await getDoc(docRef);
       const storage = getStorage();
+      arrangeImages(props.data.imageslink);
       getDownloadURL(ref(storage, `users/${props.data.author}/profile-image`))
         .then((url) => {
           if (!didCancel) {
@@ -52,6 +53,11 @@ export default function Article(props) {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const arrangeImages = (array) => {
+    const extraction = array.splice(props.data.thumbnail, 1);
+    array.unshift(extraction);
   };
 
   const convertTime = (time) => {
