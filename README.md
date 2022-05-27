@@ -1,6 +1,6 @@
 # 냥갱
 
-<img src="./markdown/images/main.png">
+<a href="https://nyang-gang.web.app" alt="냥갱 접속"><img src="./markdown/images/main.png"></a>
 
 ## 📄 프로젝트 설명
 
@@ -27,6 +27,7 @@
   - Authentication
   - Firestore
   - Firebase Storage
+  - Hosting
 
 <br />
 
@@ -44,7 +45,8 @@
 
 ## 👀 프로젝트 상세 내용
 
-- [프로젝트 보러가기 📝](https://www.notion.so/60cdd0d1c2f24a488bbfb0cb9df115f5 "Notion으로 이동")
+- [냥갱 접속해보기 🐾](https://nyang-gang.web.app, "냥갱")
+- [GitHub 보러가기 📝](https://www.notion.so/60cdd0d1c2f24a488bbfb0cb9df115f5 "Notion으로 이동")
 - [시연 영상 🎬](https://drive.google.com/file/d/1AGNiThBoy7zJX6zi_sgGa7Kt8F-29L1B/view "Google Drive로 이동")
 
-<img src="./src/images/nyang-gang.png">
+<a href="https://nyang-gang.web.app"><img src="./src/images/nyang-gang.png"></a>
