@@ -248,10 +248,20 @@ export const SearchStyle = styled.div`
   .button:active {
     transform: scale(0.95);
   }
+
+  @media screen and (max-width: 425px) {
+    .search-container {
+      padding: 0 20px;
+    }
+
+    .selection.city {
+      font-size: 0.85rem;
+    }
+  }
 `;
 
 export const AuthStyle = styled.div`
-  min-width: 568px;
+  min-width: 375x;
   width: 100vw;
   height: ${(props) => (props.signup ? "unset" : "100vh")};
   display: flex;
@@ -299,7 +309,7 @@ export const AuthStyle = styled.div`
 
   .form-container {
     display: flex;
-    max-width: 65%;
+    max-width: 100%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -726,6 +736,12 @@ export const NavStyle = styled.div`
       display: none;
     }
   }
+
+  @media screen and (max-width: 425px) {
+    .nav-wrapper {
+      padding: 0 20px;
+    }
+  }
 `;
 
 export const CarouselStyle = styled.div`
@@ -849,12 +865,25 @@ export const CarouselStyle = styled.div`
   }
 
   @media screen and (max-width: 768px) {
+    .carousel-wrapper {
+      height: 300px;
+    }
+
     .img-desc {
-      padding: 40px 60px;
+      padding: 20px;
     }
 
     .buttons {
       flex-direction: column;
+    }
+
+    .desc-title {
+      display: none;
+    }
+
+    .desc-button {
+      font-size: 0.75rem;
+      padding: 0.65rem 1rem;
     }
 
     .desc-button:not(:last-child) {
@@ -868,6 +897,11 @@ export const CarouselStyle = styled.div`
 
     .carousel-wrapper {
       height: 200px;
+    }
+
+    .desc-button {
+      font-size: 0.75rem;
+      padding: 0.65rem 1rem;
     }
 
     .img-desc {
@@ -885,14 +919,13 @@ export const ContentStyle = styled.div`
   .content-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding-top: 20px;
     column-gap: 10px;
   }
 
   .full-container {
     display: grid;
     grid-template-columns: 1fr;
-    height: 550px;
+    height: 100%;
   }
 
   @media screen and (max-width: 1210px) {
@@ -904,7 +937,13 @@ export const ContentStyle = styled.div`
   }
 
   @media screen and (max-width: 425px) {
-    padding: 0;
+    padding: 0 20px;
+
+    ${(props) =>
+      props.carousel &&
+      `
+      padding: 0;
+    `}
   }
 `;
 
@@ -957,14 +996,14 @@ export const LoadingStyle = styled.div`
 
   @media screen and (max-width: 600px) {
     .loading {
-      font-size: 1rem;
+      font-size: 0.85rem;
     }
   }
 `;
 
 export const ListStyle = styled.div`
   position: relative;
-  height: 550px;
+  max-height: 550px;
   display: flex;
   flex-direction: column;
   border: 1px solid #e5e5e5;
@@ -1092,6 +1131,19 @@ export const ListStyle = styled.div`
       left: -19px;
     }
   }
+
+  @media screen and (max-width: 768px) {
+    .name,
+    .address,
+    .tel {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media screen and (max-width: 425px) {
+    padding: 0;
+    height: 100vh;
+  }
 `;
 
 export const AnimalsStyle = styled.div`
@@ -1116,16 +1168,16 @@ export const AnimalsStyle = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    /* padding: 10px; */
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid transparent;
     transition: border-color 200ms ease, transform 200ms ease;
 
-    &:hover {
+    /* &:hover {
       border-color: #e5e5e5;
       transform: scale(1.1);
-    }
+    } */
   }
 
   .img-container {
@@ -1158,7 +1210,7 @@ export const AnimalsStyle = styled.div`
     position: fixed;
     padding: 20px;
     border-radius: 50%;
-    background-color: black;
+    background-color: #f57977;
     bottom: 50px;
     right: 50px;
     cursor: pointer;
@@ -1194,9 +1246,20 @@ export const AnimalsStyle = styled.div`
     }
   }
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 425px) {
     .list-container {
       grid-template-columns: 1fr;
+    }
+
+    .top-button {
+      padding: 0.75rem;
+      bottom: 25px;
+      right: 25px;
+
+      svg {
+        width: 0.75rem;
+        height: 0.75rem;
+      }
     }
   }
 `;
@@ -1255,6 +1318,7 @@ export const MyAccountStyle = styled.div`
 
   .edit-target {
     width: 10rem;
+    font-weight: 500;
   }
 
   .edit-input,
@@ -1375,13 +1439,22 @@ export const MyAccountStyle = styled.div`
     padding: 2rem;
   }
 
-  @media screen and (max-width: 758px) {
+  @media screen and (max-width: 768px) {
     .edit-form {
       flex-direction: column;
       align-items: flex-start;
     }
 
+    .reauth-desc {
+      font-size: 0.85rem;
+    }
+
     .edit-target {
+      margin-bottom: 1rem;
+    }
+
+    .origin-container {
+      padding: 10px 0;
       margin-bottom: 1rem;
     }
 
@@ -1578,7 +1651,7 @@ export const PasswordStyle = styled.div`
     font-size: 0.8rem;
     position: absolute;
     bottom: 0;
-    left: 20px;
+    left: 0;
   }
 
   .change-button {
@@ -1605,7 +1678,7 @@ export const PasswordStyle = styled.div`
     cursor: default;
   }
 
-  @media screen and (max-width: 848px) {
+  @media screen and (max-width: 425px) {
     .pw-desc {
       font-size: 0.8rem;
     }
@@ -2145,7 +2218,7 @@ export const AdoptionStyle = styled.div`
   width: 100%;
 
   .part.side {
-    max-width: 250px;
+    width: 250px;
     display: flex;
     flex-direction: column;
     position: sticky;
@@ -2158,7 +2231,6 @@ export const AdoptionStyle = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    min-width: 502px;
   }
 
   @media screen and (max-width: 848px) {
@@ -2170,6 +2242,7 @@ export const AdoptionStyle = styled.div`
       justify-content: space-between;
       max-width: 100%;
       margin-bottom: 1rem;
+      width: 100%;
     }
 
     .part.main {
@@ -2186,14 +2259,19 @@ export const PanelStyle = styled.div`
   font-size: 0.9rem;
   overflow: hidden;
   color: grey;
-  min-width: 250px;
+  width: 250px;
 
   &:not(:last-child) {
     margin-bottom: 1rem;
   }
 
   @media screen and (max-width: 848px) {
+    display: none;
+    min-width: unset;
+
     &:not(:last-child) {
+      width: 100%;
+      display: block;
       margin-bottom: 0;
     }
   }
@@ -2267,16 +2345,6 @@ export const ProfilePanelStyle = styled.div`
 
     &:hover {
       opacity: 0.8;
-    }
-  }
-
-  @media screen and (max-width: 848px) {
-    .my-articles:not(:last-child) {
-      margin-bottom: 1rem;
-    }
-
-    .my-articles:last-child {
-      margin-bottom: 1rem;
     }
   }
 `;

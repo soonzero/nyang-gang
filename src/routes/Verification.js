@@ -69,9 +69,11 @@ export default function Verification() {
               <form onSubmit={onSubmitHandler}>
                 <h2 className="header">이메일 인증</h2>
                 <div className="inputs-container">
-                  <h3 className="pw-title">현재 인증 상태</h3>
+                  <h3 className="pw-title">
+                    {verified ? "인증 완료" : "미인증"} 상태입니다.
+                  </h3>
                   <span className="pw-desc">
-                    {verified ? "인증" : "미인증"}
+                    {!verified && "아래 버튼을 눌러 인증을 진행해주세요"}
                   </span>
                 </div>
                 <button

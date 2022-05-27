@@ -7,7 +7,7 @@ export default function Main() {
   return (
     <>
       <Navbar />
-      <ContentStyle>
+      <ContentStyle carousel>
         <Carousel />
       </ContentStyle>
     </>

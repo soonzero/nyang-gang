@@ -204,7 +204,7 @@ export default function SignUp() {
                   className={`password-text ${pwConfirm ? "valid" : "invalid"}`}
                 >
                   {!validPassword && !pwConfirm
-                    ? "⚠️ 영문, 숫자, 특수문자를 포함하여 8자 이상 입력해주세요"
+                    ? "⚠️ 영문, 숫자, 특수문자를 포함하여 8자 이상 입력"
                     : "✔️ 영문, 숫자, 특수문자를 포함하여 8자 이상 입력 완료"}
                 </div>
                 <input

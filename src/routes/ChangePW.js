@@ -124,7 +124,7 @@ export default function ChangePW() {
               </div>
               <h3 className="pw-title">새 비밀번호</h3>
               <span className="pw-desc">
-                영문과 숫자를 포함한 8자 이상의 비밀번호를 입력해주세요.
+                영문, 숫자 포함 8자 이상으로 입력해주세요.
               </span>
               <div className="input-container">
                 <input
@@ -137,7 +137,7 @@ export default function ChangePW() {
                   {validPW == true
                     ? ""
                     : validPW == false
-                    ? "비밀번호는 영문과 숫자를 포함하여 8자 이상이어야 합니다."
+                    ? "조건을 확인해주세요."
                     : ""}
                 </span>
               </div>
