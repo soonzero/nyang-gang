@@ -232,8 +232,12 @@ export default function List(props) {
   }, []);
 
   useEffect(() => {
+    const listBox = document.querySelector(".list-box");
     if (!props.isLoading) {
       updateFilter();
+      if (listBox) {
+        listBox.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      }
     }
   }, [props.isLoading, props.city, props.number, page, favorites]);
 
