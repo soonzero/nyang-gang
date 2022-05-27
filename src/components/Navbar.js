@@ -9,6 +9,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 export default function Navbar(props) {
   const navigate = useNavigate();
 
+  const [img, setImg] = useState();
   const [hospitalSub, setHospitalSub] = useState(false);
   const [abandSub, setAbandSub] = useState(false);
   const [subMenu, setSubMenu] = useState(false);
@@ -18,25 +19,26 @@ export default function Navbar(props) {
   const [menusInProfile, setMenusInProfile] = useState(
     window.innerWidth <= 768
   );
+  const [isLoading, setIsLoading] = useState(true);
 
-  const getProfileImg = useCallback(async () => {
+  const getProfileImg = useCallback(async (user) => {
     try {
-      if (sessionStorage.getItem("uid") && !props.auth) {
-        const userRef = doc(db, "users", sessionStorage.getItem("uid"));
+      if (user.uid && !props.auth) {
+        const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
         if (userSnap.data()) {
-          const img = document.querySelector(".profile-image");
-          img.setAttribute("src", userSnap.data().profileimagelink);
+          setImg(userSnap.data().profileimagelink);
         }
       }
+      setIsLoading(false);
     } catch (e) {
       console.log(e);
     }
   });
 
-  const setAuthority = async () => {
-    if (sessionStorage.getItem("uid")) {
-      const userRef = doc(db, "users", sessionStorage.getItem("uid"));
+  const setAuthority = async (user) => {
+    if (user.uid) {
+      const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
       if (userSnap.data().auth) {
         setAdmin(true);
@@ -87,13 +89,14 @@ export default function Navbar(props) {
 
   useEffect(() => {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setIsLoggedIn(true);
-        setAuthority();
-        getProfileImg();
+        await setIsLoggedIn(true);
+        await setAuthority(user);
+        await getProfileImg(user);
       } else {
         setIsLoggedIn(false);
+        setIsLoading(false);
       }
     });
 
@@ -123,7 +126,7 @@ export default function Navbar(props) {
               {!menusInProfile && <span className="logo-text">냥갱</span>}
             </li>
           </Link>
-          {!props.auth && (
+          {!isLoading && !props.auth && (
             <div className="nav-side">
               <li
                 className="nav-menu float-menu"
@@ -173,7 +176,7 @@ export default function Navbar(props) {
                       className="profile"
                       onClick={() => setSubMenu((prev) => !prev)}
                     >
-                      <img className="profile-image" />
+                      <img className="profile-image" src={img} />
                       <ul className={`nav-sub ${subMenu ? "open" : ""}`}>
                         {menusInProfile && (
                           <>
