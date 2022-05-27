@@ -139,7 +139,7 @@ export default function Login() {
             </button>
             <div className="auth-extra">
               <span className="extra-menu">
-                <Link to="/">비밀번호 재설정</Link>
+                <Link to="/reset">비밀번호 재설정</Link>
               </span>
               <span className="extra-menu">
                 <Link to="/signup">회원가입</Link>

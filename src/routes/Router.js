@@ -19,6 +19,7 @@ import store from "reducers/store";
 import WriteArticle from "./WriteArticle";
 import Admin from "./Admin";
 import Verification from "./Verification";
+import ResetPW from "./ResetPW";
 
 export default function AppRouter() {
   return (
@@ -41,6 +42,7 @@ export default function AppRouter() {
           <Route path="/license" element={<License />} />
           <Route path="/adoption" element={<Adoption />} />
           <Route path="/adoption/write" element={<WriteArticle />} />
+          <Route path="/reset" element={<ResetPW />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </Router>
