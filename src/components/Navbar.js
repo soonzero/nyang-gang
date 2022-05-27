@@ -48,11 +48,23 @@ export default function Navbar(props) {
     }
   };
 
+  const enterAdoption = () => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/adoption");
+      } else {
+        navigate("/login");
+        alert("로그인해야 이용할 수 있어요");
+      }
+    });
+  };
+
   const logout = () => {
+    navigate("/");
+    alert("로그아웃이 완료되었습니다");
     sessionStorage.clear();
     authService.signOut();
-    alert("로그아웃이 완료되었습니다");
-    navigate("/");
   };
 
   const handleScroll = useCallback(() => {
@@ -91,7 +103,7 @@ export default function Navbar(props) {
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        await setIsLoggedIn(true);
+        setIsLoggedIn(true);
         await setAuthority(user);
         await getProfileImg(user);
       } else {
@@ -163,7 +175,7 @@ export default function Navbar(props) {
                 )}
               </li>
               <li className="nav-menu">
-                <Link to="/adoption">입양</Link>
+                <span onClick={enterAdoption}>입양</span>
               </li>
               <li className="nav-menu">
                 <Link to="/license">반려동물 등록</Link>

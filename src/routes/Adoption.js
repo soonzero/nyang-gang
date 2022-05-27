@@ -47,12 +47,11 @@ export default function Adoption() {
 
   useEffect(async () => {
     const auth = getAuth();
-    await onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         await setAuth(user, auth);
         await getData(user);
       } else {
-        alert("먼저 로그인 해주세요!");
         navigate("/login");
       }
     });
