@@ -104,7 +104,7 @@ export default function Modal(props) {
           lon: result[0].REFINE_WGS84_LOGT,
         });
       } else {
-        alert("화성시에 대한 정보가 아직 없어요!");
+        alert("선택하신 도시의 정보가 아직 없어요!");
       }
     }
   };
