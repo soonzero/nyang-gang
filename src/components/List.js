@@ -12,9 +12,10 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import { db } from "./fbase/fbase";
-import { FavoriteStyle, ListStyle } from "./styled";
+import { ListStyle } from "./styled";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default function List(props) {
   let didCancel = false;
@@ -208,13 +209,18 @@ export default function List(props) {
     }
   };
 
-  const getFavorites = async () => {
-    const docRef = doc(db, "users", sessionStorage.getItem("uid"));
-    const docSnap = await getDoc(docRef);
-    dispatch({ type: "SET_FAVORITES", data: docSnap.data() });
-    if (!didCancel) {
-      updateFilter();
-    }
+  const getFavorites = () => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        dispatch({ type: "SET_FAVORITES", data: docSnap.data() });
+      }
+      if (!didCancel) {
+        updateFilter();
+      }
+    });
   };
 
   useEffect(() => {
