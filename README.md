@@ -46,7 +46,7 @@
 ## 👀 프로젝트 상세 내용
 
 - [냥갱 접속해보기 🐾](https://nyang-gang.web.app "냥갱")
-- [GitHub 보러가기 📝](https://www.notion.so/60cdd0d1c2f24a488bbfb0cb9df115f5 "Notion으로 이동")
+- [Notion 보러가기 📝](https://soonzero.notion.site/28c2b6cb59ad40d2a243f978c1d8e2ea "Notion으로 이동")
 - [시연 영상 🎬](https://drive.google.com/file/d/1AGNiThBoy7zJX6zi_sgGa7Kt8F-29L1B/view "Google Drive로 이동")
 
 <a href="https://nyang-gang.web.app"><img src="./src/images/nyang-gang.png"></a>
